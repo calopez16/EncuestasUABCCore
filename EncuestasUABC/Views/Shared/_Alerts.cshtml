@@ -1,0 +1,96 @@
+﻿@using EncuestasUABC.Models;
+@using Newtonsoft.Json;
+@using EncuestasUABC.Utilidades;
+@using EncuestasUABC.Enumerador;
+@using EncuestasUABC.Constantes;
+
+
+@* Verificamos que exista una alerta generada. *@
+@if (TempData["MessageAlert"] != null)
+{
+    //Deserializamos el objeto que contiene la información de la alerta.
+    MessageAlert messageAlert = JsonConvert.DeserializeObject<MessageAlert>(TempData["MessageAlert"].ToString());
+    <script type="text/javascript">
+        //Obtenemos el enumerador de los tipos de alerta.
+        var enum_MessageAlertType =@(EnumHelper.EnumToString<MessageAlertType>());
+        $(document).ready(function () {
+            //Notify.js es una herramienta para generar notificaciones dentro de la aplicación, toda la información
+            //y ejemplos se encuentran en la siguiente referencia: http://bootstrap-notify.remabledesigns.com/
+            //Recurso: wwwroot/lib/boostrap-notify
+            //Se deja el primer parametro en blanco (donde va el mensaje de la alerta por default)
+            //por que utilizaremos un template personalizado por que el que venia por defecto esta feo jeje
+            $.notify("", {
+                delay: 5000,//Tiempo que la notificacion quedará visible
+                template: `<div class="alert alert-@messageAlert.ClassAlert alert-dismissable fade show" style="min-width:30%">
+                            <button class="close" data-dismiss="alert" aria-label="Close">×</button>
+                            <h4><i class="fa @messageAlert.ClassIcon"></i><span class="ml-3">@messageAlert.TitleAlert</span></h4><hr/> @Html.Raw(messageAlert.Message)
+                    </div>`,
+                onShow: function () {
+                    //Establece el largo de la notificación y aplica un pequeño margen en caso de que este en pantallas mas pequeñas
+                    this.css({ 'width': 'auto', 'height': 'auto', 'margin-left': '3%' });
+                },
+            });
+        });
+    </script>
+}
+
+<script type="text/javascript">
+        //Genera una alerta enviando como parametro el objeto MessageAlert desde JS, este metodo se utilizaria regularmente
+        //en las llamadas ajax donde arroje una respuesta de este tipo de objeto(MessageAlert).
+        function GenerarAlerta(messageAlert) {
+            $.notify("", {
+                delay: 5000, //Tiempo que la notificacion quedará visible
+                template: `<div class="alert alert-${messageAlert.ClassAlert} alert-dismissable fade show">
+                            <button class="close" data-dismiss="alert" aria-label="Close">×</button>
+                            <h4><i class="fa ${messageAlert.ClassIcon}"></i><span class="ml-3">"${messageAlert.TitleAlert}</span></h4><hr/>${messageAlert.Message}
+                    </div>`,
+                onShow: function () {
+                    //Establece el largo de la notificación y aplica un pequeño margen en caso de que este en pantallas mas pequeñas
+                    this.css({ 'width': 'auto', 'height': 'auto', 'margin-left': '3%' });
+                },
+            });
+        }
+        function GenerarAlerta(typeAlert, mensaje) {
+            var alertClass = "";
+            var alertIcon = "";
+            var alertTitle = "";
+            switch (typeAlert) {
+                case enum_MessageAlertType.SUCCESS:
+                    alertClass = '@Alerts.CLASS_ALERT_SUCCESS';
+                    alertIcon = '@Alerts.CLASS_ICON_ALERT_SUCCESS';
+                    alertTitle= '@Alerts.CLASS_TITLE_ALERT_SUCCESS';
+                    break;
+                case enum_MessageAlertType.INFORMATION:
+                    alertClass = '@Alerts.CLASS_ALERT_INFORMATION';
+                    alertIcon = '@Alerts.CLASS_ICON_ALERT_INFORMATION';
+                    alertTitle= '@Alerts.CLASS_TITLE_ALERT_INFORMATION';
+                    break;
+                case enum_MessageAlertType.WARNING:
+                    alertClass = '@Alerts.CLASS_ALERT_WARNING';
+                    alertIcon = '@Alerts.CLASS_ICON_ALERT_WARNING';
+                    alertTitle= '@Alerts.CLASS_TITLE_ALERT_WARNING';
+                    break;
+                case enum_MessageAlertType.DANGER:
+                    alertClass = '@Alerts.CLASS_ALERT_DANGER';
+                    alertIcon = '@Alerts.CLASS_ICON_ALERT_DANGER';
+                    alertTitle= '@Alerts.CLASS_TITLE_ALERT_DANGER';
+                    break;
+                case enum_MessageAlertType.EXCEPTION:
+                    alertClass = '@Alerts.CLASS_ALERT_DANGER';
+                    alertIcon = '@Alerts.CLASS_ICON_ALERT_EXCEPTION';
+                    alertTitle= '@Alerts.CLASS_TITLE_ALERT_EXCEPTION';
+                    break;
+            }
+            $.notify("", {
+                delay: 50000,
+                template: `<div class="alert alert-${alertClass} alert-dismissable fade show">
+                            <button class="close" data-dismiss="alert" aria-label="Close">×</button>
+                            <h4><i class="fa ${alertIcon}"></i><span class="ml-3">${alertTitle}</span></h4><hr/>${mensaje}
+                    </div>`,
+                onShow: function () {
+                    //Establece el largo de la notificación y aplica un pequeño margen en caso de que este en pantallas mas pequeñas
+                    this.css({ 'width': 'auto', 'height': 'auto','margin-left':'3%' });
+                },
+            });
+        }
+</script>

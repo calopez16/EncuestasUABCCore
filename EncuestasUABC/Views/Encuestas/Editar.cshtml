@@ -1,0 +1,79 @@
+﻿@using EncuestasUABC.Models;
+@model Encuesta
+@{
+    ViewData["Title"] = "Editar ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<input hidden asp-for="Id" />
+<div class="ibox p-4">
+    <div class="ibox-head pb-4">
+        <div class="ibox-title">
+            <div class="header-pagina">
+                <a asp-action="Creadas">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                <h1>
+                    @Model.Nombre
+                </h1>
+            </div>
+        </div>
+        <div class="ibox-tools">
+            <button class="btn btn-default ibox-collapse"><i class="fa fa-minus"></i></button>
+            <button class="btn btn-primary" id="btn_EditarNombre"><i class="fa fa-edit"></i></button>
+        </div>
+    </div>
+    <div class="ibox-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    @Html.Raw(Model.Descripcion)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="text-center">
+    <button class="btn btn-primary" data-toggle="modal" data-target="#modal_CrearSeccion">Agregar Secciones</button>
+</div>
+<div class="ibox p-4">
+    <div class="ibox-head">
+        <div class="ibox-title">
+            <h2 class="page-title">Secciones</h2>
+        </div>
+        <div class="ibox-tools">
+            <button class="btn btn-primary"><i class="fa fa-edit"></i></button>
+            <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
+        </div>
+    </div>
+    <div class="ibox-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <td style="width:20px"></td>
+                    <td></td>
+                    <td style="width:20px"></td>
+                </tr>
+            </thead>
+            <tbody id="lista_secciones">
+                @foreach (var item in Model.EncuestaSecciones)
+                {
+                <tr>
+                    <td>
+                        <i class="fa fa-arrows-alt" style="cursor:pointer"></i>
+                    </td>
+                    <td>
+                        @item.Nombre
+                    </td>
+                    <td></td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Views/Encuestas/PartialViews/_ModalEditarTituloDescripcion.cshtml", Model)
+@await Html.PartialAsync("~/Views/Encuestas/PartialViews/_ModalCrearSeccion.cshtml", Model)
+
+<script type="text/javascript" src="~/js/Encuestas/Editar.js"></script>
+

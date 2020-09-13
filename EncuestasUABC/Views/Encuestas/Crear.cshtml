@@ -1,0 +1,53 @@
+﻿@using EncuestasUABC.Models;
+@model Encuesta
+@{
+    ViewData["Title"] = "Editar ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="ibox p-4">
+    <div class="ibox-head pb-4">
+        <div class="ibox-title">
+            <div class="header-pagina">
+                <a asp-action="Creadas">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                <h1>
+                    @Model.Nombre
+                </h1>
+            </div>
+        </div>
+        <div class="ibox-tools">
+            <button class="btn btn-default ibox-collapse"><i class="fa fa-minus"></i></button>
+            <button class="btn btn-primary" id="btn_EditarNombre"><i class="fa fa-edit"></i></button>
+            <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
+        </div>
+    </div>
+    <div class="ibox-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    @Html.Raw(Model.Descripcion)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="ibox p-4">
+    <div class="ibox-head">
+        <div class="ibox-title">
+            <h2 class="page-title">Secciones</h2>
+        </div>
+        <div class="ibox-tools">
+            <button class="btn btn-primary"><i class="fa fa-edit"></i></button>
+            <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
+        </div>
+    </div>
+    <div class="ibox-body" style="display:none">
+
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Views/Encuestas/PartialViews/_ModalEditarTituloDescripcion.cshtml", Model)
+<script type="text/javascript" src="~/js/Encuestas/Editar.js"></script>
+

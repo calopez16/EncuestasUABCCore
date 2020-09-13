@@ -1,0 +1,119 @@
+﻿@using EncuestasUABC.Constantes;
+@model ApplicationUser;
+@{
+    ViewData["Title"] = "Perfil";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="ibox p-4">
+    <div class="header-pagina">
+        <h1>
+            @ViewData["Title"]
+        </h1>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-lg-3 col-md-4">
+            <div class="ibox">
+                <div class="ibox-body text-center">
+                    <div class="m-t-20">
+                        <img class="img-circle" src="~/img/admin-avatar.png" width="100" />
+                    </div>
+                    <h5 class="font-strong m-b-10 m-t-10">@Model.Nombre @Model.ApellidoPaterno @Model.ApellidoMaterno</h5>
+                    <div class="m-b-20 text-muted">@Model.Rol</div>
+                </div>
+            </div>
+            <div class="ibox">
+                <div class="ibox-body">
+                    <h4 class="text-center">
+                        @Model.Email
+                    </h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9 col-md-8">
+            <div class="ibox">
+                <div class="ibox-body">
+                    <ul class="nav nav-tabs tabs-line">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#informacion" data-toggle="tab">
+                                <i class="fa fa-user"></i> Informacion
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#cambiarContrasena" data-toggle="tab">
+                                <i class="fa fa-lock"></i> Cambiar contraseña
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="informacion">
+                            <form asp-action="Perfil" id="form_Usuario">
+                                <input hidden asp-for="UserName" />
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-3 form-group">
+                                        <label>Nombre(s)</label>
+                                        <input asp-for="Nombre" class="form-control" type="text" maxlength="80" autocomplete="off">
+                                    </div>
+                                    <div class="col-md-6 col-lg-3 form-group">
+                                        <label>Apellido Paterno</label>
+                                        <input asp-for="ApellidoPaterno" class="form-control" type="text" maxlength="80" autocomplete="off">
+                                    </div>
+                                    <div class="col-md-6 col-lg-3 form-group">
+                                        <label>Apellido Materno</label>
+                                        <input asp-for="ApellidoMaterno" class="form-control" type="text" maxlength="80" autocomplete="off">
+                                    </div>
+                                    <div class="col-md-6 col-lg-3 form-group">
+                                        <label>Correo UABC</label>
+                                        <input asp-for="Email" class="form-control mask-email" type="text" placeholder="usuario@uabc.edu.mx" autocomplete="off">
+                                    </div>
+                                </div>
+                                <input hidden asp-for="Rol" />
+                                @if (Model.Rol.Equals(RolesSistema.COORDINADOR) || Model.Rol.Equals(RolesSistema.MAESTRO) || Model.Rol.Equals(RolesSistema.TUTOR))
+                                {
+                                    @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormMaestro.cshtml", Model)
+                                }
+                                else if (Model.Rol.Equals(RolesSistema.EGRESADO))
+                                {
+                                    @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormEgresado.cshtml", Model)
+                                }
+                                else if (Model.Rol.Equals(RolesSistema.ALUMNO))
+                                {
+                                    @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormAlumno.cshtml", Model)
+
+                                }
+                                <div class="row">
+                                    <div class="col-12 text-right">
+                                        <button type="submit" class="btn btn-primary">Guardar</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+
+                        <div class="tab-pane fade show" id="cambiarContrasena">
+                            <form asp-action="CambiarContrasenaPerfil" onsubmit="return ContrasenaValida()">
+                                <div class="row">
+                                    <div class="row col-md-6">
+                                        <div class="col-12 form-group">
+                                            <label>Contraseña Actual</label>
+                                            <input name="contrasenaActual" class="form-control" type="password" />
+                                        </div>
+                                    </div>
+                                </div>
+                                @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormCambiarContrasena.cshtml")
+
+                                <div class="row">
+                                    <div class="col-12 text-right pr-5">
+                                        <button type="submit" class="btn btn-primary">Cambiar Contraseña</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="~/js/Usuarios/FormUsuario.js" defer></script>
+

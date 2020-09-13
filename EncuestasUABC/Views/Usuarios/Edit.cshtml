@@ -1,0 +1,34 @@
+﻿@model ApplicationUser
+
+@{
+    ViewData["Title"] = "Editar Usuario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="ibox p-4">
+    <form asp-action="Edit" id="form_Usuario">
+        <div class="header-pagina">
+            <a asp-action="Index">
+                <i class="fa fa-angle-left"></i>
+            </a>
+            <h1>
+                @ViewData["Title"]
+            </h1>
+        </div>
+        <hr />
+        <input hidden asp-for="UserName" />
+        <div class="ibox-body">
+            @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormUsuario.cshtml", Model)
+            @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormAlumno.cshtml", Model)
+            @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormEgresado.cshtml", Model)
+            @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormMaestro.cshtml", Model)
+        </div>
+        <div class="ibox-footer text-center">
+            <button type="button" class="btn btn-warning" id="btn_CambiarContrasena" data-email="@Model.Email">Cambiar Contraseña</button>
+            <button class="btn btn-primary">Permisos</button>
+            <button type="submit" class="btn btn-primary">Editar</button>
+        </div>
+    </form>
+</div>
+<partial name="~/Views/Usuarios/PartialViews/_ModalCambiarContrasena.cshtml" />
+<script type="text/javascript" src="~/js/Usuarios/FormUsuario.js"></script>
+

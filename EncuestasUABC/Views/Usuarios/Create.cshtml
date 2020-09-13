@@ -1,0 +1,34 @@
+﻿
+@model ApplicationUser
+@{
+    ViewData["Title"] = "Crear Usuario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="ibox p-4">
+    <form asp-action="Create" id="form_Usuario">
+        <div class="header-pagina">
+            <a asp-action="Index">
+                <i class="fa fa-angle-left"></i>
+            </a>
+            <h1>
+                @ViewData["Title"]
+            </h1>
+        </div>
+        <hr />
+        <div class="ibox-body">
+            @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormUsuario.cshtml", Model)
+            @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormAlumno.cshtml", Model)
+            @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormEgresado.cshtml", Model)
+            @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormMaestro.cshtml", Model)
+        </div>
+        <div class="ibox-footer text-center">
+            <button type="submit" class="btn btn-primary">Agregar</button>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript" src="~/js/Usuarios/FormUsuario.js"></script>
+
+
+
+

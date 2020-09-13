@@ -1,0 +1,66 @@
+﻿@model Encuesta
+@{
+    Layout = null;
+}
+
+<link rel="stylesheet" type="text/css" href="~/lib/summernote/dist/summernote.css" />
+<div class="modal fade" id="modal_CrearSeccion" tabindex="-1" role="dialog" aria-labelledby="modal_CrearSeccion" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <form asp-action="CrearSeccion" class="modal-content" id="form_CrearSeccion">
+            <input hidden name="EncuestaId" asp-for="Id" />
+            <div class="modal-header">
+                <h5 class="modal-title">Crear Sección</h5>
+                <span type="button" class="btn" data-dismiss="modal">
+                    <i class="fa fa-times"></i>
+                </span>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="col-md-10">
+                        <label class="control-label">Nombre</label>
+                        <input name="Nombre" class="form-control" id="txt_NombreSeccion" />
+                    </div>
+                </div>
+                <div class="form-group mt-2">
+                    <label class="control-label">Descripción</label>
+                    <textarea name="Descripcion" class="form-control" id="txtArea_DescripcionSeccion"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary" id="btn_GuardarNombreDescripcion">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#txtArea_DescripcionSeccion').summernote({
+            toolbar: [
+                ['undo', ['undo', 'redo']],
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['fontsize', ['fontsize']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['height', ['height']],
+                ['table', ['table']],
+                ['fullscreen', ['fullscreen']]
+            ],
+            height: 300,
+            lang: "es-ES"
+        });
+      
+        $("#form_CrearSeccion").validate({
+            rules: {
+                Nombre: "required",
+                CarreraId: "required",
+            },
+            messages: {
+                Nombre: "El campo Nombre es obligatorio",
+                CarreraId: "El campo Carrera es obligatorio",
+            }
+        });
+
+    });
+</script>
+
+<script type="text/javascript" src="~/lib/summernote/dist/summernote.js"></script>
