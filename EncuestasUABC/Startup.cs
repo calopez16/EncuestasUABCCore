@@ -49,6 +49,9 @@ namespace EncuestasUABC
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
+            services.AddRazorPages();
+
             services.Configure<IdentityOptions>(options =>
             {
                 // Password settings.
@@ -90,14 +93,10 @@ namespace EncuestasUABC
             services.AddTransient<IInicializador, Inicializador>();
             services.AddTransient<IUsuarioRepository, UsuarioRepository>();
 
-            services.AddTransient<IEncuestasRepository, EncuestasRepository>();
-
-            services.AddControllersWithViews().AddRazorRuntimeCompilation();
-            services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,IInicializador inicializador)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IInicializador inicializador)
         {
             if (env.IsDevelopment())
             {
@@ -113,24 +112,17 @@ namespace EncuestasUABC
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            app.UseSession();
+
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseSession();
 
             inicializador.Inicializar();
 
             app.UseEndpoints(endpoints =>
             {
-
-                endpoints.MapControllerRoute(name: "Encuestas",
-                pattern: "Encuestas/Creadas/{pagina?}",
-                defaults: new { controller = "Encuestas", action = "Creadas" });
-
-                endpoints.MapControllerRoute(name: "Login",
-                pattern: "Usuarios/Login",
-                defaults: new { controller = "Usuarios", action = "Login" });
 
                 endpoints.MapControllerRoute(
                     name: "default",

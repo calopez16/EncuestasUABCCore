@@ -38,27 +38,6 @@ namespace EncuestasUABC.AccesoDatos.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            //modelBuilder.Entity<Permiso>().HasData(
-            //    new Permiso { Id = 1, Descripcion = "Encuestas", Icono = "fa fa-folder", Menu = true },
-            //    new Permiso { Id = 2, Descripcion = "Creadas", Icono = "fa fa-folder", Action = "Creadas", Controller = "Encuestas", Menu = true, PermisoIdPadre = 1 },
-            //    new Permiso { Id = 3, Descripcion = "Asignar encuestas", Icono = "fa fa-folder", Action = "Asignar", Controller = "Encuestas", Menu = false, PermisoIdPadre = 2 },
-            //    new Permiso { Id = 4, Descripcion = "Pendientes", Icono = "fa fa-folder", Action = "Pendientes", Controller = "Encuestas", Menu = true, PermisoIdPadre = 1 },
-            //    new Permiso { Id = 5, Descripcion = "Configuracion", Icono = "fa fa-folder", Menu = true },
-            //    new Permiso { Id = 6, Descripcion = "Usuarios", Icono = "fa fa-folder", Action = "Index", Controller = "Usuarios", Menu = true, PermisoIdPadre = 5 },
-            //    new Permiso { Id = 7, Descripcion = "Crear usuario", Icono = "fa fa-folder", Action = "Create", Controller = "Usuarios", Menu = true, PermisoIdPadre = 5 }
-            //    );
-
-            //modelBuilder.Entity<Campus>().HasData(
-            //    new Campus { Id = 1, Nombre = "Mexicali", Estatus = true },
-            //    new Campus { Id = 2, Nombre = "Ensenada", Estatus = true },
-            //    new Campus { Id = 3, Nombre = "Tijuana", Estatus = true }
-            //    );
-            //modelBuilder.Entity<UnidadAcademica>().HasData(
-            //    new UnidadAcademica { Id = 1, Nombre = "Facultad de ingeniería", CampusId = 1, Estatus = true }
-            //    );
-            //modelBuilder.Entity<Carrera>().HasData(
-            //    new Carrera { Id = 1, Nombre = "Licenciado en sistemas computacionales", UnidadAcademicaId = 1, Estatus = true }
-            //    );
             modelBuilder.Entity<EstatusEncuesta>().HasData(
                 new EstatusEncuesta { Id = 1, Descripcion = "Activa", Estatus = true },
                 new EstatusEncuesta { Id = 2, Descripcion = "Inactiva", Estatus = true },
