@@ -2,8 +2,10 @@
 using EncuestasUABC.AccesoDatos.Repository.Interfaces;
 using EncuestasUABC.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace EncuestasUABC.AccesoDatos.Repository
@@ -46,6 +48,30 @@ namespace EncuestasUABC.AccesoDatos.Repository
             #endregion
         }
 
+
+        public async Task<IEnumerable<Encuesta>> FindBy(Expression<Func<Encuesta, bool>> filter = null, Func<IQueryable<Encuesta>, IOrderedQueryable<Encuesta>> orderby = null, params Expression<Func<Encuesta, object>>[] includes)
+        {
+            #region FindBy
+            IQueryable<Encuesta> query = _context.Set<Encuesta>();
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            if (includes != null)
+            {
+                query = includes.Aggregate(query,
+                          (current, include) => current.Include(include));
+            }
+
+            if (orderby != null)
+            {
+                return orderby(query).ToList();
+            }
+            return query.ToList();
+            #endregion
+        }
+
         public async Task<IEnumerable<Encuesta>> GetByUser(string userId)
         {
             #region GetByUser
@@ -70,7 +96,7 @@ namespace EncuestasUABC.AccesoDatos.Repository
                 .Include(x => x.Carrera)
                 .ThenInclude(x => x.UnidadAcademica)
                 .ThenInclude(x => x.Campus)
-                .Include(x=>x.EncuestaSecciones)
+                .Include(x => x.EncuestaSecciones)
                 .Where(x => x.EstatusEncuestaId != (int)Enumerador.EstatusEncuesta.ELIMINADA)
                 .ToListAsync();
             #endregion

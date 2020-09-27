@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     Layout = null;
 }
 
@@ -14,25 +15,13 @@
             </div>
             <div class="modal-body">
                 <div class="form-row">
-                    <div class="col-md-10">
+                    <div class="col-md-12">
                         <label class="control-label">Nombre</label>
                         <input name="Nombre" class="form-control" id="txt_Nombre" />
                     </div>
                 </div>
                 <div class="form-row mt-2">
-                    <div class="col-md-4 form-group">
-                        <label class="form-control-label">Campus</label><br />
-                        <select class="form-control select2" asp-items="ViewBag.Campus" id="select_Campus">
-                            <option value="">Seleccionar</option>
-                        </select>
-                    </div>
-                    <div class="col-md-4 form-group">
-                        <label class="form-control-label">Unidad Académica</label><br />
-                        <select class="form-control select2" id="select_UnidadAcademica">
-                            <option value="">Seleccionar</option>
-                        </select>
-                    </div>
-                    <div class="col-md-4 form-group">
+                    <div class="col-md-12 form-group">
                         <label class="control-label">Carrera</label><br />
                         <select name="CarreraId" class="form-control select2" id="select_Carrera">
                             <option value="">Seleccionar</option>
@@ -104,76 +93,22 @@
                 }
             }
         });
-
     });
 
-    function CargarUnidadesAcademicas(campusId, unidadAcademicaId) {
-        $.ajax({
-            //Url de la peticion
-            url: "../Usuarios/UnidadesAcademicas",
-            //Tipo de petición
-            type: "POST",
-            //Datos que se enviaran a la llamada
-            data: { campusId: campusId },
-            //Accion al comenzar la carga de la peticion AJAX.
-            beforeSend: function () {
-                //Aqui regularmente se implementa un loading.
-            }
-        }).done(function (data) {
-            //Se ejecuta cuando la peticion ha sido exitosa.
-            //data es la respuesta que se recibe.
-            data.unshift({ id: "", text: "Seleccionar" });
-            $("#select_UnidadAcademica").select2({
-                data: data,
-            });
-            if (unidadAcademicaId != undefined) {
-                $("#select_UnidadAcademica").val(unidadAcademicaId);
-                $("#select_UnidadAcademica").trigger('change');
-            }
-            $('select:not(.normal)').each(function () {
-                $(this).select2({
-                    dropdownParent: $(this).parent()
-                });
-            });
-        }).fail(function () {
-            //Se ejecuta cuando la peticion ha regresado algun error.
-        }).always(function () {
-            //Se ejecuta al final de la peticion sea exitosa o no.
-        });
-    }
+    function formatState(state) {
+        if (!state.id) {
+            return state.text;
+        }
+        var baseUrl = "/user/pages/images/flags";
+        var $state = $(
+            '<span><img src="' + baseUrl + '/' + state.element.value.toLowerCase() + '.png" class="img-flag" /> ' + state.text + '</span>'
+        );
+        return $state;
+    };
 
-    function CargarCarreras(unidadAcademicaId, carreraId) {
-        $.ajax({
-            //Url de la peticion
-            url: "../Usuarios/Carreras",
-            //Tipo de petición
-            type: "POST",
-            //Datos que se enviaran a la llamada
-            data: { unidadAcademicaId: unidadAcademicaId },
-            //Accion al comenzar la carga de la peticion AJAX.
-            beforeSend: function () {
-                //Aqui regularmente se implementa un loading.
-            }
-        }).done(function (data) {
-            //Se ejecuta cuando la peticion ha sido exitosa.
-            //data es la respuesta que se recibe.
-            data.unshift({ id: "", text: "Seleccionar" });
-            $("#select_Carrera").select2({ data: data });
-            if (carreraId != undefined) {
-                $("#select_Carrera").val(carreraId);
-                $("#select_Carrera").trigger('change');
-            }
-            $('select:not(.normal)').each(function () {
-                $(this).select2({
-                    dropdownParent: $(this).parent()
-                });
-            });
-        }).fail(function () {
-            //Se ejecuta cuando la peticion ha regresado algun error.
-        }).always(function () {
-            //Se ejecuta al final de la peticion sea exitosa o no.
-        });
-    }
+    $(".js-example-templating").select2({
+        templateResult: formatState
+    });
 </script>
 
 <script type="text/javascript" src="~/lib/summernote/dist/summernote.js"></script>

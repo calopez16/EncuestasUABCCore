@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace EncuestasUABC.AccesoDatos.Repository
 {
@@ -16,9 +17,10 @@ namespace EncuestasUABC.AccesoDatos.Repository
             _context = context;
         }
 
-        public void Add<T>(T entity) where T : class
+        public async Task<T> Add<T>(T entity) where T : class
         {
-            _context.Set<T>().Add(entity);
+            await _context.Set<T>().AddAsync(entity);
+            return entity;
         }
 
         public void Dispose()
@@ -27,7 +29,7 @@ namespace EncuestasUABC.AccesoDatos.Repository
                 _context.Dispose();
         }
 
-        public IEnumerable<T> FindBy<T>(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderby = null, params Expression<Func<T, object>>[] includes) where T : class
+        public async Task<IEnumerable<T>> FindBy<T>(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderby = null, params Expression<Func<T, object>>[] includes) where T : class
         {
             IQueryable<T> query = _context.Set<T>();
             if (filter != null)
@@ -43,12 +45,12 @@ namespace EncuestasUABC.AccesoDatos.Repository
 
             if (orderby != null)
             {
-                return orderby(query).ToList();
+                return await orderby(query).ToListAsync();
             }
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
-        public T FirstOrDefault<T>(Expression<Func<T, bool>> filter = null, params Expression<Func<T, object>>[] includes) where T : class
+        public async Task<T> FirstOrDefault<T>(Expression<Func<T, bool>> filter = null, params Expression<Func<T, object>>[] includes) where T : class
         {
             IQueryable<T> query = _context.Set<T>();
             if (filter != null)
@@ -62,27 +64,27 @@ namespace EncuestasUABC.AccesoDatos.Repository
                           (current, include) => current.Include(include));
             }
 
-            return query.FirstOrDefault();
+            return await query.FirstOrDefaultAsync();
         }
 
-        public IEnumerable<T> GetAll<T>() where T : class
+        public async Task<IEnumerable<T>> GetAll<T>() where T : class
         {
-            return _context.Set<T>().ToList();
+            return await _context.Set<T>().ToListAsync();
         }
 
-        public T GetById<T>(int id) where T : class
+        public async Task<T> GetById<T>(int id) where T : class
         {
-            return _context.Set<T>().Find(id);
+            return await _context.Set<T>().FindAsync(id);
         }
 
-        public void Remove<T>(T entity) where T : class
+        public async Task Remove<T>(T entity) where T : class
         {
             _context.Set<T>().Remove(entity);
         }
 
-        public void RemoveById<T>(int id) where T : class
+        public async Task RemoveById<T>(int id) where T : class
         {
-            var entity= _context.Set<T>().Find(id);
+            var entity = await _context.Set<T>().FindAsync(id);
             _context.Set<T>().Remove(entity);
         }
     }

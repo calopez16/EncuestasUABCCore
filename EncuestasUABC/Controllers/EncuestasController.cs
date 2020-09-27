@@ -9,6 +9,7 @@ using EncuestasUABC.Utilidades;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using EncuestasUABC.Models.Paginacion;
 
 namespace EncuestasUABC.Controllers
 {
@@ -29,44 +30,33 @@ namespace EncuestasUABC.Controllers
             _logger = logger;
             _repository = repository;
         }
+
         public IActionResult Index()
         {
             return View();
         }
 
-        public async Task<IActionResult> Creadas(int pagina)
+        #region CREADAS
+
+        #region INDEX
+        public async Task<IActionResult> Creadas()
         {
             #region Creadas
-            try
-            {
-                var paginacion = await PaginacionEncuestas(pagina);
-                return View(paginacion);
-            }
-            catch (MessageAlertException ex)
-            {
-                _logger.LogInformation(ex.Message);
-                GenerarAlerta(ex);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                ShowMessageException(ex.Message);
-            }
-            finally
-            {
-                await Campus();
-            }
 
-            return RedirectToAction("Index", "Home");
+            return View();
+
             #endregion
         }
 
+        #endregion
+
+        #region EDITAR
         public async Task<IActionResult> Editar(int id)
         {
             #region Edit
             try
             {
-                var encuesta = await _encuestasRepository.Get(id);
+                var encuesta = _repository.GetById<Encuesta>(id);
                 return View(encuesta);
             }
             catch (MessageAlertException ex)
@@ -83,8 +73,80 @@ namespace EncuestasUABC.Controllers
 
             #endregion
         }
+        #endregion
 
-        #region Ajax
+        #region CREAR
+        [HttpPost]
+        public async Task<IActionResult> Crear(Encuesta model)
+        {
+            #region Crear
+            try
+            {
+                var user = await _usuarioRepository.Get(User.Identity.Name);
+                model.UsuarioId = user.Id;
+                model.Fecha = DateTime.Now;
+                model.EstatusEncuestaId = (int)Enumerador.EstatusEncuesta.INACTIVA;
+                var result = await _repository.Add<Encuesta>(model);
+                ShowMessageSuccess(Constantes.Mensajes.ENCUESTAS_MSJ01);
+                return RedirectToAction(nameof(Editar), new { id = result.Id });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                ShowMessageException(ex.Message);
+            }
+            return View(nameof(Creadas));
+
+            #endregion
+        }
+        #endregion
+
+        #region AJAX
+        /// <summary>
+        /// Se obtienen los registro de las Encuestas Creadas de la base de datos
+        /// </summary>
+        /// <param name="paginacion">Contiene los valores para la paginación</param>
+        /// <returns>Retorna una estructura Json que permite a la herramienta Datatables.js crear la paginación en el HTML.</returns>
+        [HttpPost]
+        public async Task<IActionResult> CreadasPaginado([FromBody]Paginacion paginacion)
+        {
+            #region CreadasPaginado
+            try
+            {
+                var user = await _usuarioRepository.Get(User.Identity.Name);
+
+                //Aqui se traen los datos de tipo PaginacionResult
+                var listaEncuestas = await _repository.FindBy<Encuesta>(x => x.UsuarioId == user.Id, x => x.OrderByDescending(x => x.Fecha));
+                decimal paginas = listaEncuestas.Count() / paginacion.Length;
+                int totalPaginas = (int)Math.Ceiling(paginas);
+                int totalRegistros = listaEncuestas.Count();
+
+                encuestas = encuestas
+                                       .Skip(inicio)
+                                       .Take(numeroPorPagina)
+                                       .ToList();
+
+                paginacion = new List<Encuesta>
+                {
+                    Result = encuestas.ToList(),
+                    NumeroPagina = numPagina,
+                    TotalRegistros = totalRegistros,
+                    TotalPaginas = totalPaginas
+
+                };
+
+                var registrosFiltrados = result.Count();
+                var totalRegistrosFiltrados = result.Count();
+                var datosPaginados = result;
+                return Json(new { draw = paginacion.Draw, recordsFiltered = registrosFiltrados, recordsTotal = totalRegistrosFiltrados, data = datosPaginados });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex.Message);
+            }
+            #endregion
+        }
         [HttpPost]
         public async Task<IActionResult> EditarNombreDescripcion(Encuesta model, bool encuestaEstatus = false)
         {
@@ -116,31 +178,6 @@ namespace EncuestasUABC.Controllers
             return RedirectToAction(nameof(Editar), new { id = model.Id });
             #endregion
         }
-        #endregion
-
-        [HttpPost]
-        public async Task<IActionResult> Crear(Encuesta model)
-        {
-            #region Crear
-            try
-            {
-                var user = await _usuarioRepository.Get(User.Identity.Name);
-                model.UsuarioId = user.Id;
-                model.Fecha = DateTime.Now;
-                model.EstatusEncuestaId = (int)Enumerador.EstatusEncuesta.INACTIVA;
-                var result = await _encuestasRepository.Add(model);
-                ShowMessageSuccess(Constantes.Mensajes.ENCUESTAS_MSJ01);
-                return RedirectToAction(nameof(Editar), new { id = result.Id });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                ShowMessageException(ex.Message);
-            }
-            return View(nameof(Creadas));
-
-            #endregion
-        }
 
         [HttpPost]
         public async Task<IActionResult> CrearSeccion(EncuestaSeccion model)
@@ -169,49 +206,12 @@ namespace EncuestasUABC.Controllers
             #endregion
         }
 
-        private async Task<PaginacionViewModel<List<Encuesta>>> PaginacionEncuestas(int numPagina)
-        {
-            #region PaginacionEncuestas
+        #endregion
 
-            PaginacionViewModel<List<Encuesta>> paginacion;
-            int numeroPorPagina = 10;
-            var user = await _usuarioRepository.Get(User.Identity.Name);
-            var encuestas = (await _encuestasRepository.GetByUser(user.Id)).OrderByDescending(x => x.Fecha).ToList();
+        #endregion
 
-            decimal paginas = encuestas.Count() / numeroPorPagina;
-            int totalPaginas = (int)Math.Ceiling(paginas);
-            int totalRegistros = encuestas.Count();
 
-            if (numPagina > totalPaginas || numPagina == 0)
-            {
-                numPagina = 1;
-                encuestas = encuestas
-                       .Skip(0)
-                       .Take(numeroPorPagina)
-                       .ToList();
-            }
-            else
-            {
-                int inicio = (numPagina * numeroPorPagina) - numeroPorPagina;
-                encuestas = encuestas
-                                       .Skip(inicio)
-                                       .Take(numeroPorPagina)
-                                       .ToList();
-
-            }
-            paginacion = new PaginacionViewModel<List<Encuesta>>
-            {
-                Result = encuestas.ToList(),
-                NumeroPagina = numPagina,
-                TotalRegistros = totalRegistros,
-                TotalPaginas = totalPaginas
-
-            };
-
-            return paginacion;
-            #endregion
-        }
-
+        #region VIEWBAGS
         public async Task Campus()
         {
             #region Campus
@@ -220,5 +220,9 @@ namespace EncuestasUABC.Controllers
 
             #endregion
         }
+
+        #endregion
+
+     
     }
 }

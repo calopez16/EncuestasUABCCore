@@ -81,7 +81,7 @@ namespace EncuestasUABC
 
                 //options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
 
-                options.LoginPath = "/Usuarios/Login";
+                options.LoginPath = "/Account/Login";
                 options.AccessDeniedPath = "/Identity/Account/AccessDenied";
                 //options.SlidingExpiration = false;
             });
@@ -92,6 +92,7 @@ namespace EncuestasUABC
             services.AddTransient<IRepository, Repository>();
             services.AddTransient<IInicializador, Inicializador>();
             services.AddTransient<IUsuarioRepository, UsuarioRepository>();
+            services.AddTransient<IEncuestasRepository, EncuestasRepository>();
 
         }
 

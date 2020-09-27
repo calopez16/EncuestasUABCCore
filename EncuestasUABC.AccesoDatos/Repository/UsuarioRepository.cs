@@ -126,7 +126,7 @@ namespace EncuestasUABC.AccesoDatos.Repositories
         {
             #region RemoveRolOfUser
 
-           return await _userManager.RemoveFromRoleAsync(user, rol);
+            return await _userManager.RemoveFromRoleAsync(user, rol);
 
             #endregion
         }
@@ -144,12 +144,12 @@ namespace EncuestasUABC.AccesoDatos.Repositories
         {
             #region CambiarContrasena
 
-            var resetToken=await _userManager.GeneratePasswordResetTokenAsync(user);
+            var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
             return await _userManager.ResetPasswordAsync(user, resetToken, nuevaContrasena);
 
             #endregion
         }
-        public async Task<IdentityResult> CambiarContrasena(ApplicationUser user,string contrasenaActual, string nuevaContrasena)
+        public async Task<IdentityResult> CambiarContrasena(ApplicationUser user, string contrasenaActual, string nuevaContrasena)
         {
             #region CambiarContrasena
 
@@ -169,7 +169,17 @@ namespace EncuestasUABC.AccesoDatos.Repositories
             return permisos;
             #endregion
         }
-
-
+        public async Task<List<Permiso>> AllPermisosUsuario()
+        {
+            #region AllPermisosUsuario
+            var permisos = await _context.UsuariosPermisos
+                .Include(x => x.Permiso)
+                .Include(x => x.Permiso.PermisosHijos)
+                .Where(x => !x.Permiso.PermisoIdPadre.HasValue)
+                .OrderBy(x => x.Permiso.Descripcion)
+                .Select(x => x.Permiso).ToListAsync();
+            return permisos;
+            #endregion
+        }
     }
 }
