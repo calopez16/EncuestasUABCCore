@@ -256,7 +256,7 @@ namespace EncuestasUABC.Controllers
 
             try
             {
-                ViewBag.Campus = new SelectList(_repository.GetAll<Campus>(), "Id", "Nombre");
+                ViewBag.Campus = new SelectList(await _repository.GetAll<Campus>(), "Id", "Nombre");
 
             }
             catch (Exception ex)

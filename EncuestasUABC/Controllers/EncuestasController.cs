@@ -107,104 +107,104 @@ namespace EncuestasUABC.Controllers
         /// </summary>
         /// <param name="paginacion">Contiene los valores para la paginación</param>
         /// <returns>Retorna una estructura Json que permite a la herramienta Datatables.js crear la paginación en el HTML.</returns>
-        [HttpPost]
-        public async Task<IActionResult> CreadasPaginado([FromBody]Paginacion paginacion)
-        {
-            #region CreadasPaginado
-            try
-            {
-                var user = await _usuarioRepository.Get(User.Identity.Name);
+        //[HttpPost]
+        //public async Task<IActionResult> CreadasPaginado([FromBody]Paginacion paginacion)
+        //{
+        //    #region CreadasPaginado
+        //    try
+        //    {
+        //        var user = await _usuarioRepository.Get(User.Identity.Name);
 
-                //Aqui se traen los datos de tipo PaginacionResult
-                var listaEncuestas = await _repository.FindBy<Encuesta>(x => x.UsuarioId == user.Id, x => x.OrderByDescending(x => x.Fecha));
-                decimal paginas = listaEncuestas.Count() / paginacion.Length;
-                int totalPaginas = (int)Math.Ceiling(paginas);
-                int totalRegistros = listaEncuestas.Count();
+        //        //Aqui se traen los datos de tipo PaginacionResult
+        //        var listaEncuestas = await _repository.FindBy<Encuesta>(x => x.UsuarioId == user.Id, x => x.OrderByDescending(x => x.Fecha));
+        //        decimal paginas = listaEncuestas.Count() / paginacion.Length;
+        //        int totalPaginas = (int)Math.Ceiling(paginas);
+        //        int totalRegistros = listaEncuestas.Count();
 
-                encuestas = encuestas
-                                       .Skip(inicio)
-                                       .Take(numeroPorPagina)
-                                       .ToList();
+        //        encuestas = encuestas
+        //                               .Skip(inicio)
+        //                               .Take(numeroPorPagina)
+        //                               .ToList();
 
-                paginacion = new List<Encuesta>
-                {
-                    Result = encuestas.ToList(),
-                    NumeroPagina = numPagina,
-                    TotalRegistros = totalRegistros,
-                    TotalPaginas = totalPaginas
+        //        paginacion = new List<Encuesta>
+        //        {
+        //            Result = encuestas.ToList(),
+        //            NumeroPagina = numPagina,
+        //            TotalRegistros = totalRegistros,
+        //            TotalPaginas = totalPaginas
 
-                };
+        //        };
 
-                var registrosFiltrados = result.Count();
-                var totalRegistrosFiltrados = result.Count();
-                var datosPaginados = result;
-                return Json(new { draw = paginacion.Draw, recordsFiltered = registrosFiltrados, recordsTotal = totalRegistrosFiltrados, data = datosPaginados });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return BadRequest(ex.Message);
-            }
-            #endregion
-        }
-        [HttpPost]
-        public async Task<IActionResult> EditarNombreDescripcion(Encuesta model, bool encuestaEstatus = false)
-        {
-            #region EditarNombreDescripcion
-            try
-            {
-                if (encuestaEstatus)
-                    model.EstatusEncuestaId = (int)Enumerador.EstatusEncuesta.ACTIVA;
-                else
-                    model.EstatusEncuestaId = (int)Enumerador.EstatusEncuesta.INACTIVA;
+        //        var registrosFiltrados = result.Count();
+        //        var totalRegistrosFiltrados = result.Count();
+        //        var datosPaginados = result;
+        //        return Json(new { draw = paginacion.Draw, recordsFiltered = registrosFiltrados, recordsTotal = totalRegistrosFiltrados, data = datosPaginados });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex.Message);
+        //        return BadRequest(ex.Message);
+        //    }
+        //    #endregion
+        //}
+        //[HttpPost]
+        //public async Task<IActionResult> EditarNombreDescripcion(Encuesta model, bool encuestaEstatus = false)
+        //{
+        //    #region EditarNombreDescripcion
+        //    try
+        //    {
+        //        if (encuestaEstatus)
+        //            model.EstatusEncuestaId = (int)Enumerador.EstatusEncuesta.ACTIVA;
+        //        else
+        //            model.EstatusEncuestaId = (int)Enumerador.EstatusEncuesta.INACTIVA;
 
-                var encuesta = await _encuestasRepository.Get(model.Id);
-                encuesta.Nombre = model.Nombre;
-                encuesta.Descripcion = model.Descripcion;
-                encuesta.EstatusEncuestaId = model.EstatusEncuestaId;
-                await _encuestasRepository.Update(encuesta);
-                ShowMessageSuccess(Constantes.Mensajes.ENCUESTAS_MSJ03);
-            }
-            catch (MessageAlertException ex)
-            {
-                _logger.LogInformation(ex.Message);
-                GenerarAlerta(ex);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                ShowMessageException(ex.Message);
-            }
-            return RedirectToAction(nameof(Editar), new { id = model.Id });
-            #endregion
-        }
+        //        var encuesta = await _encuestasRepository.Get(model.Id);
+        //        encuesta.Nombre = model.Nombre;
+        //        encuesta.Descripcion = model.Descripcion;
+        //        encuesta.EstatusEncuestaId = model.EstatusEncuestaId;
+        //        await _encuestasRepository.Update(encuesta);
+        //        ShowMessageSuccess(Constantes.Mensajes.ENCUESTAS_MSJ03);
+        //    }
+        //    catch (MessageAlertException ex)
+        //    {
+        //        _logger.LogInformation(ex.Message);
+        //        GenerarAlerta(ex);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex.Message);
+        //        ShowMessageException(ex.Message);
+        //    }
+        //    return RedirectToAction(nameof(Editar), new { id = model.Id });
+        //    #endregion
+        //}
 
-        [HttpPost]
-        public async Task<IActionResult> CrearSeccion(EncuestaSeccion model)
-        {
-            #region Crear
-            try
-            {
-                var user = await _usuarioRepository.Get(User.Identity.Name);
-                var encuesta = await _encuestasRepository.Get(model.EncuestaId);
-                int orden = 1;
-                if (encuesta.EncuestaSecciones.Any())
-                    orden = encuesta.EncuestaSecciones.OrderBy(x => x.Orden).Last().Orden + 1;
-                model.Orden = orden;
-                encuesta.EncuestaSecciones.Add(model);
-                await _encuestasRepository.Update(encuesta);
-                ShowMessageSuccess(Constantes.Mensajes.ENCUESTAS_MSJ05);
-                return RedirectToAction(nameof(Editar), new { id = model.EncuestaId });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                ShowMessageException(ex.Message);
-            }
-            return RedirectToAction(nameof(Creadas));
+        //[HttpPost]
+        //public async Task<IActionResult> CrearSeccion(EncuestaSeccion model)
+        //{
+        //    #region Crear
+        //    try
+        //    {
+        //        var user = await _usuarioRepository.Get(User.Identity.Name);
+        //        var encuesta = await _encuestasRepository.Get(model.EncuestaId);
+        //        int orden = 1;
+        //        if (encuesta.EncuestaSecciones.Any())
+        //            orden = encuesta.EncuestaSecciones.OrderBy(x => x.Orden).Last().Orden + 1;
+        //        model.Orden = orden;
+        //        encuesta.EncuestaSecciones.Add(model);
+        //        await _encuestasRepository.Update(encuesta);
+        //        ShowMessageSuccess(Constantes.Mensajes.ENCUESTAS_MSJ05);
+        //        return RedirectToAction(nameof(Editar), new { id = model.EncuestaId });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex.Message);
+        //        ShowMessageException(ex.Message);
+        //    }
+        //    return RedirectToAction(nameof(Creadas));
 
-            #endregion
-        }
+        //    #endregion
+        //}
 
         #endregion
 
@@ -216,7 +216,7 @@ namespace EncuestasUABC.Controllers
         {
             #region Campus
 
-            ViewBag.Campus = new SelectList(_repository.GetAll<Campus>(), "Id", "Nombre");
+            ViewBag.Campus = new SelectList(await _repository.GetAll<Campus>(), "Id", "Nombre");
 
             #endregion
         }

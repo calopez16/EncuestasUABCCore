@@ -357,7 +357,7 @@ namespace EncuestasUABC.Controllers
 
             try
             {
-                ViewBag.Campus = new SelectList(_repository.GetAll<Campus>(), "Id", "Nombre");
+                ViewBag.Campus = new SelectList(await _repository.GetAll<Campus>(), "Id", "Nombre");
 
             }
             catch (Exception ex)
@@ -374,7 +374,7 @@ namespace EncuestasUABC.Controllers
 
             try
             {
-                ViewBag.UnidadesAcademicas = new SelectList(_repository.GetAll<UnidadAcademica>(), "Id", "Nombre");
+                ViewBag.UnidadesAcademicas = new SelectList(await _repository.GetAll<UnidadAcademica>(), "Id", "Nombre");
             }
             catch (Exception ex)
             {
@@ -390,7 +390,7 @@ namespace EncuestasUABC.Controllers
 
             try
             {
-                ViewBag.UnidadesAcademicas = new SelectList(_repository.GetAll<UnidadAcademica>(), "Id", "Nombre");
+                ViewBag.UnidadesAcademicas = new SelectList(await _repository.GetAll<UnidadAcademica>(), "Id", "Nombre");
             }
             catch (Exception ex)
             {
