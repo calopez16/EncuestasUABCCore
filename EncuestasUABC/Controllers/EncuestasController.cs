@@ -107,46 +107,51 @@ namespace EncuestasUABC.Controllers
         /// </summary>
         /// <param name="paginacion">Contiene los valores para la paginación</param>
         /// <returns>Retorna una estructura Json que permite a la herramienta Datatables.js crear la paginación en el HTML.</returns>
-        //[HttpPost]
-        //public async Task<IActionResult> CreadasPaginado([FromBody]Paginacion paginacion)
-        //{
-        //    #region CreadasPaginado
-        //    try
-        //    {
-        //        var user = await _usuarioRepository.Get(User.Identity.Name);
+        [HttpPost]
+        public async Task<IActionResult> CreadasPaginado([FromBody] Paginacion paginacion)
+        {
+            #region CreadasPaginado
+            try
+            {
+                var user = await _usuarioRepository.Get(User.Identity.Name);
 
-        //        //Aqui se traen los datos de tipo PaginacionResult
-        //        var listaEncuestas = await _repository.FindBy<Encuesta>(x => x.UsuarioId == user.Id, x => x.OrderByDescending(x => x.Fecha));
-        //        decimal paginas = listaEncuestas.Count() / paginacion.Length;
-        //        int totalPaginas = (int)Math.Ceiling(paginas);
-        //        int totalRegistros = listaEncuestas.Count();
+                //Aqui se traen los datos de tipo PaginacionResult
+                var listaEncuestas = await _repository.FindBy<Encuesta>(x => x.UsuarioId == user.Id, x => x.OrderByDescending(x => x.Fecha));
+                
+                int totalRegistros = listaEncuestas.Count();
+                int column = paginacion.Order[0].Column;
+                var order = paginacion.Order[0].Dir;
 
-        //        encuestas = encuestas
-        //                               .Skip(inicio)
-        //                               .Take(numeroPorPagina)
-        //                               .ToList();
 
-        //        paginacion = new List<Encuesta>
-        //        {
-        //            Result = encuestas.ToList(),
-        //            NumeroPagina = numPagina,
-        //            TotalRegistros = totalRegistros,
-        //            TotalPaginas = totalPaginas
+                switch (column)
+                {
+                    case 1:
+                        if (order.Equals("asc"))
+                            listaEncuestas = listaEncuestas.OrderBy(x => x.Fecha);
+                        else
+                            listaEncuestas = listaEncuestas.OrderBy(x => x.Fecha);
+                        break;
+                    default:
+                        break;
+                }
+                listaEncuestas = listaEncuestas
+                                       .Skip(paginacion.Start)
+                                       .Take(paginacion.Length)
+                                       .ToList();
 
-        //        };
 
-        //        var registrosFiltrados = result.Count();
-        //        var totalRegistrosFiltrados = result.Count();
-        //        var datosPaginados = result;
-        //        return Json(new { draw = paginacion.Draw, recordsFiltered = registrosFiltrados, recordsTotal = totalRegistrosFiltrados, data = datosPaginados });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex.Message);
-        //        return BadRequest(ex.Message);
-        //    }
-        //    #endregion
-        //}
+                var registrosFiltrados = listaEncuestas.Count();
+                var totalRegistrosFiltrados = totalRegistros;
+                var datosPaginados = listaEncuestas;
+                return Json(new { draw = paginacion.Draw, recordsFiltered = registrosFiltrados, recordsTotal = totalRegistrosFiltrados, data = datosPaginados });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex.Message);
+            }
+            #endregion
+        }
         //[HttpPost]
         //public async Task<IActionResult> EditarNombreDescripcion(Encuesta model, bool encuestaEstatus = false)
         //{

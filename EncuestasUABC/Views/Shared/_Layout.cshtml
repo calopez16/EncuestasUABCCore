@@ -6,7 +6,6 @@
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 @{UsuarioInfoViewModel usuarioInfo = HttpContextAccessor.HttpContext.GetUsuarioInfoViewModel(); }
 
-
 <!DOCTYPE html>
 <html lang="es-mx">
 <head>
@@ -28,14 +27,18 @@
 
     <script type="text/javascript" src="~/lib/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+
 </head>
 <body class="fixed-navbar">
-
+    @{var url = HttpContextAccessor.HttpContext.Request.Scheme + "://" + HttpContextAccessor.HttpContext.Request.Host + HttpContextAccessor.HttpContext.Request.PathBase; }
+    <script type="text/javascript">
+            window.urlproyecto='@url';
+    </script>
     <div class="page-wrapper">
         <!-- START HEADER-->
         <header class="header bg-green">
             <div class="page-brand bg-green">
-                <a class="link" href="@Url.Action("Index","Home")">
+                <a class="link" href="@Url.Action("Index", "Home")">
                     <span class="brand text-center">
                         <img src="~/img/EncuestaUABC_Logo.png" alt="" style="width:80%" />
                     </span>
@@ -101,7 +104,7 @@
                                 @foreach (var permisoHijo in permisoPadre.PermisosHijos)
                                 {
                                     <li>
-                                        <a href="@Url.Action(permisoHijo.Action,permisoHijo.Controller)">@permisoHijo.Descripcion</a>
+                                        <a href="@Url.Action(permisoHijo.Action, permisoHijo.Controller)">@permisoHijo.Descripcion</a>
                                     </li>
                                 }
 

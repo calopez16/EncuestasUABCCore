@@ -3,6 +3,8 @@
 
 // Write your JavaScript code.
 
+const _dateFormat = 'DD/MM/YYYY HH:mm:ss';
+
 $(document).ready(function () {
     $('.mask-Date').mask('99/99/9999', {
         placeholder: 'dd/mm/yyyy'
