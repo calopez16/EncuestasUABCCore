@@ -7,178 +7,177 @@
 @{UsuarioInfoViewModel usuarioInfo = HttpContextAccessor.HttpContext.GetUsuarioInfoViewModel(); }
 
 <!DOCTYPE html>
-<html lang="es-mx">
+<html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - EncuestasUABC</title>
-    <link rel="stylesheet" type="text/css" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="~/lib/font-awesome/css/font-awesome.min.css" />
-    <link rel="stylesheet" type="text/css" href="~/lib/daterangepicker/daterangepicker.min.css" />
-    <link rel="stylesheet" type="text/css" href="~/lib/selec2/css/select2.min.css" />
-    <link rel="stylesheet" type="text/css" href="~/lib/jquery-ui/jquery-ui.css" />
-
-    <!-- PLUGINS STYLES-->
-    @*<link href="./assets/vendors/jvectormap/jquery-jvectormap-2.0.3.css" rel="stylesheet" />*@
-    <!-- THEME STYLES-->
-    <link rel="stylesheet" type="text/css" href="~/css/main.min.css" />
-    <link rel="stylesheet" type="text/css" href="~/css/animate.css" />
-    <link rel="stylesheet" type="text/css" href="~/css/site.css" />
-
-    <script type="text/javascript" src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-
-</head>
-<body class="fixed-navbar">
+    <title>@ViewData["Title"] - Encuestas UABC</title>
+    <!-- Material Design -->
+    <!-- Material Design for Bootstrap CSS -->
+    <link rel="stylesheet" href="~/lib/material-design/css/material-design.css" />
+    <link rel="stylesheet" href="~/lib/material-design/css/material-icons.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="~/css/Menu.css" />
+    <!--Site style-->
+    <link rel="stylesheet" href="~/css/site.css" />
+    <script type="text/javascript" src="~/lib/jquery/jquery.js"></script>
     @{var url = HttpContextAccessor.HttpContext.Request.Scheme + "://" + HttpContextAccessor.HttpContext.Request.Host + HttpContextAccessor.HttpContext.Request.PathBase; }
     <script type="text/javascript">
             window.urlproyecto='@url';
     </script>
-    <div class="page-wrapper">
-        <!-- START HEADER-->
-        <header class="header bg-green">
-            <div class="page-brand bg-green">
-                <a class="link" href="@Url.Action("Index", "Home")">
-                    <span class="brand text-center">
-                        <img src="~/img/EncuestaUABC_Logo.png" alt="" style="width:80%" />
-                    </span>
-                    <span class="brand-mini"><img src="~/img/EncuestaUABC_LogoIcon.png" alt="" style="width:100%"></span>
-                </a>
-            </div>
-            <div class="flexbox flex-1 bg-green">
-                <!-- START TOP-LEFT TOOLBAR-->
-                <ul class="nav navbar-toolbar">
-                    <li>
-                        <a class="nav-link sidebar-toggler js-sidebar-toggler"><i class="fa fa-bars"></i></a>
-                    </li>
-                    <li>
-                        @*<h4 class="text-light mt-1">@ViewData["Title"]</h4>*@
-                    </li>
-                </ul>
-                <!-- END TOP-LEFT TOOLBAR-->
-                <!-- START TOP-RIGHT TOOLBAR-->
-                <ul class="nav navbar-toolbar">
-                    @*<li>
-                            <div class="form-group d-none d-md-block">
-                                <div class="input-group-icon">
-                                    <div class="input-icon"><i class="fa fa-search"></i></div>
-                                    <input class="form-control" type="text" placeholder="Búsqueda en la página" style="width:500px">
-                                </div>
-                            </div>
-                        </li>*@
-                    <li class="dropdown dropdown-user">
-                        <a class="nav-link dropdown-toggle link" data-toggle="dropdown">
-                            <img src="~/img/admin-avatar.png" />
-                            <span class="d-none d-md-block">@usuarioInfo.NombreCompleto</span> <i class="fa fa-angle-down m-l-5"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" asp-action="Perfil" asp-controller="Account"><i class="fa fa-user"></i>Perfil</a>
-                            <a class="dropdown-item" asp-action="Ayuda" asp-controller="Home"><i class="fa fa-support"></i>Ayuda</a>
-                            <li class="dropdown-divider"></li>
-                            <a class="dropdown-item" href="##" onclick="$('#form_Logout').submit()"><i class="fa fa-power-off"></i>Cerrar Sesión</a>
-                        </ul>
-                    </li>
-                </ul>
-                <!-- END TOP-RIGHT TOOLBAR-->
-            </div>
-            <form asp-action="Logout" asp-controller="Account" id="form_Logout">
-            </form>
-        </header>
-        <!-- END HEADER-->
-        <!-- START SIDEBAR-->
-        <nav class="page-sidebar" id="sidebar">
-            <div id="sidebar-collapse">
-                <div class="admin-block d-flex">
-                    <img src="~/img/UABC_Escudo.png" alt="" width="300">
+</head>
+<body class="fixed-navbar">
+    <!--Double navigation-->
+    <header>
+        <!-- Image and text -->
+        <nav class="navbar navbar-light bg-primary menu-principal-nav" style="position:fixed;width:100%;background:#ddeff9">
+            <div class="form-row w-100 d-flex justify-content-between">
+                <div class="col-2">
+                    <button type="button" class="btn btn-light bmd-btn-fab float-left text-primary btn_Menu btn_MenuAbrir">
+                        <i class="material-icons md-24">menu</i>
+                    </button>
                 </div>
-
-                <ul class="side-menu metismenu">
-                    @foreach (var permisoPadre in usuarioInfo.Permisos)
-                    {
-                        <li>
-                            <a href="javascript:;">
-                                <i class="sidebar-item-icon @permisoPadre.Icono"></i>
-                                <span class="nav-label">@permisoPadre.Descripcion</span><i class="fa fa-angle-left arrow"></i>
+                <div class="col-8 d-flex justify-content-end">
+                    <ul class="nav nav-pills">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                <i class="material-icons md-48 text-light float-left mr-3" style="margin-top:-15px">account_circle</i>
+                                @usuarioInfo.NombreCompleto
                             </a>
-                            <ul class="nav-2-level collapse">
-                                @foreach (var permisoHijo in permisoPadre.PermisosHijos)
-                                {
-                                    <li>
-                                        <a href="@Url.Action(permisoHijo.Action, permisoHijo.Controller)">@permisoHijo.Descripcion</a>
-                                    </li>
-                                }
-
-                            </ul>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a asp-action="Perfil" asp-controller="Account" class="dropdown-item">
+                                    <i class="material-icons float-left mr-2">person</i>
+                                    Perfil
+                                </a>
+                                <a asp-action="Ayuda" asp-controller="Home" class="dropdown-item">
+                                    <i class="material-icons float-left mr-2">support</i>
+                                    Ayuda
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="##" onclick="$('#form_Logout').submit()">
+                                    <i class="material-icons float-left mr-2">exit_to_app</i>
+                                    Cerrar Sesión
+                                </a>
+                            </div>
                         </li>
-                    }
-                    <li><hr /></li>
-                    <li>
-                        <a asp-action="Ayuda" asp-controller="Home">
-                            <i class="sidebar-item-icon fa fa-life-ring"></i>
-                            <span class="nav-label">Soporte</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="##" onclick="$('#form_Logout').submit()">
-                            <i class="sidebar-item-icon fa fa-sign-out"></i>
-                            <span class="nav-label">Cerrar sesión</span>
-                        </a>
-
-                    </li>
-                </ul>
+                    </ul>
+                </div>
             </div>
         </nav>
-        <!-- END SIDEBAR-->
-        <div class="content-wrapper">
-            @*<div class="page-heading">
-                    <h1 class="page-title">@ViewData["Title"]</h1>
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a href="index.html"><i class="la la-home font-20"></i></a>
-                        </li>
-                        <li class="breadcrumb-item">Colors</li>
-                        <li class="breadcrumb-item">Colors</li>
+        <nav class="menu-principal">
+            <div class="menu-opciones p-0 bg-light shadow">
+                <nav class="navbar navbar-light">
+                    <div class="row">
+                        <div class="col-12">
+                            <h4 class="text-primary mt-2 text-center">
+                                <img src="~/img/Logo-icon.png" style="width:40px" />
+                                Encuestas UABC
+                            </h4>
+                        </div>
+                        <div class="col-12">
+                            <hr />
+                        </div>
+                        <div class="col-3">
+                            <i class="material-icons md-74 text-primary">account_circle</i>
+                        </div>
+                        <div class="col-9 mt-2">
+                            <h5>@usuarioInfo.NombreCompleto</h5>
+                            <p>@usuarioInfo.Rol</p>
+                        </div>
+                    </div>
+                </nav>
+                <div class="row">
+                    <div class="col-12">
+                        <ul class="opciones">
+                            @foreach (var permiso in usuarioInfo.Permisos)
+                            {
+                                <li>
+                                    @if (!permiso.PermisosHijos.Any())
+                                    {
 
-                    </ol>
-                </div>*@
-            <!-- START PAGE CONTENT-->
-            <div class="page-content fade-in-up">
-                @RenderBody()
+                                        <a class="opciones-item btn btn-primary text-left p-3 pl-4 m-0" href="@Url.Action(permiso.Action,permiso.Controller)">
+                                            <i class="material-icons float-left">@permiso.Icono</i>
+                                            <span class="pl-3" style="vertical-align:middle">@permiso.Descripcion</span>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a class="opciones-item btn btn-primary text-left p-3 pl-4">
+                                            <i class="material-icons float-left">@permiso.Icono</i>
+                                            <span class="pl-3">@permiso.Descripcion</span>
+                                            <i class="material-icons float-right">keyboard_arrow_down</i>
+                                        </a>
+                                        <ul style="display:none">
+                                            @foreach (var permisoHijo in permiso.PermisosHijos)
+                                            {
+                                                <li>
+                                                    <a class="sub-opciones-item btn btn-secondary text-left p-3 pl-4" href="@Url.Action(permisoHijo.Action,permisoHijo.Controller)">
+                                                        <i class="material-icons float-left">@permisoHijo.Icono</i>
+                                                        <span class="pl-3">@permisoHijo.Descripcion</span>
+                                                    </a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    }
+                                </li>
+                            }
+                        </ul>
+                        <form asp-action="Logout" asp-controller="Account" id="form_Logout">
+                        </form>
+                    </div>
+                    <div class="col-12">
+                        <hr />
+                    </div>
+                    <div class="col-12">
+                        <ul class="opciones">
+                            <li>
+                                <a class="opciones-item btn btn-primary text-left p-3 pl-4 m-0" href="##" onclick="$('#form_Logout').submit()">
+                                    <i class="material-icons float-left clearfix">exit_to_app</i>
+                                    <span class="pl-3">Cerrar Sesión</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-12 d-flex justify-content-center">
+                        <button type="button" class="btn btn-primary bmd-btn-fab text-light btn_Menu btn_MenuCerrar">
+                            <i class="material-icons">menu_open</i>
+                        </button>
+                    </div>
+                </div>
             </div>
-            <!-- END PAGE CONTENT-->
-            <footer class="page-footer">
-                <div class="font-13"><b>ENCUESTAS UABC</b> @DateTime.Now.Year ©  - Todos los derechos reservados.</div>
-                <div class="to-top"><i class="fa fa-angle-double-up"></i></div>
-            </footer>
+        </nav>
+        <div class="fondo-negro" style="display:none"></div>
+    </header>
+    <!--/.Double navigation-->
+    <!--Main layout-->
+    <main style="padding-top:110px;background:#f3f6fa">
+        <div class="container-fluid">
+            @RenderBody()
         </div>
-    </div>
+    </main>
+    <!--/Main layout-->
+    <!--Footer-->
+    <footer class="page-footer text-center text-md-left pt-4">
+        <!--Copyright-->
+        <div class="footer-copyright py-3 text-center">
+            <div class="container-fluid">
+                © @DateTime.Now.Year Copyright: Encuestas UABC
+            </div>
+        </div>
+        <!--/.Copyright-->
+    </footer>
+    <!--/.Footer-->
 
-
-    <!-- BEGIN PAGA BACKDROPS-->
-    <div class="sidenav-backdrop backdrop"></div>
-    <div class="preloader-backdrop">
-        <div class="page-preloader">Cargando...</div>
-    </div>
-
-    <!-- CORE PLUGINS-->
-    <script type="text/javascript" src="~/lib/popper.js/dist/umd/popper.min.js"></script>
-    <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="~/lib/metisMenu/dist/metisMenu.min.js"></script>
-    <script type="text/javascript" src="~/lib/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-    <script type="text/javascript" src="~/lib/momentjs/moment.js"></script>
-    <script type="text/javascript" src="~/lib/bootstrap-notify/bootstrap-notify.min.js"></script>
-    <script type="text/javascript" src="~/lib/jquery-ui/jquery-ui.js"></script>
-
-    <!-- PAGE LEVEL PLUGINS-->
-    <script type="text/javascript" src="~/lib/chart.js/dist/Chart.min.js"></script>
-    <script type="text/javascript" src="~/lib/jquery.inputmask/jquery.maskedinput.min.js"></script>
-    <!--Select2-->
-    <script type="text/javascript" src="~/lib/selec2/js/select2.min.js"></script>
-    <script type="text/javascript" src="~/lib/selec2/js/i18n/es.js"></script>
-
-    <script type="text/javascript" src="~/js/app.min.js"></script>
+    <script type="text/javascript" src="~/lib/popper/umd/popper.js"></script>
+    <script type="text/javascript" src="~/lib/material-design/js/material-design.js"></script>
+    <script type="module" src="~/lib/cookiejs/cookiejs.js"></script>
+    <script type="module" src="~/js/Menu.js"></script>
+    <script type="module" src="~/lib/jquery-validation/jquery.validate.min.js"></script>
+    <script type="module" src="~/lib/bootstrap-notify/bootstrap-notify.js"></script>
     <script type="text/javascript" src="~/js/site.js"></script>
+    <script>$(document).ready(function () { $('body').bootstrapMaterialDesign(); });</script>
     <partial name="~/Views/Shared/_Alerts.cshtml" />
+
     @RenderSection("Scripts", required: false)
     <script type="text/javascript">
         var enum_MessageAlertType = @(EnumHelper.EnumToString<MessageAlertType>());

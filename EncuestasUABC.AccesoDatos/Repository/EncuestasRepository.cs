@@ -47,46 +47,7 @@ namespace EncuestasUABC.AccesoDatos.Repository
             return encuesta;
             #endregion
         }
-
-
-        public async Task<IEnumerable<Encuesta>> FindBy(Expression<Func<Encuesta, bool>> filter = null, Func<IQueryable<Encuesta>, IOrderedQueryable<Encuesta>> orderby = null, params Expression<Func<Encuesta, object>>[] includes)
-        {
-            #region FindBy
-            IQueryable<Encuesta> query = _context.Set<Encuesta>();
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
-
-            if (includes != null)
-            {
-                query = includes.Aggregate(query,
-                          (current, include) => current.Include(include));
-            }
-
-            if (orderby != null)
-            {
-                return orderby(query).ToList();
-            }
-            return query.ToList();
-            #endregion
-        }
-
-        public async Task<IEnumerable<Encuesta>> GetByUser(string userId)
-        {
-            #region GetByUser
-            return (await GetEncuestas())
-                .Where(x => x.UsuarioId.Equals(userId))
-                .ToList();
-            #endregion
-        }
-        public async Task<int> Update(Encuesta encuesta)
-        {
-            #region Update
-            _context.Entry(encuesta).State = EntityState.Modified;
-            return await _context.SaveChangesAsync();
-            #endregion
-        }
+       
         private async Task<IEnumerable<Encuesta>> GetEncuestas()
         {
             #region 

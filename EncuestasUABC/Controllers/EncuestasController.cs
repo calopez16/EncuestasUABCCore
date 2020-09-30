@@ -152,6 +152,29 @@ namespace EncuestasUABC.Controllers
             }
             #endregion
         }
+
+        [HttpPost]
+        public async Task<IActionResult> CarreraAutoComplete(string busqueda)
+        {
+            #region EditarNombreDescripcion
+            try
+            {
+                var carreras = _repository.FindBy<Carrera>(x=>x.Nombre.Contains(busqueda));
+            }
+            catch (MessageAlertException ex)
+            {
+                _logger.LogInformation(ex.Message);
+                GenerarAlerta(ex);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                ShowMessageException(ex.Message);
+            }
+            return Ok();
+            #endregion
+        }
+
         //[HttpPost]
         //public async Task<IActionResult> EditarNombreDescripcion(Encuesta model, bool encuestaEstatus = false)
         //{

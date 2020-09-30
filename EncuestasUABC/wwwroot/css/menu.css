@@ -1,0 +1,68 @@
+﻿/*Menu principal*/
+.menu-principal {
+    position: absolute;
+    top: 0px;
+    left: -350px;
+    display: none;
+    z-index: 3;
+    height: 100%;
+}
+
+    .menu-principal > div {
+        position: fixed;
+        height: 100%;
+        width: 350px;
+        padding: 20px;
+    }
+
+.menu-opciones {
+    max-height: 100vh; /*modify the value to fit your needs, 80px is the position of your floating button*/
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+/*Fondo negro al ser responsivo*/
+.fondo-negro {
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.50);
+    z-index: 2;
+}
+
+/*Opciones del menu*/
+
+
+    .opciones, .opciones ul {
+        width: 100%;
+        list-style: none;
+        list-style-type: none;
+        padding: 0;
+    }
+
+.opciones-item, .sub-opciones-item {
+    display: block;
+    width: 100%;
+    vertical-align: middle !important;
+}
+
+.opciones-item {
+    color: #135934 !important;
+}
+
+    .opciones-item.active {
+        color: white !important;
+    }
+
+    .opciones-item > i {
+        margin-top: -2px;
+    }
+
+    .opciones-item:hover {
+        background: #135934 !important;
+        color: white !important;
+    }
+
+.sub-opciones-item {
+    padding-left: 40px !important;
+}

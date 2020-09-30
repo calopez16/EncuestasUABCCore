@@ -60,19 +60,45 @@ $(document).ready(function() {
         ],
         //Se traducen algunos de los textos de la tabla que se genera.
         language: {
-            processing: '<div class="spinner-border text-primary" role="status"></div>',
+            processing: 'Cargando',
             search: "Buscar _INPUT_",
-            lengthMenu: "Elementos por página:  _MENU_",
+            lengthMenu: "Elementos por p&#225;gina:  _MENU_",
             info: "Mostrando _START_ - _END_ de _TOTAL_ elementos",
             infoEmpty: "Mostrando _START_ - _END_ de _TOTAL_ elementos",
-            emptyTable: "No hay información",
+            emptyTable: "No hay informaci&#243;n",
             paginate: {
                 previous: "Anterior",
                 next: "Siguiente"
             },
             infoFiltered: " - filtrado de _MAX_ registros en total"
         },
+    });
 
+    $("#select_Carrera").select2({
+        placeholder: "Select Multiple Values",
+        theme: "bootstrap4",
+        allowClear: true,
+        ajax: {
+            url: `${window.urlproyecto}/Encuestas/CarreraAutoComplete`,
+            contentType: "application/json; charset=utf-8",
+            data: function (params) {
+                var query =
+                {
+                    term: params.term,
+                };
+                return query;
+            },
+            processResults: function (result) {
+                return {
+                    results: $.map(result, function (item) {
+                        return {
+                            id: item.IdCarrera,
+                            text: item.Nombre
+                        };
+                    }),
+                };
+            }
+        }
     });
 
 });
