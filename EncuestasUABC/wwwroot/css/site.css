@@ -14,8 +14,6 @@ body {
 .material-icons.md-90 { font-size: 90px; }
 .material-icons.md-128 { font-size: 128px; }
 
-
-
 /* Rules for using icons as black on a light background. */
 .material-icons.md-dark { color: rgba(0, 0, 0, 0.54); }
 .material-icons.md-dark.md-inactive { color: rgba(0, 0, 0, 0.26); }
@@ -29,6 +27,10 @@ a.bmd-btn-fab {
     align-items: center;
     justify-content: center;
 }
-.error{
-    color:red;
+
+.modal-title {
+    font-size: 28px;
+    color: #135934;
+    font-weight:500;
 }
+

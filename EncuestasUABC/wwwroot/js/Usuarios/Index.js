@@ -12,7 +12,7 @@ function CargarUsuarios() {
         // Petición AJAX
         ajax: {
             //URL de donde se obtendrán los datos paginados.
-            url: "/Usuarios/Paginado",
+            url: `${window.urlproyecto}/Usuarios/Paginado`,
             //Tipo de petición http
             type: "POST",
             //Tipo de formato que se enviara al servidor.
@@ -32,7 +32,6 @@ function CargarUsuarios() {
                     search: filtros.search,
                     OtrosFiltros: []
                 };
-
                 //En caso de que se necesiten enviar más parámetros agregar alguna de las siguientes líneas.
                 //datos.OtrosFiltros.push(OtroParametro); //Variable
                 //datos.OtrosFiltros.push("Valor1"); //string
@@ -43,6 +42,7 @@ function CargarUsuarios() {
             }
         },
         ordering: true,// Habilita el ordenamiento de la tabla.
+        searching: false,
         //Se especifica la información de las columnas
         columns: [
             {
@@ -82,12 +82,28 @@ function CargarUsuarios() {
                 autoWidth: true,
                 className: "text-center",
                 render: function (data, type, row) {
-                    var item = `<a href="/Usuarios/Edit?email=${data}" class="btn btn-primary m-1" title="Editar"><i class="fa fa-edit"></i></a>`;
-                    item += `<button class="btn btn-danger m-1 btn_Eliminar" title="Editar" data-id="${data}"><i class="fa fa-trash"></i></button>`;
+                    var item = `<span class="btn-group-sm">
+                                  <a class="btn btn-info bmd-btn-fab" href="${window.urlproyecto}/Usuarios/Edit?email=${data}" data-toggle="tooltip" data-placement="bottom" title="Editar usuario">
+                                    <i class="material-icons">edit</i>
+                                  </a>
+                                </span>`;
                     return item;
                 }
             },
-
+            {
+                data: 'userName',
+                sortable: false,
+                autoWidth: true,
+                className: "text-center",
+                render: function (data, type, row) {
+                    var item = `<span class="btn-group-sm">
+                                  <button class="btn btn-danger bmd-btn-fab btn_Eliminar" data-id="${data}" href="${window.urlproyecto}/Usuarios/Edit?email=${data}" data-toggle="tooltip" data-placement="bottom" title="Eliminar usuario">
+                                    <i class="material-icons">delete</i>
+                                  </button>
+                                </span>`;
+                    return item;
+                }
+            },
         ],
         //Se traducen algunos de los textos de la tabla que se genera.
         language: {
@@ -103,6 +119,9 @@ function CargarUsuarios() {
             },
             infoFiltered: " - filtrado de _MAX_ registros en total"
         },
+        initComplete: function (settings, json) {
+            $('[data-toggle="tooltip"]').tooltip();
+        }
     });
 
     $("#table_Usuarios").on("click", ".btn_Eliminar", function () {

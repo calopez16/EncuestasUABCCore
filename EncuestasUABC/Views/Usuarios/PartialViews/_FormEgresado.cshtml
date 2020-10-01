@@ -3,41 +3,54 @@
     Layout = null;
 }
 
-    <div class="row" id="div_Egresado">
-        <input hidden asp-for="UsuarioEgresado.EgresadoId" />
-
-        <div class="col-md-3 form-group">
-            <label>Periodo de ingreso</label>
+<div class="row" id="div_Egresado">
+    <input hidden asp-for="UsuarioEgresado.EgresadoId" />
+    <div class="col-md-3">
+        <div class="form-group">
+            <label asp-for="UsuarioEgresado.Egresado.PeriodoIngreso" class="bmd-label-floating"></label>
             <input asp-for="UsuarioEgresado.Egresado.PeriodoIngreso" class="form-control mask-periodo" type="text">
         </div>
-        <div class="col-md-2 form-group">
-            <label>Periodo de Egreso</label>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label asp-for="UsuarioEgresado.Egresado.PeriodoEgreso" class="bmd-label-floating"></label>
             <input asp-for="UsuarioEgresado.Egresado.PeriodoEgreso" class="form-control mask-periodo" type="text">
         </div>
-
-        <div class="col-sm-3 form-group">
-            <label>Correo</label>
+    </div>
+    <div class="col-sm-3">
+        <div class="form-group">
+            <label asp-for="UsuarioEgresado.Egresado.Correo" class="bmd-label-floating"></label>
             <input asp-for="UsuarioEgresado.Egresado.Correo" class="form-control" type="text">
         </div>
-        <div class="col-md-3 form-group">
-            <label>Correo Alterno</label>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <label asp-for="UsuarioEgresado.Egresado.CorreoAlterno" class="bmd-label-floating"></label>
             <input asp-for="UsuarioEgresado.Egresado.CorreoAlterno" class="form-control" type="text">
         </div>
-        <div class="col-md-4 form-group">
-            <label>Facebook</label>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="UsuarioEgresado.Egresado.Facebook" class="bmd-label-floating"></label>
             <input asp-for="UsuarioEgresado.Egresado.Facebook" class="form-control" type="text">
-
         </div>
-        <div class="col-sm-3 form-group">
-            <label>Otro</label>
+    </div>
+    <div class="col-sm-3">
+        <div class="form-group">
+            <label asp-for="UsuarioEgresado.Egresado.Otro" class="bmd-label-floating"></label>
             <input asp-for="UsuarioEgresado.Egresado.Otro" class="form-control" type="text">
         </div>
-        <div class="col-sm-3 form-group">
-            <label>Teléfono</label>
+    </div>
+    <div class="col-sm-3">
+        <div class="form-group">
+            <label asp-for="UsuarioEgresado.Egresado.Telefono" class="bmd-label-floating"></label>
             <input asp-for="UsuarioEgresado.Egresado.Telefono" class="form-control mask-phone" type="text">
         </div>
-        <div class="col-sm-3 form-group">
-            <label>Celular</label>
+    </div>
+    <div class="col-sm-3">
+        <div class="form-group">
+            <label asp-for="UsuarioEgresado.Egresado.Celular" class="bmd-label-floating"></label>
             <input asp-for="UsuarioEgresado.Egresado.Celular" class="form-control mask-phone" type="text">
         </div>
     </div>
+</div>

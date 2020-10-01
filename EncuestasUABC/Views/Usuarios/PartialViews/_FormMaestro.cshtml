@@ -2,23 +2,31 @@
 @{
     Layout = null;
 }
-    <div class="row" id="div_Maestro">
-        <input hidden asp-for="UsuarioMaestro.MaestroId" />
-        <div class="col-md-3 form-group">
-            <label>Número de Empleado</label>
+<div class="row" id="div_Maestro">
+    <input hidden asp-for="UsuarioMaestro.MaestroId" />
+    <div class="col-md-3">
+        <div class="form-group">
+            <label asp-for="UsuarioMaestro.Maestro.NumeroEmpleado" class="bmd-label-floating"></label>
             <input asp-for="UsuarioMaestro.Maestro.NumeroEmpleado" class="form-control" type="text">
         </div>
-        <div class="col-md-2 form-group">
-            <label>Correo</label>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label asp-for="UsuarioMaestro.Maestro.Correo" class="bmd-label-floating"></label>
             <input asp-for="UsuarioMaestro.Maestro.Correo" class="form-control" type="text">
         </div>
+    </div>
 
-        <div class="col-sm-3 form-group">
-            <label>Correo Alterno</label>
+    <div class="col-sm-3">
+        <div class="form-group">
+            <label asp-for="UsuarioMaestro.Maestro.CorreoAlterno" class="bmd-label-floating"></label>
             <input asp-for="UsuarioMaestro.Maestro.CorreoAlterno" class="form-control" type="text">
         </div>
-        <div class="col-md-3 form-group">
-            <label>Teléfono</label>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <label asp-for="UsuarioMaestro.Maestro.Telefono" class="bmd-label-floating"></label>
             <input asp-for="UsuarioMaestro.Maestro.Telefono" class="form-control mask-phone" type="text">
         </div>
     </div>
+</div>

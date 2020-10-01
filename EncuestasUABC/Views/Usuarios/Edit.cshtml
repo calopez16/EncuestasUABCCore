@@ -4,31 +4,34 @@
     ViewData["Title"] = "Editar Usuario";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="ibox p-4">
-    <form asp-action="Edit" id="form_Usuario">
-        <div class="header-pagina">
-            <a asp-action="Index">
-                <i class="fa fa-angle-left"></i>
-            </a>
-            <h1>
-                @ViewData["Title"]
-            </h1>
-        </div>
-        <hr />
-        <input hidden asp-for="UserName" />
-        <div class="ibox-body">
+
+<div class="card">
+    <div class="card-header">
+        <a asp-action="Index" class="btn btn-primary bmd-btn-fab float-left mr-4" data-toggle="tooltip" data-placement="bottom" title="Regresar">
+            <i class="material-icons">keyboard_backspace</i>
+        </a>
+        <a class="btn btn-primary bmd-btn-fab float-right mr-4" data-toggle="tooltip" data-placement="bottom" title="Permisos">
+            <i class="material-icons">verified_user</i>
+        </a>
+        <button id="btn_CambiarContrasena" data-email="@Model.Email" class="btn btn-warning bmd-btn-fab float-right mr-4" data-toggle="tooltip" data-placement="bottom" title="Cambiar contraseña">
+            <i class="material-icons">vpn_key</i>
+        </button>
+        <h1 class="mt-2">@ViewData["Title"]</h1>
+    </div>
+    <div class="card-body">
+        <form asp-action="Edit" id="form_Usuario">
+            <input hidden asp-for="UserName" />
             @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormUsuario.cshtml", Model)
             @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormAlumno.cshtml", Model)
             @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormEgresado.cshtml", Model)
             @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormMaestro.cshtml", Model)
-        </div>
-        <div class="ibox-footer text-center">
-            <button type="button" class="btn btn-warning" id="btn_CambiarContrasena" data-email="@Model.Email">Cambiar Contraseña</button>
-            <button class="btn btn-primary">Permisos</button>
-            <button type="submit" class="btn btn-primary">Editar</button>
-        </div>
-    </form>
+        </form>
+    </div>
+    <div class="card-footer text-center">
+        <button type="submit" class="btn btn-success btn-raised">Editar</button>
+    </div>
 </div>
+
 <partial name="~/Views/Usuarios/PartialViews/_ModalCambiarContrasena.cshtml" />
 <script type="text/javascript" src="~/js/Usuarios/FormUsuario.js"></script>
 

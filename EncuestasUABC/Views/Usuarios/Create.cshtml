@@ -4,29 +4,25 @@
     ViewData["Title"] = "Crear Usuario";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="ibox p-4">
+<div class="card">
     <form asp-action="Create" id="form_Usuario">
-        <div class="header-pagina">
-            <a asp-action="Index">
-                <i class="fa fa-angle-left"></i>
+        <div class="card-header">
+            <a asp-action="Index" class="btn btn-primary bmd-btn-fab float-left mr-4" data-toggle="tooltip" data-placement="bottom" title="Regresar">
+                <i class="material-icons">keyboard_backspace</i>
             </a>
-            <h1>
-                @ViewData["Title"]
-            </h1>
+            <h1 class="mt-2">@ViewData["Title"]</h1>
         </div>
-        <hr />
-        <div class="ibox-body">
+        <div class="card-body">
             @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormUsuario.cshtml", Model)
             @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormAlumno.cshtml", Model)
             @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormEgresado.cshtml", Model)
             @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormMaestro.cshtml", Model)
-        </div>
-        <div class="ibox-footer text-center">
-            <button type="submit" class="btn btn-primary">Agregar</button>
+        </div>          
+        <div class="card-footer text-center">
+            <button type="submit" class="btn btn-primary btn-raised">Guardar</button>
         </div>
     </form>
 </div>
-
 <script type="text/javascript" src="~/js/Usuarios/FormUsuario.js"></script>
 
 

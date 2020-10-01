@@ -1,25 +1,18 @@
-﻿@using EncuestasUABC.Models;
-@using Newtonsoft.Json;
-@using EncuestasUABC.Utilidades;
-@using EncuestasUABC.Enumerador;
-@using EncuestasUABC.Constantes;
-@{
-    ViewData["Title"] = "Listado de Usuarios";
+﻿@{
+    ViewData["Title"] = "Usuarios";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<script type="text/javascript" src="~/lib/DataTables/datatables.min.js"></script>
-<link href="~/lib/DataTables/datatables.min.css" rel="stylesheet" />
-<div class="ibox p-4">
-    <div class="ibox-head">
-        <div class="ibox-title">
-            <h1 class="page-title">@ViewData["Title"]</h1>
-        </div>
-        <a class="btn btn-primary" href="@Url.Action("Create","Usuarios")">Agregar</a>
+<div class="card">
+    <div class="card-header">
+        <a asp-action="Create" class="btn btn-primary bmd-btn-fab float-right" data-toggle="tooltip" data-placement="bottom" title="Agregar usuario">
+            <i class="material-icons">add</i>
+        </a>
+        <h1 class="mt-md-2">@ViewData["Title"]</h1>
     </div>
-    <div class="ibox-body">
+    <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered" id="table_Usuarios">
+            <table class="table table-bordered table-hover" id="table_Usuarios">
                 <thead>
                     <tr>
                         <th>Correo</th>
@@ -27,7 +20,8 @@
                         <th>Apellido Paterno</th>
                         <th>Apellido Materno</th>
                         <th>Rol</th>
-                        <th></th>
+                        <th style="width:40px"></th>
+                        <th style="width:40px"></th>
                     </tr>
                 </thead>
                 <tbody>

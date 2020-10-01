@@ -93,30 +93,10 @@ $(document).ready(function () {
             }
         }
     });
-
-    var campusId = $("#txt_CampusId").val();
-    var unidadAcademicaId = parseInt($("#txt_UnidadAcademicaId").val());
-    var carreraId = parseInt($("#txt_CarreraId").val());
-    CargarUnidadesAcademicas(campusId, unidadAcademicaId);
-    CargarCarreras(unidadAcademicaId, carreraId);
-    $("#select_Campus").change(function () {
-        var campusId = $(this).val();
-        $("#select_UnidadAcademica").empty();
-        $("#select_Carrera").empty();
-        CargarUnidadesAcademicas(campusId);
-        CargarCarreras(0);
-    });
-
-    $("#select_UnidadAcademica").change(function () {
-        var unidadAcademicaId = $(this).val();
-        $("#select_Carrera").empty();
-        CargarCarreras(unidadAcademicaId);
-    });
-
     $("#btn_CambiarContrasena").click(function () {
         var email = $(this).data("email");
         $("#txt_EmailContrasena").val(email);
         $("#modal_CambiarContrasena").modal("show");
-    })
+    });
 });
 

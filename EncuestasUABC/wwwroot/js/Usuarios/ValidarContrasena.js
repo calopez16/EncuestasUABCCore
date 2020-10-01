@@ -1,7 +1,6 @@
 var contrasenaValida = false;
 
 $(document).ready(function () {
-
     $("#txt_contrasena").keyup(function () {
         ValidarContrasena();
     });

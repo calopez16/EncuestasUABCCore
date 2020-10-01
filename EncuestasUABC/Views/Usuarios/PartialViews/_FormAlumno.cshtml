@@ -9,53 +9,71 @@
     <input hidden asp-for="UsuarioAlumno.Alumno.CarreraId" id="txt_CarreraId" name="txt_CarreraId" />
     <input hidden asp-for="UsuarioAlumno.AlumnoId" />
     <div class="row">
-        <div class="col-md-3 form-group">
-            <label>Matrícula</label>
-            <input asp-for="UsuarioAlumno.Alumno.Matricula" class="form-control">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label asp-for="UsuarioAlumno.Alumno.Matricula" class="bmd-label-floating"></label>
+                <input asp-for="UsuarioAlumno.Alumno.Matricula" class="form-control">
+            </div>
         </div>
-        <div class="col-md-2 form-group">
-            <label>Semeste</label>
-            <input asp-for="UsuarioAlumno.Alumno.Semestre" class="form-control">
+        <div class="col-md-2">
+            <div class="form-group">
+                <label asp-for="UsuarioAlumno.Alumno.Semestre" class="bmd-label-floating"></label>
+                <input asp-for="UsuarioAlumno.Alumno.Semestre" class="form-control">
+            </div>
         </div>
 
-        <div class="col-md-3 form-group">
-            <label>Periodo de Ingreso</label>
-            <input asp-for="UsuarioAlumno.Alumno.PeriodoIngreso" class="form-control mask-periodo">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label asp-for="UsuarioAlumno.Alumno.PeriodoIngreso" class="bmd-label-floating"></label>
+                <input asp-for="UsuarioAlumno.Alumno.PeriodoIngreso" class="form-control mask-periodo">
+            </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-4 form-group">
-            <label class="form-control-label">Campus</label><br />
-            <select asp-for="UsuarioAlumno.Alumno.CampusId" class="form-control select2" asp-items="ViewBag.Campus" id="select_Campus">
-                <option value="">Seleccionar</option>
-            </select>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="UsuarioAlumno.Alumno.CampusId" class="bmd-label-floating"></label>
+                <select asp-for="UsuarioAlumno.Alumno.CampusId" class="form-control select2" asp-items="ViewBag.Campus" id="select_Campus">
+                    <option value="">Seleccionar</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="UsuarioAlumno.Alumno.UnidadAcademicaId" class="bmd-label-floating"></label>
+                <select asp-for="UsuarioAlumno.Alumno.UnidadAcademicaId" class="form-control" id="select_UnidadAcademica">
+                    <option value="">Seleccionar</option>
+                </select>
+            </div>
+
         </div>
         <div class="col-md-4 form-group">
-            <label class="form-control-label">Unidad Académica</label><br />
-            <select asp-for="UsuarioAlumno.Alumno.UnidadAcademicaId" class="form-control" id="select_UnidadAcademica">
-                <option value="">Seleccionar</option>
-            </select>
-        </div>
-        <div class="col-md-4 form-group">
-            <label class="form-control-label">Carrera</label><br />
-            <select asp-for="UsuarioAlumno.Alumno.CarreraId" class="form-control" id="select_Carrera">
-                <option value="">Seleccionar</option>
-            </select>
+            <div class="form-group">
+                <label asp-for="UsuarioAlumno.Alumno.CarreraId" class="bmd-label-floating"></label>
+                <select asp-for="UsuarioAlumno.Alumno.CarreraId" class="form-control" id="select_Carrera">
+                    <option value="">Seleccionar</option>
+                </select>
+            </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-3 form-group">
-            <label>Correo Alterno</label>
-            <input asp-for="UsuarioAlumno.Alumno.CorreoAlterno" class="form-control " type="text">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label asp-for="UsuarioAlumno.Alumno.CorreoAlterno" class="bmd-label-floating"></label>
+                <input asp-for="UsuarioAlumno.Alumno.CorreoAlterno" class="form-control" type="text">
+            </div>
         </div>
-        <div class="col-md-4 form-group">
-            <label>Celular</label>
-            <input asp-for="UsuarioAlumno.Alumno.Celular" class="form-control mask-phone" type="text">
-
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="UsuarioAlumno.Alumno.Celular" class="bmd-label-floating"></label>
+                <input asp-for="UsuarioAlumno.Alumno.Celular" class="form-control mask-phone" type="text">
+            </div>
         </div>
-        <div class="col-sm-3 form-group">
-            <label>Fecha de Nacimiento</label>
-            <input asp-for="UsuarioAlumno.Alumno.FechaNacimiento" class="form-control">
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label asp-for="UsuarioAlumno.Alumno.FechaNacimiento" class="bmd-label-floating"></label>
+                <input asp-for="UsuarioAlumno.Alumno.FechaNacimiento" class="form-control">
+            </div>
         </div>
     </div>
 </div>
