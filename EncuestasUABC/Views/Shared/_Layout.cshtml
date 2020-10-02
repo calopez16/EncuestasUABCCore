@@ -27,13 +27,16 @@
 
     <!--Jquery-->
     <script type="text/javascript" src="~/lib/jquery/jquery.js"></script>
-   
+
 </head>
 <body class="fixed-navbar">
     @{var url = HttpContextAccessor.HttpContext.Request.Scheme + "://" + HttpContextAccessor.HttpContext.Request.Host + HttpContextAccessor.HttpContext.Request.PathBase; }
     <script type="text/javascript">
             window.urlproyecto='@url';
     </script>
+    <div class="loader-container">
+        <div class="loader"></div>
+    </div>
     <!--Double navigation-->
     <header>
         <!-- Image and text -->
@@ -174,7 +177,6 @@
         <!--/.Copyright-->
     </footer>
     <!--/.Footer-->
-
     <!--PLUGINS-->
     <script type="text/javascript" src="~/lib/DataTables/datatables.js"></script>
     <script type="text/javascript" src="~/lib/DataTables/datatables.bootstrap4.js"></script>
@@ -200,6 +202,5 @@
     </script>
 
     @RenderSection("Scripts", required: false)
-
 </body>
 </html>

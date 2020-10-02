@@ -5,3 +5,7 @@
 $(document).ready(() => {
     $('[data-toggle="tooltip"]').tooltip();
 });
+
+$(window).on("load", function () {
+    $(".loader-container").fadeOut();
+});

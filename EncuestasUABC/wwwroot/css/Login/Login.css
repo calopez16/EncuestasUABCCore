@@ -9,6 +9,7 @@ body {
     background-position: center;
     position: relative;
     overflow-y: hidden;
+    margin-left:0 !important;
 }
 
 .fondo-login {
@@ -37,82 +38,10 @@ body {
     transition: .3s ease-in-out;
     border-radius: 10px;
     transform: translateX(10%);
+    padding:30px 80px 30px 80px;
 }
 
 .white-login-right {
     transform: translateX(130%) !important;
 }
 
-
-.input-data {
-    height: 40px;
-    width: 100%;
-    position: relative;
-}
-
-    .input-data input, .input-data textarea {
-        height: 100%;
-        width: 100%;
-        border: none;
-        outline: none;
-        font-size: 20px;
-        border-bottom: 2px solid silver;
-    }
-
-        .input-data input:focus ~ label,
-        .input-data input:valid ~ label,
-        .input-data textarea:focus ~ label,
-        .input-data textarea:valid ~ label {
-            transform: translateY(-20px);
-            font-size: 20px;
-            color: #11784c;
-        }
-
-        
-
-    .input-data label {
-        position: absolute;
-        bottom: 10px;
-        left: 0;
-        color: grey;
-        pointer-events: none;
-        transition: all 0.3s ease;
-    }
-
-    .input-data .underline {
-        position: absolute;
-        height: 2px;
-        width: 100%;
-        bottom: 0;
-    }
-
-        .input-data .underline:before {
-            position: absolute;
-            content: "";
-            height: 100%;
-            width: 100%;
-            background: #11784c;
-            transform: scaleX(0);
-            transform-origin: center;
-            transition: transform 0.3s ease;
-        }
-
-    .input-data input:focus ~ .underline:before,
-    .input-data input:valid ~ .underline:before,
-    .input-data textarea:focus ~ .underline:before,
-    .input-data textarea:valid ~ .underline:before {
-        transform: scaleX(1);
-    }
-
-.btn_Login {
-    background-color: #11784c;
-    border-radius: 10px;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 20px;
-    cursor: pointer;
-    margin-top: 20px;
-}

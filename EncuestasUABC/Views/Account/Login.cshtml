@@ -63,54 +63,49 @@
             </div>
 
             <div class="white-login">
-                <form asp-action="Login" class="form-group" method="post" id="form_login">
+                <form asp-action="Login" method="post" id="form_login">
                     <div class="form-row p-4">
                         <div class="col-12">
                             <h1 class="text-primary mt-2 text-center text-pr">
-                                <img src="~/img/EncuestasUABCLogo.svg" style="width:40px" />
+                                <img src="~/img/EncuestasUABCLogo.svg" style="width:100px" />
                                 Encuestas UABC
                             </h1>
                         </div>
                         <div class="col-12 mt-5">
                             <h2 class="text-center" style="color:#11784c;">Iniciar sesión</h2>
                         </div>
-                        <div class="col-12 pl-5 pr-5 mt-5">
-                            <div class="input-data">
-                                <input asp-for="Email" required>
-                                <div class="underline">
-                                </div>
-                                <label>Correo</label>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label asp-for="Email" class="bmd-label-floating"></label>
+                                <input asp-for="Email" class="form-control form-control-lg">
+                                <span asp-validation-for="Email"></span>
                             </div>
-                            <div class="input-data mt-5">
-                                <input asp-for="Password" required>
-                                <div class="underline">
-                                </div>
-                                <label>Contraseña</label>
-                            </div>
-
-                            <div class="checkbox mt-2">
-                                <label asp-for="RememberMe">
-                                    <input asp-for="RememberMe" />
-                                    @Html.DisplayNameFor(m => m.RememberMe)
-                                </label>
-                            </div>
-                            @if (TempData["InvalidLogin"] != null)
-                            {
-                                <div class="alert alert-danger mt-3">
-                                    @TempData["InvalidLogin"].ToString()
-                                </div>
-                            }
-                            @if (TempData["InfoLogin"] != null)
-                            {
-                                <div class="alert alert-success mt-3">
-                                    @TempData["InfoLogin"].ToString()
-                                </div>
-                            }
-                            <div class="form-group text-center fixed-bottom mb-5">
-                                <button type="submit" class="btn_Login">Iniciar sesión</button>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label asp-for="Password" class="bmd-label-floating"></label>
+                                <input asp-for="Password" class="form-control form-control-lg">
+                                <span asp-validation-for="Password"></span>
                             </div>
                         </div>
 
+                        @if (TempData["InvalidLogin"] != null)
+                        {
+                            <div class="alert alert-danger mt-3">
+                                @TempData["InvalidLogin"].ToString()
+                            </div>
+                        }
+                        @if (TempData["InfoLogin"] != null)
+                        {
+                            <div class="alert alert-success mt-3">
+                                @TempData["InfoLogin"].ToString()
+                            </div>
+                        }
+                        <div class="form-group text-center fixed-bottom mb-5">
+                            <button type="submit" class="btn btn-primary btn-raised btn-lg">Iniciar sesión</button>
+                        </div>
                     </div>
                 </form>
 
