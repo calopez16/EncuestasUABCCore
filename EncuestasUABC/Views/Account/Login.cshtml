@@ -77,6 +77,20 @@
                     </div>
                     <div class="row">
                         <div class="col-12">
+                            @if (TempData["InvalidLogin"] != null)
+                            {
+                                <div class="alert alert-danger mt-3">
+                                    @TempData["InvalidLogin"].ToString()
+                                </div>
+                            }
+                            @if (TempData["InfoLogin"] != null)
+                            {
+                                <div class="alert alert-success mt-3">
+                                    @TempData["InfoLogin"].ToString()
+                                </div>
+                            }
+                        </div>
+                        <div class="col-12">
                             <div class="form-group">
                                 <label asp-for="Email" class="bmd-label-floating"></label>
                                 <input asp-for="Email" class="form-control form-control-lg">
@@ -90,19 +104,6 @@
                                 <span asp-validation-for="Password"></span>
                             </div>
                         </div>
-
-                        @if (TempData["InvalidLogin"] != null)
-                        {
-                            <div class="alert alert-danger mt-3">
-                                @TempData["InvalidLogin"].ToString()
-                            </div>
-                        }
-                        @if (TempData["InfoLogin"] != null)
-                        {
-                            <div class="alert alert-success mt-3">
-                                @TempData["InfoLogin"].ToString()
-                            </div>
-                        }
                         <div class="form-group text-center fixed-bottom mb-5">
                             <button type="submit" class="btn btn-primary btn-raised btn-lg">Iniciar sesión</button>
                         </div>

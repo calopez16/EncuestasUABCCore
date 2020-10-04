@@ -85,7 +85,7 @@ namespace EncuestasUABC.Controllers
                 var user = await _usuarioRepository.Get(User.Identity.Name);
                 model.UsuarioId = user.Id;
                 model.Fecha = DateTime.Now;
-                model.EstatusEncuestaId = (int)Enumerador.EstatusEncuesta.INACTIVA;
+                model.EstatusEncuestaId = (int)Enumerador.EstatusEncuestaId.Inactiva;
                 var result = await _repository.Add<Encuesta>(model);
                 ShowMessageSuccess(Constantes.Mensajes.ENCUESTAS_MSJ01);
                 return RedirectToAction(nameof(Editar), new { id = result.Id });

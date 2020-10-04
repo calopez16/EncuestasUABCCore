@@ -24,7 +24,7 @@
                     <div class="col-md-2 align-self-center pt-4">
                         <label class="ui-checkbox ui-checkbox-primary mt-1">
                             @if (Model != null)
-                                @if (Model.EstatusEncuestaId == (int)EncuestasUABC.Enumerador.EstatusEncuesta.ACTIVA)
+                                @if (Model.EstatusEncuestaId == (int)EstatusEncuestaId.Activa)
                                 {
                                     <input name="encuestaEstatus" type="checkbox" value="true" checked>
                                 }

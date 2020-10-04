@@ -2,38 +2,40 @@
 {
     public static class RolesSistema
     {
-        public const string ADMINISTRADOR = "ADMINISTRADOR";
-        public const string MAESTRO = "MAESTRO";
-        public const string COORDINADOR = "COORDINADOR";
-        public const string TUTOR = "TUTOR";
-        public const string ALUMNO = "ALUMNO";
-        public const string EGRESADO = "EGRESADO";
+        public const string Administrador = "Administrador";
+        public const string Maestro = "Maestro";
+        public const string Coordinador = "Coordinador";
+        public const string Tutor = "Tutor";
+        public const string Alumno = "Alumno";
+        public const string Egresado = "Egresado";
     }  
 
     public static class EstatusEncuestaAsignada
     {
-        public const string SIN_VISUALIZAR = "SIN VISUALIZAR";
-        public const string INICIADA = "INICIADA";
-        public const string FINALIZADA = "FINALIZADA";
+        public const string SinVisualizar = "SIN VISUALIZAR";
+        public const string Iniciada = "INICIADA";
+        public const string Finalizada = "FINALIZADA";
     }
     public static class EstatusEncuesta
     {
-        public const string ACTIVA = "ACTIVA";
-        public const string INACTIVA = "INACTIVA";
-        public const string ELIMINADA = "ELIMINADA";
+        public const string Activa = "ACTIVA";
+        public const string Inactiva = "INACTIVA";
+        public const string Eliminada = "ELIMINADA";
 
     }
     public static class TipoPregunta
     {
-        public static string ABIERTA = "ABIERTA";
-        public static string MULTIPLE = "OPCIÓN MÚLTIPLE";
-        public static string UNICA_OPCION = "ÚNICA OPCIÓN";
+        public static string Abierta = "ABIERTA";
+        public static string Multiple = "OPCIÓN MÚLTIPLE";
+        public static string UnicaOpcion = "ÚNICA OPCIÓN";
 
     }
  
     public static class Defaults
     {
-        public static string CONTRASENA = "Us@2020!";
+        public static string Contrasena = "Us@2020!";
+        public static string AdminEmail = "admin@uabc.edu.mx";
+
     }
 
     public static class Alerts
@@ -43,11 +45,11 @@
         public const string CLASS_ALERT_WARNING = "warning";
         public const string CLASS_ALERT_DANGER = "danger";
 
-        public const string CLASS_ICON_ALERT_SUCCESS = "fa-check-circle";
-        public const string CLASS_ICON_ALERT_INFORMATION = "fa-info-circle";
-        public const string CLASS_ICON_ALERT_WARNING = "fa-exclamation-triangle";
-        public const string CLASS_ICON_ALERT_DANGER = "fa-exclamation-circle";
-        public const string CLASS_ICON_ALERT_EXCEPTION = "fa-bug";
+        public const string CLASS_ICON_ALERT_SUCCESS = "check_circle";
+        public const string CLASS_ICON_ALERT_INFORMATION = "info";
+        public const string CLASS_ICON_ALERT_WARNING = "warning";
+        public const string CLASS_ICON_ALERT_DANGER = "report";
+        public const string CLASS_ICON_ALERT_EXCEPTION = "error";
 
         public const string CLASS_TITLE_ALERT_SUCCESS = "¡Operación exitosa!";
         public const string CLASS_TITLE_ALERT_INFORMATION = "Información";

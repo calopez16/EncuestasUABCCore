@@ -1,37 +1,42 @@
-﻿@model ApplicationUser
+﻿@model ApplicationUserViewModel
 
 
 <div class="row mb-4">
     <div class="col-md-6 col-lg-3">
         <div class="form-group">
             <label asp-for="Nombre" class="bmd-label-floating"></label>
-            <input asp-for="Nombre" class="form-control" type="text" maxlength="80" autocomplete="off">
+            <input asp-for="Nombre" class="form-control">
+            <span asp-validation-for="Nombre"></span>
         </div>
     </div>
     <div class="col-md-6 col-lg-3">
         <div class="form-group">
             <label asp-for="ApellidoPaterno" class="bmd-label-floating"></label>
-            <input asp-for="ApellidoPaterno" class="form-control" type="text" maxlength="80" autocomplete="off">
+            <input asp-for="ApellidoPaterno" class="form-control" >
+            <span asp-validation-for="ApellidoPaterno"></span>
         </div>
     </div>
     <div class="col-sm-6 col-lg-3">
         <div class="form-group">
             <label asp-for="ApellidoMaterno" class="bmd-label-floating"></label>
-            <input asp-for="ApellidoMaterno" class="form-control" type="text" maxlength="80" autocomplete="off">
+            <input asp-for="ApellidoMaterno" class="form-control">
+            <span asp-validation-for="ApellidoMaterno"></span>
         </div>
     </div>
     <div class="col-md-6 col-lg-3">
         <div class="form-group">
             <label asp-for="Email" class="bmd-label-floating"></label>
-            <input asp-for="Email" class="form-control mask-email" type="text" placeholder="usuario@uabc.edu.mx" autocomplete="off">
+            <input asp-for="Email" class="form-control">
+            <span asp-validation-for="Email"></span>
         </div>
     </div>
     <div class="col-md-6 col-lg-3">
         <div class="form-group">
-            <label asp-for="Rol" class="bmd-label-floating"></label>
-            <select asp-for="Rol" class="form-control" asp-items="ViewBag.Roles" id="select_Rol">
+            <label asp-for="RolId" class="bmd-label-floating"></label>
+            <select asp-for="RolId" class="form-control" asp-items="ViewBag.Roles" id="select_Rol">
                 <option value="">Seleccionar</option>
             </select>
+            <span asp-validation-for="RolId"></span>
         </div>
     </div>
 </div>

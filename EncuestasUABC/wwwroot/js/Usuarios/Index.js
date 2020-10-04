@@ -71,7 +71,7 @@ function CargarUsuarios() {
                 visible: true
             },
             {
-                data: 'rol',
+                data: 'rolIdNavigation.descripcion',
                 sortable: false,
                 autoWidth: true,
                 visible: true

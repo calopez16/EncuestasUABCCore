@@ -10,13 +10,31 @@ $(document).ready(function () {
     });
 });
 
-function ContrasenaValida() {
+function ContrasenaValida(validaContraAnterior = false) {
+    $("#contrasenaActual").next().html("");
+    $("#txt_contrasena").next().text("");
+    $("#txt_confirmarContrasena").next().text("");
+    if (validaContraAnterior) {
+        if ($("#contrasenaActual").val() == "") {
+            $("#contrasenaActual").next().html("Ingresa la contrase&ntilde;a actual");
+            contrasenaValida = false;
+        }
+    }
+    if ($("#txt_contrasena").val() == "") {
+        $("#txt_contrasena").next().text("El campo es requerido");
+        contrasenaValida = false;
+    } else if($("#txt_confirmarContrasena").val() == "") {
+        $("#txt_confirmarContrasena").next().text("El campo es requerido");
+        contrasenaValida = false;
+    }
+   
     if (contrasenaValida)
         return true;
     else
         return false;
 }
 function ValidarContrasena() {
+   
     var pswd = $("#txt_contrasena").val();
     var pswdConfirm = $('#txt_confirmarContrasena').val();
     contrasenaValida = true;
@@ -66,7 +84,7 @@ function ValidarContrasena() {
         $('#ContrasNoCoinciden').addClass('d-none');
         contrasenaValida = false;
     }
-
+   
     if (contrasenaValida) {
         $(".div_CaracteristicasContraAlert").removeClass("alert-warning");
         $(".div_CaracteristicasContraAlert").addClass("alert-success");
@@ -74,5 +92,7 @@ function ValidarContrasena() {
         $(".div_CaracteristicasContraAlert").addClass("alert-warning");
         $(".div_CaracteristicasContraAlert").removeClass("alert-success");
     }
+
+    return contrasenaValida;
 }
 

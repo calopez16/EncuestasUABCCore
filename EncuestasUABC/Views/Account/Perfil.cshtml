@@ -1,4 +1,4 @@
-﻿@using EncuestasUABC.Constantes;
+﻿@using EncuestasUABC.Enumerador;
 @model ApplicationUser;
 @{
     ViewData["Title"] = "Perfil";
@@ -19,7 +19,7 @@
                             <img class="img-circle" src="~/img/admin-avatar.png" width="100" />
                         </div>
                         <h5 class="font-strong m-b-10 m-t-10">@Model.Nombre @Model.ApellidoPaterno @Model.ApellidoMaterno</h5>
-                        <div class="m-b-20 text-muted">@Model.Rol</div>
+                        <div class="m-b-20 text-muted">@Model.RolIdNavigation.Descripcion</div>
                     </div>
                 </div>
                 <div class="ibox">
@@ -75,33 +75,34 @@
                                             </div>
                                         </div>
                                     </div>
-                                        <input hidden asp-for="Rol" />
-                                        @if (Model.Rol.Equals(RolesSistema.COORDINADOR) || Model.Rol.Equals(RolesSistema.MAESTRO) || Model.Rol.Equals(RolesSistema.TUTOR))
-                                        {
-                                            @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormMaestro.cshtml", Model)
-                                        }
-                                        else if (Model.Rol.Equals(RolesSistema.EGRESADO))
-                                        {
-                                            @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormEgresado.cshtml", Model)
-                                        }
-                                        else if (Model.Rol.Equals(RolesSistema.ALUMNO))
-                                        {
-                                            @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormAlumno.cshtml", Model)
+                                    <input hidden asp-for="RolId" />
+                                    @if (Model.RolId == (int)RolId.Coordinador || Model.RolId == (int)RolId.Administrativo || Model.RolId == (int)RolId.Tutor)
+                                    {
+                                        @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormMaestro.cshtml", Model)
+                                    }
+                                    else if (Model.RolId == (int)RolId.Egresado)
+                                    {
+                                        @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormEgresado.cshtml", Model)
+                                    }
+                                    else if (Model.RolId == (int)RolId.Alumno)
+                                    {
+                                        @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormAlumno.cshtml", Model)
 
-                                        }
-                                        <div class="card-footer text-center">
-                                            <button type="submit" class="btn btn-primary btn-raised">Guardar</button>
-                                        </div>
-</form>
+                                    }
+                                    <div class="card-footer text-center">
+                                        <button type="submit" class="btn btn-primary btn-raised">Guardar</button>
+                                    </div>
+                                </form>
                             </div>
                             <div class="tab-pane fade show" id="cambiarContrasena">
-                                <form asp-action="CambiarContrasenaPerfil" onsubmit="return ContrasenaValida()">
+                                <form asp-action="CambiarContrasenaPerfil" onsubmit="return ContrasenaValida(true)">
                                     <div class="row">
                                         <div class="row col-md-6">
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <label for="contrasenaActual" class="bmd-label-floating">Contraseña Actual</label>
                                                     <input name="contrasenaActual" id="contrasenaActual" class="form-control" type="password" />
+                                                    <span class="field-validation-error"></span>
                                                 </div>
                                             </div>
                                         </div>

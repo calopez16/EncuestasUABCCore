@@ -1,5 +1,6 @@
-﻿@model ApplicationUser
-
+﻿@model ApplicationUserViewModel
+@using EncuestasUABC.Utilidades;
+@using EncuestasUABC.Enumerador;
 @{
     ViewData["Title"] = "Editar Usuario";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -28,10 +29,12 @@
         </form>
     </div>
     <div class="card-footer text-center">
-        <button type="submit" class="btn btn-primary btn-raised">Editar</button>
+        <button type="button" class="btn btn-primary btn-raised" id="btn_Guardar">Guardar</button>
     </div>
 </div>
 
 <partial name="~/Views/Usuarios/PartialViews/_ModalCambiarContrasena.cshtml" />
 <script type="text/javascript" src="~/js/Usuarios/FormUsuario.js"></script>
-
+<script type="text/javascript">
+    var enum_Roles=@(EnumHelper.EnumToString<RolId>())
+</script>

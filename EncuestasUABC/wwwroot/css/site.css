@@ -96,3 +96,7 @@ a.bmd-btn-fab {
     z-index: 1000;
     left: 0;
 }
+
+.field-validation-error{
+    color:red;
+}

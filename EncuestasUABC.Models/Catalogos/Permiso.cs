@@ -16,7 +16,7 @@ namespace EncuestasUABC.Models.Catalogos
 
 
         [ForeignKey(nameof(PermisoIdPadre))]
-        public Permiso PermisoPadre { get; set; }
+        public Permiso PermisoIdPadreNavigation { get; set; }
         public virtual ICollection<Permiso> PermisosHijos { get; set; }
     }
 }

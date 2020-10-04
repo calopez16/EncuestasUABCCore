@@ -1,32 +1,36 @@
-﻿@model ApplicationUser;
+﻿@model ApplicationUserViewModel;
 @{
     Layout = null;
 }
 <div class="row" id="div_Maestro">
-    <input hidden asp-for="UsuarioMaestro.MaestroId" />
+    <input hidden asp-for="Administrativo.Id" />
     <div class="col-md-3">
         <div class="form-group">
-            <label asp-for="UsuarioMaestro.Maestro.NumeroEmpleado" class="bmd-label-floating"></label>
-            <input asp-for="UsuarioMaestro.Maestro.NumeroEmpleado" class="form-control" type="text">
+            <label asp-for="Administrativo.NumeroEmpleado" class="bmd-label-floating"></label>
+            <input asp-for="Administrativo.NumeroEmpleado" class="form-control">
+            <span asp-validation-for="Administrativo.NumeroEmpleado"></span>
         </div>
     </div>
     <div class="col-md-2">
         <div class="form-group">
-            <label asp-for="UsuarioMaestro.Maestro.Correo" class="bmd-label-floating"></label>
-            <input asp-for="UsuarioMaestro.Maestro.Correo" class="form-control" type="text">
+            <label asp-for="Administrativo.Correo" class="bmd-label-floating"></label>
+            <input asp-for="Administrativo.Correo" class="form-control">
+            <span asp-validation-for="Administrativo.Correo"></span>
         </div>
     </div>
 
     <div class="col-sm-3">
         <div class="form-group">
-            <label asp-for="UsuarioMaestro.Maestro.CorreoAlterno" class="bmd-label-floating"></label>
-            <input asp-for="UsuarioMaestro.Maestro.CorreoAlterno" class="form-control" type="text">
+            <label asp-for="Administrativo.CorreoAlterno" class="bmd-label-floating"></label>
+            <input asp-for="Administrativo.CorreoAlterno" class="form-control">
+            <span asp-validation-for="Administrativo.CorreoAlterno"></span>
         </div>
     </div>
     <div class="col-md-3">
         <div class="form-group">
-            <label asp-for="UsuarioMaestro.Maestro.Telefono" class="bmd-label-floating"></label>
-            <input asp-for="UsuarioMaestro.Maestro.Telefono" class="form-control mask-phone" type="text">
+            <label asp-for="Administrativo.Telefono" class="bmd-label-floating"></label>
+            <input asp-for="Administrativo.Telefono" class="form-control mask-phone">
+            <span asp-validation-for="Administrativo.Telefono"></span>
         </div>
     </div>
 </div>

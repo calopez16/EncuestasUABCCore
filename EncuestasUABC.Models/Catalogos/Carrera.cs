@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EncuestasUABC.Models.Catalogos
 {
@@ -8,9 +9,9 @@ namespace EncuestasUABC.Models.Catalogos
         public string Nombre { get; set; }
         public int UnidadAcademicaId { get; set; }
         public bool Estatus { get; set; }
+        public UnidadAcademica UnidadAcademicaIdNavigation { get; set; }
 
-        [ForeignKey(nameof(UnidadAcademicaId))]
-        public UnidadAcademica UnidadAcademica{ get; set; }
+        public virtual ICollection<Alumno> Alumnos { get; set; }
 
     }
 }

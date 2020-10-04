@@ -67,7 +67,7 @@ namespace EncuestasUABC.Controllers
                         if (result.Succeeded)
                         {
                             List<Permiso> permisos;
-                            if (user.Rol.Equals(Constantes.RolesSistema.ADMINISTRADOR))
+                            if (user.RolIdNavigation.Descripcion.Equals(Constantes.RolesSistema.Administrador))
                             {
                                 permisos = await _usuarioRepository.AllPermisosUsuario();
                             }
@@ -79,7 +79,7 @@ namespace EncuestasUABC.Controllers
                             {
                                 Id = user.Id,
                                 NombreCompleto = $"{user.Nombre} {user.ApellidoPaterno} {user.ApellidoMaterno}",
-                                Rol = user.Rol,
+                                Rol = user.RolIdNavigation.Descripcion,
                                 Permisos = permisos
                             }, new JsonSerializerSettings
                             {
@@ -136,7 +136,7 @@ namespace EncuestasUABC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Perfil(ApplicationUser model)
+        public async Task<IActionResult> Perfil(ApplicationUserViewModel model)
         {
             #region Perfil
 
@@ -146,24 +146,9 @@ namespace EncuestasUABC.Controllers
                 if (!model.Email.Equals(user.Email))
                 {
                     if ((await _usuarioRepository.Get(model.Email)) != null)
-                        throw new MessageAlertException(Enumerador.MessageAlertType.INFORMATION, string.Format(Constantes.Mensajes.USUARIOS_MSJ03, model.Email));
+                        throw new MessageAlertException(Enumerador.MessageAlertType.Information, string.Format(Constantes.Mensajes.USUARIOS_MSJ03, model.Email));
                 }
-
-                if (!user.Rol.Equals(model.Rol))
-                {
-                    var resultRemoveRol = await _usuarioRepository.RemoveRolOfUser(user, user.Rol);
-                    if (resultRemoveRol.Succeeded)
-                    {
-                        var resultSetRol = await _usuarioRepository.SetRolToUser(user, model.Rol);
-                        if (resultSetRol.Succeeded)
-                            user.Rol = model.Rol;
-                        else
-                            throw new MessageAlertException(Enumerador.MessageAlertType.WARNING, Constantes.Mensajes.USUARIOS_MSJ13);
-                    }
-                }
-                user.UsuarioEgresado = model.UsuarioEgresado;
-                user.UsuarioAlumno = model.UsuarioAlumno;
-                user.UsuarioMaestro = model.UsuarioMaestro;
+                         
                 user.Nombre = model.Nombre;
                 user.ApellidoPaterno = model.ApellidoPaterno;
                 user.ApellidoMaterno = model.ApellidoMaterno;
@@ -174,7 +159,7 @@ namespace EncuestasUABC.Controllers
 
                 var resultUpdate = await _usuarioRepository.Update(user);
                 if (!resultUpdate.Succeeded)
-                    throw new MessageAlertException(Enumerador.MessageAlertType.WARNING, string.Format(Constantes.Mensajes.USUARIOS_MSJ08, user.Email));
+                    throw new MessageAlertException(Enumerador.MessageAlertType.Warning, string.Format(Constantes.Mensajes.USUARIOS_MSJ08, user.Email));
                 ShowMessageSuccess(string.Format(Constantes.Mensajes.USUARIOS_MSJ06, user.Email));
                 return RedirectToAction(nameof(Perfil));
             }
@@ -187,10 +172,6 @@ namespace EncuestasUABC.Controllers
             {
                 _logger.LogError(ex.Message);
                 ShowMessageException(ex.Message);
-            }
-            finally
-            {
-                await Campus();
             }
             return View(model);
 
@@ -216,7 +197,7 @@ namespace EncuestasUABC.Controllers
                 }
                 else
                 {
-                    throw new MessageAlertException(Enumerador.MessageAlertType.WARNING, Constantes.Mensajes.USUARIOS_MSJ15);
+                    throw new MessageAlertException(Enumerador.MessageAlertType.Warning, Constantes.Mensajes.USUARIOS_MSJ15);
                 }
             }
             catch (MessageAlertException ex)

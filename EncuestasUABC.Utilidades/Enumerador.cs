@@ -1,36 +1,45 @@
 ﻿
 namespace EncuestasUABC.Enumerador
 {
-    public enum Campus
+    public enum CampusId
     {
-        MEXICALI = 1,
-        ENSENADA,
-        TIJUANA,
-        TECATE
+        Mexicali = 1,
+        Ensenada,
+        Tijuana,
+        Tecate
     }
-    public enum EstatusEncuesta
+    public enum EstatusEncuestaId
     {
-        ACTIVA = 1,
-        INACTIVA,
-        ELIMINADA
+        Activa = 1,
+        Inactiva,
+        Eliminada
     }
-    public enum TipoPregunta
+    public enum TipoPreguntaId
     {
-        ABIERTA = 1,
-        MULTIPLE,
-        UNICA_OPCION,
-        CONDICIONAL,
-        MATRIZ,
-        SUBPREGUNTA
+        Abierta = 1,
+        Multiple,
+        UnicaOpcion,
+        Condicional,
+        Matriz,
+        SubPregunta
     }
 
     public enum MessageAlertType
     {
-        SUCCESS = 1,
-        WARNING,
-        INFORMATION,
-        DANGER,
-        EXCEPTION
+        Success = 1,
+        Warning,
+        Information,
+        Danger,
+        Exception
     }
 
+    public enum RolId
+    {
+        Administrador = 1,
+        Administrativo,
+        Coordinador,
+        Tutor,
+        Alumno,
+        Egresado
+    }
 }

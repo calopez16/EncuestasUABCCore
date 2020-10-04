@@ -79,19 +79,19 @@ namespace EncuestasUABC.Controllers
             #region GenerarAlerta
             switch ((int)ex.ExceptionType)
             {
-                case (int)Enumerador.MessageAlertType.SUCCESS:
+                case (int)Enumerador.MessageAlertType.Success:
                     ShowMessageSuccess(ex.Message);
                     break;
-                case (int)Enumerador.MessageAlertType.INFORMATION:
+                case (int)Enumerador.MessageAlertType.Information:
                     ShowMessageInfo(ex.Message);
                     break;
-                case (int)Enumerador.MessageAlertType.WARNING:
+                case (int)Enumerador.MessageAlertType.Warning:
                     ShowMessageWarning(ex.Message);
                     break;
-                case (int)Enumerador.MessageAlertType.DANGER:
+                case (int)Enumerador.MessageAlertType.Danger:
                     ShowMessageDanger(ex.Message);
                     break;
-                case (int)Enumerador.MessageAlertType.EXCEPTION:
+                case (int)Enumerador.MessageAlertType.Exception:
                     ShowMessageException(ex.Message);
                     break;
             }

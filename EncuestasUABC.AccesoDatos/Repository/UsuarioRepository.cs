@@ -34,7 +34,9 @@ namespace EncuestasUABC.AccesoDatos.Repositories
         {
             #region GetAll
 
-            return await _context.ApplicationUser.Where(x => x.Activo).ToListAsync();
+            return await _context.ApplicationUser
+                .Include(x => x.RolIdNavigation)
+                .Where(x => x.Activo).ToListAsync();
 
             #endregion
         }
@@ -42,17 +44,9 @@ namespace EncuestasUABC.AccesoDatos.Repositories
         public async Task<List<ApplicationUser>> GetAll(string rol)
         {
             #region GetAll
-            var usuarios = await _context.ApplicationUser.Where(x => x.Activo).ToListAsync();
-            var usuariosResult = new List<ApplicationUser>();
-            usuariosResult.AddRange(usuarios);
-            foreach (var usuario in usuarios)
-            {
-                if (!await _userManager.IsInRoleAsync(usuario, rol))
-                {
-                    usuariosResult.Remove(usuario);
-                }
-            }
-            return usuariosResult;
+            return await _context.ApplicationUser
+                        .Include(x => x.RolIdNavigation)
+                        .Where(x => x.Activo && x.RolIdNavigation.Descripcion.Equals(rol)).ToListAsync();
             #endregion
         }
 
@@ -60,17 +54,12 @@ namespace EncuestasUABC.AccesoDatos.Repositories
         {
             #region Get
 
-            var user = await _context.ApplicationUser
-                 .Include(x => x.UsuarioAlumno).ThenInclude(x => x.Alumno)
-                 .Include(x => x.UsuarioEgresado).ThenInclude(x => x.Egresado)
-                 .Include(x => x.UsuarioMaestro).ThenInclude(x => x.Maestro)
-                  .FirstOrDefaultAsync(x => x.Id.Equals(id));
-            if (user != null)
-            {
-                user.Rol = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
-            }
-            return user;
-
+            return await _context.ApplicationUser
+                 .Include(x => x.Alumno)
+                 .Include(x => x.Egresado)
+                 .Include(x => x.Administrativo)
+                 .Include(x => x.RolIdNavigation)
+                 .FirstOrDefaultAsync(x => x.Id.Equals(id));
 
             #endregion
         }
@@ -79,18 +68,13 @@ namespace EncuestasUABC.AccesoDatos.Repositories
         {
             #region Get
 
-            var user = await _context.ApplicationUser
-                 .Include(x => x.UsuarioAlumno).ThenInclude(x => x.Alumno).ThenInclude(x => x.Carrera).ThenInclude(x => x.UnidadAcademica).ThenInclude(x => x.Campus)
-                 .Include(x => x.UsuarioEgresado).ThenInclude(x => x.Egresado)
-                 .Include(x => x.UsuarioMaestro).ThenInclude(x => x.Maestro)
+            return await _context.ApplicationUser
+                 .Include(x => x.Alumno).ThenInclude(x => x.CarreraIdNavigation).ThenInclude(x => x.UnidadAcademicaIdNavigation).ThenInclude(x => x.CampusIdNavigation)
+                 .Include(x => x.Egresado)
+                 .Include(x => x.Administrativo)
+                 .Include(x => x.RolIdNavigation)
                   .Where(x => x.UserName.Equals(userName))
                   .FirstOrDefaultAsync();
-            if (user != null)
-            {
-                user.Rol = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
-            }
-            return user;
-
 
             #endregion
         }
@@ -99,7 +83,7 @@ namespace EncuestasUABC.AccesoDatos.Repositories
         {
             #region Create
 
-            return await _userManager.CreateAsync(user, Defaults.CONTRASENA);
+            return await _userManager.CreateAsync(user, Defaults.Contrasena);
 
             #endregion
         }
@@ -160,25 +144,23 @@ namespace EncuestasUABC.AccesoDatos.Repositories
         public async Task<List<Permiso>> PermisosUsuario(string userId)
         {
             #region PermisosUsuario
-            var permisos = await _context.UsuariosPermisos
-                .Include(x => x.Permiso)
-                .Include(x => x.Permiso.PermisosHijos)
-                .Where(x => x.UsuarioId.Equals(userId) && !x.Permiso.PermisoIdPadre.HasValue)
-                .OrderBy(x => x.Permiso.Descripcion)
-                .Select(x => x.Permiso).ToListAsync();
-            return permisos;
+            return await _context.UsuariosPermisos
+                .Include(x => x.PermisoIdNavigation)
+                .Include(x => x.PermisoIdNavigation.PermisosHijos)
+                .Where(x => x.UsuarioId.Equals(userId) && !x.PermisoIdNavigation.PermisoIdPadre.HasValue)
+                .OrderBy(x => x.PermisoIdNavigation.Descripcion)
+                .Select(x => x.PermisoIdNavigation).ToListAsync();
             #endregion
         }
         public async Task<List<Permiso>> AllPermisosUsuario()
         {
             #region AllPermisosUsuario
-            var permisos = await _context.UsuariosPermisos
-                .Include(x => x.Permiso)
-                .Include(x => x.Permiso.PermisosHijos)
-                .Where(x => !x.Permiso.PermisoIdPadre.HasValue)
-                .OrderBy(x => x.Permiso.Descripcion)
-                .Select(x => x.Permiso).ToListAsync();
-            return permisos;
+            return await _context.Permisos
+                .Include(x => x.PermisosHijos)
+                .ThenInclude(x=>x.PermisosHijos)
+                .Where(x => !x.PermisoIdPadre.HasValue)
+                .OrderBy(x => x.PermisoIdPadreNavigation.Descripcion)
+                .ToListAsync();
             #endregion
         }
     }

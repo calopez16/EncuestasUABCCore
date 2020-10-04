@@ -1,4 +1,5 @@
-﻿using EncuestasUABC.Models.Relaciones;
+﻿using EncuestasUABC.Models.Catalogos;
+using EncuestasUABC.Models.Relaciones;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -18,17 +19,14 @@ namespace EncuestasUABC.Models
         public string ApellidoPaterno { get; set; }
         [MaxLength(80)]
         public string ApellidoMaterno { get; set; }
+        public int RolId { get; set; }
         public bool Activo { get; set; } = true;
 
+        public Rol RolIdNavigation { get; set; }
+        public virtual Administrativo Administrativo { get; set; }
+        public virtual Alumno Alumno { get; set; }
+        public virtual Egresado Egresado { get; set; }
         public virtual ICollection<UsuarioPermiso> Permisos { get; set; }
-        public virtual UsuarioMaestro UsuarioMaestro { get; set; }
-        public virtual UsuarioAlumno UsuarioAlumno { get; set; }
-        public virtual UsuarioEgresado UsuarioEgresado { get; set; }
 
-        #region NotMapped
-        [NotMapped]
-        public string Rol { get; set; }
-
-        #endregion
     }
 }

@@ -10,7 +10,7 @@
 {
     //Deserializamos el objeto que contiene la información de la alerta.
     MessageAlert messageAlert = JsonConvert.DeserializeObject<MessageAlert>(TempData["MessageAlert"].ToString());
-    <script type="text/javascript">
+<script type="text/javascript">
         //Obtenemos el enumerador de los tipos de alerta.
         var enum_MessageAlertType =@(EnumHelper.EnumToString<MessageAlertType>());
         $(document).ready(function () {
@@ -23,7 +23,7 @@
                 delay: 5000,//Tiempo que la notificacion quedará visible
                 template: `<div class="alert alert-@messageAlert.ClassAlert alert-dismissable fade show" style="min-width:30%">
                             <button class="close" data-dismiss="alert" aria-label="Close">×</button>
-                            <h4><i class="fa @messageAlert.ClassIcon"></i><span class="ml-3">@messageAlert.TitleAlert</span></h4><hr/> @Html.Raw(messageAlert.Message)
+                            <h4><i class="material-icons">@messageAlert.ClassIcon</i><span class="ml-3">@messageAlert.TitleAlert</span></h4><hr/> @Html.Raw(messageAlert.Message)
                     </div>`,
                 onShow: function () {
                     //Establece el largo de la notificación y aplica un pequeño margen en caso de que este en pantallas mas pequeñas
@@ -31,7 +31,7 @@
                 },
             });
         });
-    </script>
+</script>
 }
 
 <script type="text/javascript">
@@ -42,7 +42,7 @@
                 delay: 5000, //Tiempo que la notificacion quedará visible
                 template: `<div class="alert alert-${messageAlert.ClassAlert} alert-dismissable fade show">
                             <button class="close" data-dismiss="alert" aria-label="Close">×</button>
-                            <h4><i class="fa ${messageAlert.ClassIcon}"></i><span class="ml-3">"${messageAlert.TitleAlert}</span></h4><hr/>${messageAlert.Message}
+                            <h4><i class="material-icons">${messageAlert.ClassIcon}</i><span class="ml-3">"${messageAlert.TitleAlert}</span></h4><hr/>${messageAlert.Message}
                     </div>`,
                 onShow: function () {
                     //Establece el largo de la notificación y aplica un pequeño margen en caso de que este en pantallas mas pequeñas

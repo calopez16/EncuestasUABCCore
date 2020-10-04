@@ -8,9 +8,9 @@ namespace EncuestasUABC.Models.Relaciones
         public string UsuarioId { get; set; }
         public int PermisoId { get; set; }
         [ForeignKey(nameof(UsuarioId))]
-        public ApplicationUser Usuario { get; set; }
+        public ApplicationUser UsuarioIdNavigation { get; set; }
         [ForeignKey(nameof(PermisoId))]
-        public Permiso Permiso { get; set; }
+        public Permiso PermisoIdNavigation { get; set; }
 
 
     }

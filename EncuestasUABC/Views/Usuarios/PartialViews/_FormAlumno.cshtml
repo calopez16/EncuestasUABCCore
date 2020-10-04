@@ -1,56 +1,37 @@
-﻿@model ApplicationUser;
+﻿@model ApplicationUserViewModel
 @{
     Layout = null;
 }
 
 <div id="div_Alumno">
-    <input hidden asp-for="UsuarioAlumno.Alumno.CampusId" id="txt_CampusId" name="txt_CampusId" />
-    <input hidden asp-for="UsuarioAlumno.Alumno.UnidadAcademicaId" id="txt_UnidadAcademicaId" name="txt_UnidadAcademicaId" />
-    <input hidden asp-for="UsuarioAlumno.Alumno.CarreraId" id="txt_CarreraId" name="txt_CarreraId" />
-    <input hidden asp-for="UsuarioAlumno.AlumnoId" />
+    <input hidden asp-for="Alumno.CarreraId" id="txt_CarreraId" name="txt_CarreraId" />
+    <input hidden asp-for="Alumno.Id" />
     <div class="row">
         <div class="col-md-3">
             <div class="form-group">
-                <label asp-for="UsuarioAlumno.Alumno.Matricula" class="bmd-label-floating"></label>
-                <input asp-for="UsuarioAlumno.Alumno.Matricula" class="form-control">
+                <label asp-for="Alumno.Matricula" class="bmd-label-floating"></label>
+                <input asp-for="Alumno.Matricula" class="form-control">
             </div>
         </div>
         <div class="col-md-2">
             <div class="form-group">
-                <label asp-for="UsuarioAlumno.Alumno.Semestre" class="bmd-label-floating"></label>
-                <input asp-for="UsuarioAlumno.Alumno.Semestre" class="form-control">
+                <label asp-for="Alumno.Semestre" class="bmd-label-floating"></label>
+                <input asp-for="Alumno.Semestre" class="form-control">
             </div>
         </div>
 
         <div class="col-md-3">
             <div class="form-group">
-                <label asp-for="UsuarioAlumno.Alumno.PeriodoIngreso" class="bmd-label-floating"></label>
-                <input asp-for="UsuarioAlumno.Alumno.PeriodoIngreso" class="form-control mask-periodo">
+                <label asp-for="Alumno.PeriodoIngreso" class="bmd-label-floating"></label>
+                <input asp-for="Alumno.PeriodoIngreso" class="form-control mask-periodo">
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-4">
-            <div class="form-group">
-                <label asp-for="UsuarioAlumno.Alumno.CampusId" class="bmd-label-floating"></label>
-                <select asp-for="UsuarioAlumno.Alumno.CampusId" class="form-control select2" asp-items="ViewBag.Campus" id="select_Campus">
-                    <option value="">Seleccionar</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                <label asp-for="UsuarioAlumno.Alumno.UnidadAcademicaId" class="bmd-label-floating"></label>
-                <select asp-for="UsuarioAlumno.Alumno.UnidadAcademicaId" class="form-control" id="select_UnidadAcademica">
-                    <option value="">Seleccionar</option>
-                </select>
-            </div>
-
-        </div>
         <div class="col-md-4 form-group">
             <div class="form-group">
-                <label asp-for="UsuarioAlumno.Alumno.CarreraId" class="bmd-label-floating"></label>
-                <select asp-for="UsuarioAlumno.Alumno.CarreraId" class="form-control" id="select_Carrera">
+                <label asp-for="Alumno.CarreraId" class="bmd-label-floating"></label>
+                <select asp-for="Alumno.CarreraId" class="form-control" id="select_Carrera">
                     <option value="">Seleccionar</option>
                 </select>
             </div>
@@ -59,20 +40,20 @@
     <div class="row">
         <div class="col-md-3">
             <div class="form-group">
-                <label asp-for="UsuarioAlumno.Alumno.CorreoAlterno" class="bmd-label-floating"></label>
-                <input asp-for="UsuarioAlumno.Alumno.CorreoAlterno" class="form-control" type="text">
+                <label asp-for="Alumno.CorreoAlterno" class="bmd-label-floating"></label>
+                <input asp-for="Alumno.CorreoAlterno" class="form-control" type="text">
             </div>
         </div>
         <div class="col-md-4">
             <div class="form-group">
-                <label asp-for="UsuarioAlumno.Alumno.Celular" class="bmd-label-floating"></label>
-                <input asp-for="UsuarioAlumno.Alumno.Celular" class="form-control mask-phone" type="text">
+                <label asp-for="Alumno.Celular" class="bmd-label-floating"></label>
+                <input asp-for="Alumno.Celular" class="form-control mask-phone" type="text">
             </div>
         </div>
         <div class="col-sm-3">
             <div class="form-group">
-                <label asp-for="UsuarioAlumno.Alumno.FechaNacimiento" class="bmd-label-floating"></label>
-                <input asp-for="UsuarioAlumno.Alumno.FechaNacimiento" class="form-control">
+                <label asp-for="Alumno.FechaNacimiento" class="bmd-label-floating"></label>
+                <input asp-for="Alumno.FechaNacimiento" class="form-control">
             </div>
         </div>
     </div>

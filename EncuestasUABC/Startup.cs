@@ -15,6 +15,7 @@ using System;
 using Microsoft.AspNetCore.Http;
 using EncuestasUABC.AccesoDatos.Repository.Interfaces;
 using EncuestasUABC.AccesoDatos.Repository;
+using AutoMapper;
 
 namespace EncuestasUABC
 {
@@ -93,6 +94,10 @@ namespace EncuestasUABC
             services.AddTransient<IInicializador, Inicializador>();
             services.AddTransient<IUsuarioRepository, UsuarioRepository>();
             services.AddTransient<IEncuestasRepository, EncuestasRepository>();
+
+
+            // Auto Mapper Configurations
+            services.AddAutoMapper(typeof(Startup));
 
         }
 
