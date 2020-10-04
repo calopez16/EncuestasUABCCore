@@ -87,4 +87,21 @@ namespace EncuestasUABC.Models
         public ApplicationUserViewModel UsuarioIdNavigation { get; set; }
 
     }
+
+
+    public class PermisoViewModel
+    {
+        public int Id { get; set; }
+        public string Descripcion { get; set; }
+        public string Icono { get; set; }
+        public string Action { get; set; }
+        public string Controller { get; set; }
+        public bool Menu { get; set; }
+        public int? PermisoIdPadre { get; set; }
+        public bool Estatus { get; set; }
+
+
+        public PermisoViewModel PermisoIdPadreNavigation { get; set; }
+        public ICollection<PermisoViewModel> PermisosHijos { get; set; }
+    }
 }

@@ -9,10 +9,6 @@ namespace EncuestasUABC.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        public ApplicationUser()
-        {
-            Permisos = new HashSet<UsuarioPermiso>();
-        }
         [MaxLength(80)]
         public string Nombre { get; set; }
         [MaxLength(80)]

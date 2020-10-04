@@ -76,6 +76,8 @@
         public const string USUARIOS_MSJ14 = "La constraseña se cambió correctamente, favor de iniciar sesión con la nueva contraseña.";
         public const string USUARIOS_MSJ15 = "La constraseña no se puedo cambiar correctamente.";
         public const string USUARIOS_MSJ16 = "La constraseña se cambió correctamente.";
+        public const string Usuarios_Msj17 = "Los permisos del usuario <strong>{0}</strong> se han actualizado correctamente.";
+        public const string Usuarios_Msj18 = "No se han podido actualizar los permisos del usuario <strong>{0}</strong>.";
 
         public const string ENCUESTAS_MSJ01 = "La Encuesta se creó correctamente.";
         public const string ENCUESTAS_MSJ02 = "La Encuesta no se pudo crear correctamente.";

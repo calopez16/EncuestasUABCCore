@@ -42,7 +42,7 @@ function CargarUsuarios() {
             }
         },
         ordering: true,// Habilita el ordenamiento de la tabla.
-        searching: false,
+        searching: true,
         //Se especifica la información de las columnas
         columns: [
             {
@@ -72,7 +72,7 @@ function CargarUsuarios() {
             },
             {
                 data: 'rolIdNavigation.descripcion',
-                sortable: false,
+                sortable: true,
                 autoWidth: true,
                 visible: true
             },

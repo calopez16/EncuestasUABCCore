@@ -14,7 +14,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "ancmHostingModel": "InProcess"
+      "nativeDebugging": true
     },
     "EncuestasUABC": {
       "commandName": "Project",

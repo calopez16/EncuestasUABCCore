@@ -36,7 +36,7 @@ namespace EncuestasUABC.AccesoDatos.Repositories
 
             return await _context.ApplicationUser
                 .Include(x => x.RolIdNavigation)
-                .Where(x => x.Activo).ToListAsync();
+                .Where(x => x.Activo && !x.Email.Equals(Defaults.AdminEmail)).ToListAsync();
 
             #endregion
         }
@@ -46,7 +46,7 @@ namespace EncuestasUABC.AccesoDatos.Repositories
             #region GetAll
             return await _context.ApplicationUser
                         .Include(x => x.RolIdNavigation)
-                        .Where(x => x.Activo && x.RolIdNavigation.Descripcion.Equals(rol)).ToListAsync();
+                        .Where(x => x.Activo && x.RolIdNavigation.Descripcion.Equals(rol) && !x.Email.Equals(Defaults.AdminEmail)).ToListAsync();
             #endregion
         }
 
@@ -73,6 +73,7 @@ namespace EncuestasUABC.AccesoDatos.Repositories
                  .Include(x => x.Egresado)
                  .Include(x => x.Administrativo)
                  .Include(x => x.RolIdNavigation)
+                 .Include(x => x.Permisos)
                   .Where(x => x.UserName.Equals(userName))
                   .FirstOrDefaultAsync();
 
@@ -123,7 +124,6 @@ namespace EncuestasUABC.AccesoDatos.Repositories
 
             #endregion
         }
-
         public async Task<IdentityResult> CambiarContrasena(ApplicationUser user, string nuevaContrasena)
         {
             #region CambiarContrasena
@@ -152,12 +152,22 @@ namespace EncuestasUABC.AccesoDatos.Repositories
                 .Select(x => x.PermisoIdNavigation).ToListAsync();
             #endregion
         }
-        public async Task<List<Permiso>> AllPermisosUsuario()
+        public async Task<List<Permiso>> AllPermisosByUser(string userId)
         {
-            #region AllPermisosUsuario
+            #region AllPermisosByUser
+            return await _context.UsuariosPermisos
+                .Where(x => x.UsuarioId.Equals(userId))
+                .Select(x => x.PermisoIdNavigation)
+                .ToListAsync();
+            #endregion
+        }
+
+        public async Task<List<Permiso>> AllPermisos()
+        {
+            #region AllPermisos
             return await _context.Permisos
                 .Include(x => x.PermisosHijos)
-                .ThenInclude(x=>x.PermisosHijos)
+                .ThenInclude(x => x.PermisosHijos)
                 .Where(x => !x.PermisoIdPadre.HasValue)
                 .OrderBy(x => x.PermisoIdPadreNavigation.Descripcion)
                 .ToListAsync();

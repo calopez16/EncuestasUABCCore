@@ -11,7 +11,7 @@
         <a asp-action="Index" class="btn btn-primary bmd-btn-fab float-left mr-4" data-toggle="tooltip" data-placement="bottom" title="Regresar">
             <i class="material-icons">keyboard_backspace</i>
         </a>
-        <a class="btn btn-primary bmd-btn-fab float-right mr-4" data-toggle="tooltip" data-placement="bottom" title="Permisos">
+        <a asp-action="Permisos" asp-route-email="@Model.Email" class="btn btn-primary bmd-btn-fab float-right mr-4" data-toggle="tooltip" data-placement="bottom" title="Permisos">
             <i class="material-icons">verified_user</i>
         </a>
         <button id="btn_CambiarContrasena" data-email="@Model.Email" class="btn btn-warning bmd-btn-fab float-right mr-4" data-toggle="tooltip" data-placement="bottom" title="Cambiar contraseña">

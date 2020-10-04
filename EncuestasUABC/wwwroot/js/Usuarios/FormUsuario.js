@@ -22,8 +22,8 @@ $(document).ready(function () {
         $("#div_Maestro").hide();
         $("#div_Alumno").hide();
         $("#div_Egresado").hide();
-        var rolId = $(this).val();
-        if (rolId == enum_Roles.Maestro || rolId == enum_Roles.Coordinador || rolId == enum_Roles.Tutor) {
+        var rolId = parseInt($(this).val());
+        if (rolId == enum_Roles.Administrativo || rolId == enum_Roles.Coordinador || rolId == enum_Roles.Tutor) {
             $("#div_Maestro").show();
         } else if (rolId == enum_Roles.Alumno) {
             $("#div_Alumno").show();

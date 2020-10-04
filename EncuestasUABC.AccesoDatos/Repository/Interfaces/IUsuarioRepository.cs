@@ -31,6 +31,7 @@ namespace EncuestasUABC.AccesoDatos.Repository.Interfaces
         Task<IdentityResult> RemoveRolOfUser(ApplicationUser user, string rol);
         Task<IdentityResult> CambiarContrasena(ApplicationUser user, string nuevaContrasena);
         Task<IdentityResult> CambiarContrasena(ApplicationUser user, string contrasenaActual, string nuevaContrasena);
-        Task<List<Permiso>> AllPermisosUsuario();
+        Task<List<Permiso>> AllPermisos();
+        Task<List<Permiso>> AllPermisosByUser(string userId);
     }
 }

@@ -8,6 +8,7 @@ using EncuestasUABC.Enumerador;
 using EncuestasUABC.Models;
 using EncuestasUABC.Models.Catalogos;
 using EncuestasUABC.Models.Paginacion;
+using EncuestasUABC.Models.Relaciones;
 using EncuestasUABC.Utilidades;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -83,7 +84,7 @@ namespace EncuestasUABC.Controllers
                     model.Administrativo = null;
                     model.Egresado = null;
                 }
-                else if(model.RolId == (int)RolId.Alumno)
+                else if (model.RolId == (int)RolId.Alumno)
                 {
                     model.Administrativo = null;
                     model.Egresado = null;
@@ -169,7 +170,6 @@ namespace EncuestasUABC.Controllers
                     if ((await _usuarioRepository.Get(model.Email)) != null)
                         throw new MessageAlertException(MessageAlertType.Information, string.Format(Constantes.Mensajes.USUARIOS_MSJ03, model.Email));
                 }
-
                 user.Nombre = model.Nombre;
                 user.ApellidoPaterno = model.ApellidoPaterno;
                 user.ApellidoMaterno = model.ApellidoMaterno;
@@ -177,6 +177,7 @@ namespace EncuestasUABC.Controllers
                 user.UserName = model.Email;
                 user.NormalizedEmail = model.Email.ToUpper();
                 user.NormalizedUserName = model.Email.ToUpper();
+                user.RolId = model.RolId;
 
                 var resultUpdate = await _usuarioRepository.Update(user);
                 if (!resultUpdate.Succeeded)
@@ -202,6 +203,78 @@ namespace EncuestasUABC.Controllers
 
             #endregion
         }
+        #endregion
+
+        #region Permisos
+        public async Task<IActionResult> Permisos(string email)
+        {
+            #region Permisos
+
+            try
+            {
+                var permisos = await _usuarioRepository.AllPermisos();
+                var user = await _usuarioRepository.Get(email);
+                var permisosUsuario = await _usuarioRepository.AllPermisosByUser(user.Id);
+                ViewBag.PermisosUsuario = _mapper.Map<List<PermisoViewModel>>(permisosUsuario);
+                var permisosResult = _mapper.Map<List<PermisoViewModel>>(permisos);
+                ViewBag.Email = email;
+                return View(permisosResult);
+            }
+            catch (MessageAlertException ex)
+            {
+                _logger.LogInformation(ex.Message);
+                GenerarAlerta(ex);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                ShowMessageException(ex.Message);
+            }
+            return RedirectToAction(nameof(Index));
+
+            #endregion
+        }
+        [HttpPost]
+        public async Task<IActionResult> Permisos(int[] idPermiso, string email)
+        {
+            #region Permisos
+
+            try
+            {
+                var user = await _usuarioRepository.Get(email);
+                List<UsuarioPermiso> usuarioPermisos = new List<UsuarioPermiso>();
+                foreach (var permisoid in idPermiso)
+                {
+                    usuarioPermisos.Add(new UsuarioPermiso
+                    {
+                        PermisoId = permisoid,
+                        UsuarioId=user.Id
+                    });
+                }
+
+                user.Permisos = usuarioPermisos;
+                var result=await _usuarioRepository.Update(user);
+                if(result.Succeeded)
+                    ShowMessageSuccess(string.Format(Constantes.Mensajes.Usuarios_Msj17, user.Email));
+                else
+                    throw new MessageAlertException(MessageAlertType.Warning, string.Format(Constantes.Mensajes.Usuarios_Msj18, user.Email));
+
+            }
+            catch (MessageAlertException ex)
+            {
+                _logger.LogInformation(ex.Message);
+                GenerarAlerta(ex);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                ShowMessageException(ex.Message);
+            }
+            return RedirectToAction(nameof(Permisos), new { email });
+
+            #endregion
+        }
+
         #endregion
 
         #region Delete & Restore
@@ -308,7 +381,7 @@ namespace EncuestasUABC.Controllers
             {
                 var usuarios = await _usuarioRepository.GetAll();
                 int totalRegistros = usuarios.Count();
-                var usuariosResult= _mapper.Map<List<ApplicationUserViewModel>>(usuarios);
+                var usuariosResult = _mapper.Map<List<ApplicationUserViewModel>>(usuarios);
                 usuariosResult = await PaginacionApplicationUser(paginacion, usuariosResult);
                 var result = new PaginacionResult<ApplicationUserViewModel>()
                 {
@@ -359,25 +432,25 @@ namespace EncuestasUABC.Controllers
 
             switch (columnaOrdenar)
             {
-                case 1:
-                    if (ordenacion.Equals("asc")) usuarios = usuarios.OrderBy(x => x.UserName).ToList();
-                    else usuarios = usuarios.OrderByDescending(x => x.UserName).ToList();
+                case 0:
+                    if (ordenacion.Equals("asc")) usuarios = usuarios.OrderBy(x => x.Email).ToList();
+                    else usuarios = usuarios.OrderByDescending(x => x.Email).ToList();
                     break;
-                case 2:
+                case 1:
                     if (ordenacion.Equals("asc")) usuarios = usuarios.OrderBy(x => x.Nombre).ToList();
                     else usuarios = usuarios.OrderByDescending(x => x.Nombre).ToList();
                     break;
-                case 3:
+                case 2:
                     if (ordenacion.Equals("asc")) usuarios = usuarios.OrderBy(x => x.ApellidoPaterno).ToList();
                     else usuarios = usuarios.OrderByDescending(x => x.ApellidoPaterno).ToList();
                     break;
-                case 4:
+                case 3:
                     if (ordenacion.Equals("asc")) usuarios = usuarios.OrderBy(x => x.ApellidoMaterno).ToList();
                     else usuarios = usuarios.OrderByDescending(x => x.ApellidoMaterno).ToList();
                     break;
-                case 6:
-                    if (ordenacion.Equals("asc")) usuarios = usuarios.OrderBy(x => x.Activo).ToList();
-                    else usuarios = usuarios.OrderByDescending(x => x.Activo).ToList();
+                case 4:
+                    if (ordenacion.Equals("asc")) usuarios = usuarios.OrderBy(x => x.RolIdNavigation.Descripcion).ToList();
+                    else usuarios = usuarios.OrderByDescending(x => x.RolIdNavigation.Descripcion).ToList();
                     break;
                 default:
                     usuarios = usuarios.OrderBy(x => x.UserName).ToList();

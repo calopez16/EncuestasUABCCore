@@ -28,6 +28,9 @@ namespace EncuestasUABC
             CreateMap<Rol, RolViewModel>();
             CreateMap<RolViewModel, Rol>();
 
+            CreateMap<Permiso, PermisoViewModel>();
+            CreateMap<PermisoViewModel, Permiso>();
+
         }
     }
 }

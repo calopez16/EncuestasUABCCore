@@ -1,0 +1,66 @@
+﻿@model List<PermisoViewModel>
+@{
+    ViewData["Title"] = "Permisos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<PermisoViewModel> permisosUsuario = (List<PermisoViewModel>)ViewBag.PermisosUsuario;
+}
+<div class="card">
+    <form asp-action="Permisos" id="form_Usuario">
+        <div class="card-header">
+            <a asp-action="Edit" asp-route-email="@ViewBag.Email" class="btn btn-primary bmd-btn-fab float-left mr-4" data-toggle="tooltip" data-placement="bottom" title="Regresar">
+                <i class="material-icons">keyboard_backspace</i>
+            </a>
+            <h1 class="mt-2">@ViewData["Title"]</h1>
+        </div>
+        <div class="card-body">
+            <input hidden name="email" value="@ViewBag.Email" />
+            @foreach (var permiso in Model)
+            {
+                <div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="idPermiso" value="@permiso.Id" checked="@permisosUsuario.Any(x=>x.Id==permiso.Id)">@permiso.Descripcion
+                                    @*<span data-toggle="collapse" data-target="#PermisoCollapse-@permiso.Id" aria-expanded="true" aria-controls="PermisoCollapse-@permiso.Id"> </span>*@
+                                </label>
+                            </div>
+
+                        </div>
+                        <div id="PermisoCollapse-@permiso.Id" class="collapse show">
+                            <div class="card-body">
+                                <ul style="list-style:none" class="mb-0">
+                                    @foreach (var permisoHijo in permiso.PermisosHijos)
+                                    {
+                                        <li>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" name="idPermiso" value="@permisoHijo.Id" checked="@permisosUsuario.Any(x=>x.Id==permisoHijo.Id)"> @permisoHijo.Descripcion
+                                                </label>
+                                            </div>
+                                            <ul style="list-style:none" class="mb-0">
+                                                @foreach (var acciones in permisoHijo.PermisosHijos)
+                                                {
+                                                    <li>
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" name="idPermiso" value="@acciones.Id" checked="@permisosUsuario.Any(x=>x.Id==acciones.Id)"> @acciones.Descripcion
+                                                            </label>
+                                                        </div>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="card-footer text-center">
+            <button type="submit" class="btn btn-primary btn-raised" id="btn_Guardar">Guardar</button>
+        </div>
+    </form>
+</div>

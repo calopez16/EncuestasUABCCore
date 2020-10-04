@@ -10,9 +10,22 @@
 {
     //Deserializamos el objeto que contiene la información de la alerta.
     MessageAlert messageAlert = JsonConvert.DeserializeObject<MessageAlert>(TempData["MessageAlert"].ToString());
-<script type="text/javascript">
+    @if (messageAlert.ClassAlert.Equals(Alerts.CLASS_ALERT_DANGER))
+    {
+        <script type="text/javascript">
+            var delay = 0;
+        </script>
+    }
+    else
+    {
+        <script type="text/javascript">
+            var delay = 5000;
+        </script>
+    }
+    <script type="text/javascript">
         //Obtenemos el enumerador de los tipos de alerta.
         var enum_MessageAlertType =@(EnumHelper.EnumToString<MessageAlertType>());
+
         $(document).ready(function () {
             //Notify.js es una herramienta para generar notificaciones dentro de la aplicación, toda la información
             //y ejemplos se encuentran en la siguiente referencia: http://bootstrap-notify.remabledesigns.com/
@@ -20,7 +33,7 @@
             //Se deja el primer parametro en blanco (donde va el mensaje de la alerta por default)
             //por que utilizaremos un template personalizado por que el que venia por defecto esta feo jeje
             $.notify("", {
-                delay: 5000,//Tiempo que la notificacion quedará visible
+                delay: delay,//Tiempo que la notificacion quedará visible
                 template: `<div class="alert alert-@messageAlert.ClassAlert alert-dismissable fade show" style="min-width:30%">
                             <button class="close" data-dismiss="alert" aria-label="Close">×</button>
                             <h4><i class="material-icons">@messageAlert.ClassIcon</i><span class="ml-3">@messageAlert.TitleAlert</span></h4><hr/> @Html.Raw(messageAlert.Message)
@@ -31,7 +44,7 @@
                 },
             });
         });
-</script>
+    </script>
 }
 
 <script type="text/javascript">
@@ -39,7 +52,7 @@
         //en las llamadas ajax donde arroje una respuesta de este tipo de objeto(MessageAlert).
         function GenerarAlerta(messageAlert) {
             $.notify("", {
-                delay: 5000, //Tiempo que la notificacion quedará visible
+                delay: delay, //Tiempo que la notificacion quedará visible
                 template: `<div class="alert alert-${messageAlert.ClassAlert} alert-dismissable fade show">
                             <button class="close" data-dismiss="alert" aria-label="Close">×</button>
                             <h4><i class="material-icons">${messageAlert.ClassIcon}</i><span class="ml-3">"${messageAlert.TitleAlert}</span></h4><hr/>${messageAlert.Message}
@@ -78,11 +91,12 @@
                 case enum_MessageAlertType.EXCEPTION:
                     alertClass = '@Alerts.CLASS_ALERT_DANGER';
                     alertIcon = '@Alerts.CLASS_ICON_ALERT_EXCEPTION';
-                    alertTitle= '@Alerts.CLASS_TITLE_ALERT_EXCEPTION';
+                    alertTitle = '@Alerts.CLASS_TITLE_ALERT_EXCEPTION';
+                    delay = 0;
                     break;
             }
             $.notify("", {
-                delay: 50000,
+                delay: delay,
                 template: `<div class="alert alert-${alertClass} alert-dismissable fade show">
                             <button class="close" data-dismiss="alert" aria-label="Close">×</button>
                             <h4><i class="fa ${alertIcon}"></i><span class="ml-3">${alertTitle}</span></h4><hr/>${mensaje}

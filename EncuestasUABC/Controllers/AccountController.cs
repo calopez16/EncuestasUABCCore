@@ -69,7 +69,7 @@ namespace EncuestasUABC.Controllers
                             List<Permiso> permisos;
                             if (user.RolIdNavigation.Descripcion.Equals(Constantes.RolesSistema.Administrador))
                             {
-                                permisos = await _usuarioRepository.AllPermisosUsuario();
+                                permisos = await _usuarioRepository.AllPermisos();
                             }
                             else
                             {
