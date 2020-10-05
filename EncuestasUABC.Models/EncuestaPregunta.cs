@@ -18,18 +18,17 @@ namespace EncuestasUABC.Models
         public int TipoPreguntaId { get; set; }
         public bool Obligatoria { get; set; }
         public int Orden { get; set; }
-        public bool Eliminado { get; set; } = false;
         public int? EncuestaIdPadre { get; set; }
         public int? EncuestaSeccionIdPadre { get; set; }
         public int? EncuestaPreguntaIdPadre { get; set; }
+
+        public bool Eliminado { get; set; } = false;
+
+        public EncuestaSeccion EncuestaSeccionIdNavigation { get; set; }
+        public TipoPregunta TipoPreguntaIdNavigation { get; set; }
+        public EncuestaPregunta EncuestaPreguntaIdPadreNavigation { get; set; }
         public virtual ICollection<EncuestaPregunta> SubPreguntas { get; set; }
         public virtual ICollection<EncuestaPreguntaOpcion> Opciones { get; set; }
-        //Relaciones
-        [ForeignKey("EncuestaSeccionId,EncuestaId")]
-        public EncuestaSeccion EncuestaSeccion { get; set; }
-        [ForeignKey("EncuestaPreguntaIdPadre,EncuestaIdPadre,EncuestaSeccionIdPadre")]
-        public EncuestaPregunta EncuestaPreguntaPadre { get; set; }
-        [ForeignKey(nameof(TipoPreguntaId))]
-        public TipoPregunta TipoPregunta { get; set; }
+      
     }
 }

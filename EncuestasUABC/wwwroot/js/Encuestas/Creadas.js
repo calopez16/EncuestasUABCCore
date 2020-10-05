@@ -1,6 +1,6 @@
 
-$(document).ready(function() {
-    $('#table_paginado').DataTable({
+$(document).ready(function () {
+    $('#table_Creadas').DataTable({
         // ServerSide Setups
         serverSide: true,
         //Habilita la paginación
@@ -42,21 +42,42 @@ $(document).ready(function() {
         //Se especifica la información de las columnas
         columns: [
             {
-                data: 'Fecha',
+                data: 'fecha',
                 searchable: false,
                 sortable: true,
                 autoWidth: true,
                 visible: true
             },
-
             {
-                data: 'Nombre',
+                data: 'nombre',
                 searchable: false,
                 sortable: true,
                 autoWidth: true,
                 visible: true
             },
-
+            {
+                data: 'carreraIdNavigation.nombre',
+                searchable: false,
+                sortable: true,
+                autoWidth: true,
+                visible: true
+            },
+            {
+                data: 'estatusEncuestaIdNavigation.descripcion',
+                searchable: false,
+                sortable: true,
+                autoWidth: true,
+                visible: true
+            },
+            {
+                searchable: false,
+                sortable: true,
+                autoWidth: true,
+                visible: true,
+                render: function (data, x, row) {
+                    return null;
+                }
+            },
         ],
         //Se traducen algunos de los textos de la tabla que se genera.
         language: {
@@ -73,32 +94,7 @@ $(document).ready(function() {
             infoFiltered: " - filtrado de _MAX_ registros en total"
         },
     });
-
-    $("#select_Carrera").select2({
-        placeholder: "Select Multiple Values",
-        theme: "bootstrap4",
-        allowClear: true,
-        ajax: {
-            url: `${window.urlproyecto}/Encuestas/CarreraAutoComplete`,
-            contentType: "application/json; charset=utf-8",
-            data: function (params) {
-                var query =
-                {
-                    term: params.term,
-                };
-                return query;
-            },
-            processResults: function (result) {
-                return {
-                    results: $.map(result, function (item) {
-                        return {
-                            id: item.IdCarrera,
-                            text: item.Nombre
-                        };
-                    }),
-                };
-            }
-        }
+    $("#btn_CrearEncuesta").click(function () {
+        $("#modal_CrearEncuesta").modal("show");
     });
-
 });

@@ -133,6 +133,24 @@ namespace EncuestasUABC.AccesoDatos.Migrations
                     b.ToTable("Carreras");
                 });
 
+            modelBuilder.Entity("EncuestasUABC.Models.Catalogos.Estatus.EstatusEncuesta", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Estatus")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EstatusEncuesta");
+                });
+
             modelBuilder.Entity("EncuestasUABC.Models.Catalogos.Permiso", b =>
                 {
                     b.Property<int>("Id")
@@ -184,6 +202,24 @@ namespace EncuestasUABC.AccesoDatos.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("RolesSistema");
+                });
+
+            modelBuilder.Entity("EncuestasUABC.Models.Catalogos.Tipos.TipoPregunta", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Estatus")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TiposPregunta");
                 });
 
             modelBuilder.Entity("EncuestasUABC.Models.Catalogos.UnidadAcademica", b =>
@@ -250,6 +286,151 @@ namespace EncuestasUABC.AccesoDatos.Migrations
                         .HasFilter("[UsuarioId] IS NOT NULL");
 
                     b.ToTable("Egresados");
+                });
+
+            modelBuilder.Entity("EncuestasUABC.Models.Encuesta", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CarreraId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EstatusEncuestaId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UsuarioId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarreraId");
+
+                    b.HasIndex("EstatusEncuestaId");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("Encuestas");
+                });
+
+            modelBuilder.Entity("EncuestasUABC.Models.EncuestaPregunta", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("EncuestaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EncuestaSeccionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Eliminado")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("EncuestaIdPadre")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("EncuestaPreguntaIdPadre")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("EncuestaSeccionIdPadre")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Obligatoria")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Orden")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TipoPreguntaId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id", "EncuestaId", "EncuestaSeccionId");
+
+                    b.HasIndex("TipoPreguntaId");
+
+                    b.HasIndex("EncuestaId", "EncuestaSeccionId");
+
+                    b.HasIndex("EncuestaIdPadre", "EncuestaSeccionIdPadre", "EncuestaPreguntaIdPadre");
+
+                    b.ToTable("EncuestaPreguntas");
+                });
+
+            modelBuilder.Entity("EncuestasUABC.Models.EncuestaPreguntaOpcion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("EncuestaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EncuestaSeccionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EncuestaPreguntaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Eliminado")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Orden")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id", "EncuestaId", "EncuestaSeccionId", "EncuestaPreguntaId");
+
+                    b.HasIndex("EncuestaId", "EncuestaSeccionId", "EncuestaPreguntaId");
+
+                    b.ToTable("EncuestaPreguntaOpciones");
+                });
+
+            modelBuilder.Entity("EncuestasUABC.Models.EncuestaSeccion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("EncuestaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Eliminado")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Orden")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id", "EncuestaId");
+
+                    b.HasIndex("EncuestaId");
+
+                    b.ToTable("EncuestaSecciones");
                 });
 
             modelBuilder.Entity("EncuestasUABC.Models.Relaciones.UsuarioPermiso", b =>
@@ -525,7 +706,7 @@ namespace EncuestasUABC.AccesoDatos.Migrations
 
             modelBuilder.Entity("EncuestasUABC.Models.Catalogos.Permiso", b =>
                 {
-                    b.HasOne("EncuestasUABC.Models.Catalogos.Permiso", "PermisoPadre")
+                    b.HasOne("EncuestasUABC.Models.Catalogos.Permiso", "PermisoIdPadreNavigation")
                         .WithMany("PermisosHijos")
                         .HasForeignKey("PermisoIdPadre");
                 });
@@ -544,6 +725,62 @@ namespace EncuestasUABC.AccesoDatos.Migrations
                     b.HasOne("EncuestasUABC.Models.ApplicationUser", "UsuarioIdNavigation")
                         .WithOne("Egresado")
                         .HasForeignKey("EncuestasUABC.Models.Egresado", "UsuarioId");
+                });
+
+            modelBuilder.Entity("EncuestasUABC.Models.Encuesta", b =>
+                {
+                    b.HasOne("EncuestasUABC.Models.Catalogos.Carrera", "CarreraIdNavigation")
+                        .WithMany("Encuestas")
+                        .HasForeignKey("CarreraId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EncuestasUABC.Models.Catalogos.Estatus.EstatusEncuesta", "EstatusEncuestaIdNavigation")
+                        .WithMany("Encuestas")
+                        .HasForeignKey("EstatusEncuestaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EncuestasUABC.Models.ApplicationUser", "UsuarioIdNavigation")
+                        .WithMany("EncuestasCreadas")
+                        .HasForeignKey("UsuarioId");
+                });
+
+            modelBuilder.Entity("EncuestasUABC.Models.EncuestaPregunta", b =>
+                {
+                    b.HasOne("EncuestasUABC.Models.Catalogos.Tipos.TipoPregunta", "TipoPreguntaIdNavigation")
+                        .WithMany("EncuestaPreguntas")
+                        .HasForeignKey("TipoPreguntaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EncuestasUABC.Models.EncuestaSeccion", "EncuestaSeccionIdNavigation")
+                        .WithMany("EncuestaPreguntas")
+                        .HasForeignKey("EncuestaId", "EncuestaSeccionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EncuestasUABC.Models.EncuestaPregunta", "EncuestaPreguntaIdPadreNavigation")
+                        .WithMany("SubPreguntas")
+                        .HasForeignKey("EncuestaIdPadre", "EncuestaSeccionIdPadre", "EncuestaPreguntaIdPadre");
+                });
+
+            modelBuilder.Entity("EncuestasUABC.Models.EncuestaPreguntaOpcion", b =>
+                {
+                    b.HasOne("EncuestasUABC.Models.EncuestaPregunta", "EncuestaPreguntaIdNavigation")
+                        .WithMany("Opciones")
+                        .HasForeignKey("EncuestaId", "EncuestaSeccionId", "EncuestaPreguntaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EncuestasUABC.Models.EncuestaSeccion", b =>
+                {
+                    b.HasOne("EncuestasUABC.Models.Encuesta", "EncuestaIdNavigation")
+                        .WithMany("EncuestaSecciones")
+                        .HasForeignKey("EncuestaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("EncuestasUABC.Models.Relaciones.UsuarioPermiso", b =>

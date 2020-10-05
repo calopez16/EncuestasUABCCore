@@ -26,9 +26,6 @@ namespace EncuestasUABC.AccesoDatos.Repository.Interfaces
         Task<ApplicationUser> GetById(string id);
         Task<IdentityResult> Create(ApplicationUser user);
         Task<IdentityResult> Update(ApplicationUser user);
-        Task<string> GetRolByUser(ApplicationUser user);
-        Task<IdentityResult> SetRolToUser(ApplicationUser user, string rol);
-        Task<IdentityResult> RemoveRolOfUser(ApplicationUser user, string rol);
         Task<IdentityResult> CambiarContrasena(ApplicationUser user, string nuevaContrasena);
         Task<IdentityResult> CambiarContrasena(ApplicationUser user, string contrasenaActual, string nuevaContrasena);
         Task<List<Permiso>> AllPermisos();

@@ -1,0 +1,30 @@
+﻿
+
+@{
+    ViewData["Title"] = "Catálogos del sistema";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header">
+        <a asp-action="Create" class="btn btn-primary bmd-btn-fab float-right" data-toggle="tooltip" data-placement="bottom" title="Agregar usuario">
+            <i class="material-icons">add</i>
+        </a>
+        <h1 class="mt-md-2">@ViewData["Title"]</h1>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover" id="table_Usuarios">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Nombre</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

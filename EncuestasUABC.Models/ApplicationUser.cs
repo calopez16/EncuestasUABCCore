@@ -23,6 +23,7 @@ namespace EncuestasUABC.Models
         public virtual Alumno Alumno { get; set; }
         public virtual Egresado Egresado { get; set; }
         public virtual ICollection<UsuarioPermiso> Permisos { get; set; }
+        public virtual ICollection<Encuesta> EncuestasCreadas { get; set; }
 
     }
 }

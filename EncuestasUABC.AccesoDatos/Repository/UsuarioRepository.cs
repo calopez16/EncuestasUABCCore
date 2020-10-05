@@ -87,34 +87,7 @@ namespace EncuestasUABC.AccesoDatos.Repositories
             return await _userManager.CreateAsync(user, Defaults.Contrasena);
 
             #endregion
-        }
-
-        public async Task<string> GetRolByUser(ApplicationUser user)
-        {
-            #region GetRolByUser
-
-            return (await _userManager.GetRolesAsync(user)).FirstOrDefault();
-
-            #endregion
-        }
-
-        public async Task<IdentityResult> SetRolToUser(ApplicationUser user, string rol)
-        {
-            #region SetRolToUser
-
-            return await _userManager.AddToRoleAsync(user, rol);
-
-            #endregion
-        }
-
-        public async Task<IdentityResult> RemoveRolOfUser(ApplicationUser user, string rol)
-        {
-            #region RemoveRolOfUser
-
-            return await _userManager.RemoveFromRoleAsync(user, rol);
-
-            #endregion
-        }
+        }  
 
         public async Task<IdentityResult> Update(ApplicationUser user)
         {

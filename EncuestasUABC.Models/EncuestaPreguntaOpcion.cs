@@ -17,9 +17,8 @@ namespace EncuestasUABC.Models
         public int Orden { get; set; }
         public bool Eliminado { get; set; } = false;
 
-        //Relaciones
-        [ForeignKey("EncuestaPreguntaId,EncuestaId,EncuestaSeccionId")]
-        public EncuestaPregunta EncuestaPregunta { get; set; }
+        
+        public EncuestaPregunta EncuestaPreguntaIdNavigation { get; set; }
 
     }
 }

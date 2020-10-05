@@ -12,6 +12,7 @@ namespace EncuestasUABC.Models.Catalogos
         public UnidadAcademica UnidadAcademicaIdNavigation { get; set; }
 
         public virtual ICollection<Alumno> Alumnos { get; set; }
+        public virtual ICollection<Encuesta> Encuestas { get; set; }
 
     }
 }

@@ -20,6 +20,7 @@ namespace EncuestasUABC.AccesoDatos.Repository
         public async Task<T> Add<T>(T entity) where T : class
         {
             await _context.Set<T>().AddAsync(entity);
+            await _context.SaveChangesAsync();
             return entity;
         }
 

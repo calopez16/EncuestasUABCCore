@@ -24,21 +24,5 @@ namespace EncuestasUABC.Controllers
             return View();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> CarrerasSelect()
-        {
-            #region CarrerasSelect
-            try
-            {
-                return View();
-            }
-            catch (Exception ex)
-            {
-                return View();
-
-
-            }
-            #endregion
-        }
     }
 }

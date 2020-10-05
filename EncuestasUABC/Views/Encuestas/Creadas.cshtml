@@ -6,29 +6,34 @@
     ViewData["Title"] = "Encuestas Creadas";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<script type="text/javascript" src="~/lib/DataTables/datatables.min.js"></script>
-<link href="~/lib/DataTables/datatables.min.css" rel="stylesheet" />
-<div class="ibox p-4">
-    <div class="ibox-head">
-        <div class="ibox-title">
-            <h1 class="page-title">@ViewData["Title"]</h1>
-        </div>
-        <button class="btn btn-primary" data-toggle="modal" data-target="#modal_CrearEncuesta">Agregar</button>
+
+<div class="card">
+    <div class="card-header">
+        <button type="button" class="btn btn-primary bmd-btn-fab float-right" data-toggle="tooltip" data-placement="bottom" title="Crear Encuesta" id="btn_CrearEncuesta">
+            <i class="material-icons">add</i>
+        </button>
+        <h1 class="mt-md-2">@ViewData["Title"]</h1>
     </div>
-    <div class="ibox-body">
-        <table class="table table-hover" id="table_paginado">
-            <thead>
-                <tr>
-                    <th>Fecha</th>
-                    <th>Nombre</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover" id="table_Creadas">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Nombre</th>
+                        <th>Carrera</th>
+                        <th>Estatus</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
-<partial name="~/Views/Encuestas/PartialViews/_ModalCrearEncuesta.cshtml" />
+<partial name="~/Views/Encuestas/PartialViews/_ModalCrearEncuesta.cshtml" model="new EncuestasUABC.Models.ViewModels.EncuestaViewModel()" />
 
 <script type="text/javascript">
     var enum_EstatusEncuesta=@(EnumHelper.EnumToString<EstatusEncuestaId>())

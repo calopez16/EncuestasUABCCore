@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EncuestasUABC.Models;
 using EncuestasUABC.Models.Catalogos;
+using EncuestasUABC.Models.ViewModels;
 using EncuestasUABC.Models.ViewModels.Catalogos;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,9 @@ namespace EncuestasUABC
 
             CreateMap<Permiso, PermisoViewModel>();
             CreateMap<PermisoViewModel, Permiso>();
+
+            CreateMap<Encuesta, EncuestaViewModel>();
+            CreateMap<EncuestaViewModel, Encuesta>();
 
         }
     }

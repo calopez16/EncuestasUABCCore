@@ -10,6 +10,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using EncuestasUABC.Models.Paginacion;
+using EncuestasUABC.Enumerador;
+using EncuestasUABC.Models.ViewModels;
+using AutoMapper;
+using EncuestasUABC.Models.Catalogos.Estatus;
+using System.Security.Cryptography.X509Certificates;
 
 namespace EncuestasUABC.Controllers
 {
@@ -19,16 +24,20 @@ namespace EncuestasUABC.Controllers
         private readonly IEncuestasRepository _encuestasRepository;
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IRepository _repository;
+        private readonly IMapper _mapper;
 
         public EncuestasController(ILogger<EncuestasController> logger,
             IEncuestasRepository encuestasRepository,
             IUsuarioRepository usuarioRepository,
-            IRepository repository)
+            IRepository repository,
+            IMapper mapper)
         {
             _encuestasRepository = encuestasRepository;
             _usuarioRepository = usuarioRepository;
             _logger = logger;
             _repository = repository;
+            _mapper = mapper;
+
         }
 
         public IActionResult Index()
@@ -77,16 +86,16 @@ namespace EncuestasUABC.Controllers
 
         #region CREAR
         [HttpPost]
-        public async Task<IActionResult> Crear(Encuesta model)
+        public async Task<IActionResult> Crear(EncuestaViewModel model)
         {
             #region Crear
             try
             {
                 var user = await _usuarioRepository.Get(User.Identity.Name);
                 model.UsuarioId = user.Id;
-                model.Fecha = DateTime.Now;
-                model.EstatusEncuestaId = (int)Enumerador.EstatusEncuestaId.Inactiva;
-                var result = await _repository.Add<Encuesta>(model);
+                model.EstatusEncuestaId = (int)EstatusEncuestaId.Inactiva;
+                var encuesta = _mapper.Map<Encuesta>(model);
+                var result = await _repository.Add<Encuesta>(encuesta);
                 ShowMessageSuccess(Constantes.Mensajes.ENCUESTAS_MSJ01);
                 return RedirectToAction(nameof(Editar), new { id = result.Id });
             }
@@ -114,35 +123,53 @@ namespace EncuestasUABC.Controllers
             try
             {
                 var user = await _usuarioRepository.Get(User.Identity.Name);
+                List<Encuesta> encuestas;
+                if (user.RolId == (int)RolId.Administrador)
+                {
+                    encuestas = (await _repository.FindBy<Encuesta>(null, x => x.OrderByDescending(x => x.Fecha), x => x.CarreraIdNavigation, x => x.EstatusEncuestaIdNavigation)).ToList();
+                }
+                else
+                {
+                    encuestas = (await _repository.FindBy<Encuesta>(x => x.UsuarioId == user.Id, x => x.OrderByDescending(x => x.Fecha), x => x.CarreraIdNavigation, x => x.EstatusEncuestaIdNavigation)).ToList();
+                }
 
-                //Aqui se traen los datos de tipo PaginacionResult
-                var listaEncuestas = await _repository.FindBy<Encuesta>(x => x.UsuarioId == user.Id, x => x.OrderByDescending(x => x.Fecha));
-                
-                int totalRegistros = listaEncuestas.Count();
+                int totalRegistros = encuestas.Count();
                 int column = paginacion.Order[0].Column;
                 var order = paginacion.Order[0].Dir;
-
 
                 switch (column)
                 {
                     case 1:
                         if (order.Equals("asc"))
-                            listaEncuestas = listaEncuestas.OrderBy(x => x.Fecha);
+                            encuestas = encuestas.OrderBy(x => x.Fecha).ToList();
                         else
-                            listaEncuestas = listaEncuestas.OrderBy(x => x.Fecha);
+                            encuestas = encuestas.OrderBy(x => x.Fecha).ToList();
                         break;
                     default:
                         break;
                 }
-                listaEncuestas = listaEncuestas
-                                       .Skip(paginacion.Start)
-                                       .Take(paginacion.Length)
-                                       .ToList();
+                var encuestasResult = encuestas
+                            .Skip(paginacion.Start)
+                            .Take(paginacion.Length)
+                            .Select(x => new
+                            {
+                                x.Fecha,
+                                x.Nombre,
+                                CarreraIdNavigation = new
+                                {
+                                    x.CarreraIdNavigation.Nombre
+                                },
+                                EstatusEncuestaIdNavigation = new
+                                {
+                                    x.EstatusEncuestaIdNavigation.Descripcion
+                                }
+                            })
+                            .ToList();
 
 
-                var registrosFiltrados = listaEncuestas.Count();
+                var registrosFiltrados = encuestasResult.Count();
                 var totalRegistrosFiltrados = totalRegistros;
-                var datosPaginados = listaEncuestas;
+                var datosPaginados = encuestasResult;
                 return Json(new { draw = paginacion.Draw, recordsFiltered = registrosFiltrados, recordsTotal = totalRegistrosFiltrados, data = datosPaginados });
             }
             catch (Exception ex)
@@ -159,7 +186,7 @@ namespace EncuestasUABC.Controllers
             #region EditarNombreDescripcion
             try
             {
-                var carreras = _repository.FindBy<Carrera>(x=>x.Nombre.Contains(busqueda));
+                var carreras = _repository.FindBy<Carrera>(x => x.Nombre.Contains(busqueda));
             }
             catch (MessageAlertException ex)
             {
@@ -251,6 +278,6 @@ namespace EncuestasUABC.Controllers
 
         #endregion
 
-     
+
     }
 }

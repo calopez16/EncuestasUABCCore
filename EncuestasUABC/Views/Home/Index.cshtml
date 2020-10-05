@@ -1,10 +1,21 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿
+@{
+    ViewData["Title"] = "Aiuda";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="text-center">
-    <div class="form-group">
-        <img src="~/img/EncuestaUABC_Logo.png" alt="" />
+<div class="card">
+    <div class="card-body text-center" style="height:70vh">
+        <img src="~/img/EncuestasUABCLogo.svg" style="width:19%;display:none" id="logo" />
+        <h1 class="text-primary" style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;font-size:4vw;display:none" id="titulo">Encuestas UABC</h1>
+        <h1 style="display:none">Bienvenido </h1>
     </div>
-    <h1 class="display-4">Bienvenido, </h1>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#logo").slideDown(1000);
+        $("#titulo").delay(600).fadeIn();
+        $("#titulo").next().delay(1000).fadeIn(200);
+    });
+</script>

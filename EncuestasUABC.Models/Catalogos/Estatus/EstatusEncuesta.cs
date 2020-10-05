@@ -12,5 +12,6 @@ namespace EncuestasUABC.Models.Catalogos.Estatus
         public string Descripcion { get; set; }
         public bool Estatus { get; set; }
 
+        public virtual ICollection<Encuesta> Encuestas { get; set; }
     }
 }
