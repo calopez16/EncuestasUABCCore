@@ -97,7 +97,7 @@ function CargarUsuarios() {
                 className: "text-center",
                 render: function (data, type, row) {
                     var item = `<span class="btn-group-sm">
-                                  <button class="btn btn-danger bmd-btn-fab btn_Eliminar" data-id="${data}" href="${window.urlproyecto}/Usuarios/Edit?email=${data}" data-toggle="tooltip" data-placement="bottom" title="Eliminar usuario">
+                                  <button class="btn btn-danger bmd-btn-fab btn_Eliminar" data-id="${data}" data-toggle="tooltip" data-placement="bottom" title="Eliminar usuario">
                                     <i class="material-icons">delete</i>
                                   </button>
                                 </span>`;

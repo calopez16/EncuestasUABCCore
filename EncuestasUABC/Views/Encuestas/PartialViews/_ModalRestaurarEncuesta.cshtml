@@ -1,0 +1,25 @@
+﻿@{ 
+    Layout = null;
+}
+
+<!-- Modal -->
+<div class="modal fade" id="modal_RestaurarEncuesta" tabindex="-1" role="dialog" aria-labelledby="modal_RestaurarEncuesta" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form asp-action="Restore" class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Restaurar Encuesta</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input hidden type="text" name="id" id="text_EncuestaRestaurar"/>
+                ¿Estas seguro de eliminar la encuesta <strong><span id="span_NombreEncuestaRestaurar"></span></strong>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-raised mr-2" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-success btn-raised">Confirmar</button>
+            </div>
+        </form>
+    </div>
+</div>

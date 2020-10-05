@@ -19,6 +19,6 @@ namespace EncuestasUABC.AccesoDatos.Repository.Interfaces
         Task<T> GetById<T>(int id) where T : class;
         Task Remove<T>(T entity) where T : class;
         Task RemoveById<T>(int id) where T : class;
-
+        Task Update<T>(T entity) where T : class;
     }
 }

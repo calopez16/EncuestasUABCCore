@@ -19,11 +19,12 @@
             <table class="table table-bordered table-hover" id="table_Creadas">
                 <thead>
                     <tr>
+                        <th style="width:40px">Activa</th>
                         <th>Fecha</th>
                         <th>Nombre</th>
                         <th>Carrera</th>
-                        <th>Estatus</th>
-                        <th></th>
+                        <th style="width:40px"></th>
+                        <th style="width:40px"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -32,8 +33,9 @@
         </div>
     </div>
 </div>
-
 <partial name="~/Views/Encuestas/PartialViews/_ModalCrearEncuesta.cshtml" model="new EncuestasUABC.Models.ViewModels.EncuestaViewModel()" />
+<partial name="~/Views/Encuestas/PartialViews/_ModalEliminarEncuesta.cshtml" />
+<partial name="~/Views/Encuestas/PartialViews/_ModalRestaurarEncuesta.cshtml" />
 
 <script type="text/javascript">
     var enum_EstatusEncuesta=@(EnumHelper.EnumToString<EstatusEncuestaId>())

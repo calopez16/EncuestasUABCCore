@@ -88,5 +88,11 @@ namespace EncuestasUABC.AccesoDatos.Repository
             var entity = await _context.Set<T>().FindAsync(id);
             _context.Set<T>().Remove(entity);
         }
+
+        public async Task Update<T>(T entity) where T : class
+        {
+            _context.Entry(entity).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
     }
 }

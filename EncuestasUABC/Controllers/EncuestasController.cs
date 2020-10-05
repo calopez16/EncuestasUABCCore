@@ -65,7 +65,7 @@ namespace EncuestasUABC.Controllers
             #region Edit
             try
             {
-                var encuesta = _repository.GetById<Encuesta>(id);
+                var encuesta =await _repository.GetById<Encuesta>(id);
                 return View(encuesta);
             }
             catch (MessageAlertException ex)
@@ -137,13 +137,36 @@ namespace EncuestasUABC.Controllers
                 int column = paginacion.Order[0].Column;
                 var order = paginacion.Order[0].Dir;
 
+                if (!string.IsNullOrEmpty(paginacion.Search.Value))
+                {
+                    encuestas = encuestas.Where(x => x.Nombre.Contains(paginacion.Search.Value)).ToList();
+                }
+
                 switch (column)
                 {
+                    case 0:
+                        if (order.Equals("asc"))
+                            encuestas = encuestas.OrderBy(x => x.EstatusEncuestaIdNavigation.Descripcion).ToList();
+                        else
+                            encuestas = encuestas.OrderByDescending(x => x.EstatusEncuestaIdNavigation.Descripcion).ToList();
+                        break;
                     case 1:
                         if (order.Equals("asc"))
                             encuestas = encuestas.OrderBy(x => x.Fecha).ToList();
                         else
-                            encuestas = encuestas.OrderBy(x => x.Fecha).ToList();
+                            encuestas = encuestas.OrderByDescending(x => x.Fecha).ToList();
+                        break;
+                    case 2:
+                        if (order.Equals("asc"))
+                            encuestas = encuestas.OrderBy(x => x.Nombre).ToList();
+                        else
+                            encuestas = encuestas.OrderByDescending(x => x.Nombre).ToList();
+                        break;
+                    case 3:
+                        if (order.Equals("asc"))
+                            encuestas = encuestas.OrderBy(x => x.CarreraIdNavigation.Nombre).ToList();
+                        else
+                            encuestas = encuestas.OrderByDescending(x => x.CarreraIdNavigation.Nombre).ToList();
                         break;
                     default:
                         break;
@@ -153,12 +176,14 @@ namespace EncuestasUABC.Controllers
                             .Take(paginacion.Length)
                             .Select(x => new
                             {
+                                x.Id,
                                 x.Fecha,
                                 x.Nombre,
                                 CarreraIdNavigation = new
                                 {
                                     x.CarreraIdNavigation.Nombre
                                 },
+                                x.EstatusEncuestaId,
                                 EstatusEncuestaIdNavigation = new
                                 {
                                     x.EstatusEncuestaIdNavigation.Descripcion
@@ -199,6 +224,56 @@ namespace EncuestasUABC.Controllers
                 ShowMessageException(ex.Message);
             }
             return Ok();
+            #endregion
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            #region Delete
+            try
+            {
+                var encuesta =await _repository.GetById<Encuesta>(id);
+                encuesta.EstatusEncuestaId = (int)EstatusEncuestaId.Eliminada;
+                await _repository.Update<Encuesta>(encuesta);
+                ShowMessageSuccess(Constantes.Mensajes.Encuesta_msj07);
+
+            }
+            catch (MessageAlertException ex)
+            {
+                _logger.LogInformation(ex.Message);
+                GenerarAlerta(ex);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                ShowMessageException(ex.Message);
+            }
+            return RedirectToAction(nameof(Creadas));
+            #endregion
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Restore(int id)
+        {
+            #region Delete
+            try
+            {
+                var encuesta = await _repository.GetById<Encuesta>(id);
+                encuesta.EstatusEncuestaId = (int)EstatusEncuestaId.Inactiva;
+                await _repository.Update<Encuesta>(encuesta);
+                ShowMessageSuccess(Constantes.Mensajes.Encuesta_msj09);
+            }
+            catch (MessageAlertException ex)
+            {
+                _logger.LogInformation(ex.Message);
+                GenerarAlerta(ex);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                ShowMessageException(ex.Message);
+            }
+            return RedirectToAction(nameof(Creadas));
             #endregion
         }
 

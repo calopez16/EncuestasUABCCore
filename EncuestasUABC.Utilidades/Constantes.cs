@@ -85,5 +85,9 @@
         public const string ENCUESTAS_MSJ04 = "La Encuesta no se pudo editar correctamente.";
         public const string ENCUESTAS_MSJ05 = "La Sección se agregó correctamente.";
         public const string ENCUESTAS_MSJ06 = "La Sección no se pudo agregar correctamente.";
+        public const string Encuesta_msj07 = "La encuesta se eliminó correctamente.";
+        public const string Encuesta_msj08 = "La encuesta no pudo eliminarse correctamente.";
+        public const string Encuesta_msj09 = "La encuesta se restauró correctamente.";
+        public const string Encuesta_msj10 = "La encuesta no pudo restaurar correctamente.";
     }
 }
