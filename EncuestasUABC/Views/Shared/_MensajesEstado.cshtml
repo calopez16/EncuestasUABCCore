@@ -1,0 +1,40 @@
+﻿
+@using EncuestasUABC.Constantes;
+
+
+<script type="text/javascript">
+    function MostrarMensajeEstado(typeAlert, mensaje) {
+            var alertClass = "";
+            var alertIcon = "";
+            var alertTitle = "";
+            switch (typeAlert) {
+                case enum_MessageAlertType.Success:
+                    alertClass = '@Alerts.CLASS_ALERT_SUCCESS';
+                    alertIcon = '@Alerts.CLASS_ICON_ALERT_SUCCESS';
+                    alertTitle= '@Alerts.CLASS_TITLE_ALERT_SUCCESS';
+                    break;
+                case enum_MessageAlertType.Information:
+                    alertClass = '@Alerts.CLASS_ALERT_INFORMATION';
+                    alertIcon = '@Alerts.CLASS_ICON_ALERT_INFORMATION';
+                    alertTitle= '@Alerts.CLASS_TITLE_ALERT_INFORMATION';
+                    break;
+                case enum_MessageAlertType.Warning:
+                    alertClass = '@Alerts.CLASS_ALERT_WARNING';
+                    alertIcon = '@Alerts.CLASS_ICON_ALERT_WARNING';
+                    alertTitle= '@Alerts.CLASS_TITLE_ALERT_WARNING';
+                    break;
+                case enum_MessageAlertType.Danger:
+                    alertClass = '@Alerts.CLASS_ALERT_DANGER';
+                    alertIcon = '@Alerts.CLASS_ICON_ALERT_DANGER';
+                    alertTitle= '@Alerts.CLASS_TITLE_ALERT_DANGER';
+                    break;
+                case enum_MessageAlertType.Exception:
+                    alertClass = '@Alerts.CLASS_ALERT_DANGER';
+                    alertIcon = '@Alerts.CLASS_ICON_ALERT_EXCEPTION';
+                    alertTitle = '@Alerts.CLASS_TITLE_ALERT_EXCEPTION';
+                    delay = 0;
+                    break;
+            }
+           
+        }
+</script>

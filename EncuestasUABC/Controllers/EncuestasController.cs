@@ -13,8 +13,8 @@ using EncuestasUABC.Models.Paginacion;
 using EncuestasUABC.Enumerador;
 using EncuestasUABC.Models.ViewModels;
 using AutoMapper;
-using EncuestasUABC.Models.Catalogos.Estatus;
 using System.Security.Cryptography.X509Certificates;
+using Newtonsoft.Json;
 
 namespace EncuestasUABC.Controllers
 {
@@ -65,7 +65,7 @@ namespace EncuestasUABC.Controllers
             #region Edit
             try
             {
-                var encuesta =await _repository.GetById<Encuesta>(id);
+                var encuesta = await _repository.GetById<Encuesta>(id);
                 return View(encuesta);
             }
             catch (MessageAlertException ex)
@@ -111,6 +111,8 @@ namespace EncuestasUABC.Controllers
         #endregion
 
         #region AJAX
+
+        #region Paginado
         /// <summary>
         /// Se obtienen los registro de las Encuestas Creadas de la base de datos
         /// </summary>
@@ -204,35 +206,16 @@ namespace EncuestasUABC.Controllers
             }
             #endregion
         }
+        #endregion
 
-        [HttpPost]
-        public async Task<IActionResult> CarreraAutoComplete(string busqueda)
-        {
-            #region EditarNombreDescripcion
-            try
-            {
-                var carreras = _repository.FindBy<Carrera>(x => x.Nombre.Contains(busqueda));
-            }
-            catch (MessageAlertException ex)
-            {
-                _logger.LogInformation(ex.Message);
-                GenerarAlerta(ex);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                ShowMessageException(ex.Message);
-            }
-            return Ok();
-            #endregion
-        }
+        #region Delete & Restore
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
             #region Delete
             try
             {
-                var encuesta =await _repository.GetById<Encuesta>(id);
+                var encuesta = await _repository.GetById<Encuesta>(id);
                 encuesta.EstatusEncuestaId = (int)EstatusEncuestaId.Eliminada;
                 await _repository.Update<Encuesta>(encuesta);
                 ShowMessageSuccess(Constantes.Mensajes.Encuesta_msj07);
@@ -255,7 +238,7 @@ namespace EncuestasUABC.Controllers
         [HttpPost]
         public async Task<IActionResult> Restore(int id)
         {
-            #region Delete
+            #region Restore
             try
             {
                 var encuesta = await _repository.GetById<Encuesta>(id);
@@ -274,6 +257,92 @@ namespace EncuestasUABC.Controllers
                 ShowMessageException(ex.Message);
             }
             return RedirectToAction(nameof(Creadas));
+            #endregion
+        }
+        #endregion
+
+        #region CambiarEstatus
+        [HttpPost]
+        public async Task<IActionResult> CambiarActivo(int id, bool activo)
+        {
+            #region CambiarActivo
+            try
+            {
+                var encuesta = await _repository.GetById<Encuesta>(id);
+                if (activo)
+                {
+                    encuesta.EstatusEncuestaId = (int)EstatusEncuestaId.Activa;
+                }
+                else
+                {
+                    encuesta.EstatusEncuestaId = (int)EstatusEncuestaId.Inactiva;
+                }
+                await _repository.Update<Encuesta>(encuesta);
+            }
+            catch (MessageAlertException ex)
+            {
+                _logger.LogInformation(ex.Message);
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest();
+            }
+            return Ok();
+            #endregion
+        }
+        #endregion
+
+        #region GET
+
+        [HttpGet]
+        public async Task<IActionResult> GetEncuesta(int id)
+        {
+            #region EditarNombreDescripcion
+            try
+            {
+                var encuesta = await _repository.FirstOrDefault<Encuesta>(x => x.Id == id, x => x.EncuestaSecciones);
+                return Ok(encuesta);
+            }
+            catch (MessageAlertException ex)
+            {
+                _logger.LogInformation(ex.Message);
+                GenerarAlerta(ex);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                ShowMessageException(ex.Message);
+            }
+            return BadRequest();
+            #endregion
+        }
+
+        #endregion
+
+        #region POST
+
+        [HttpGet]
+        public async Task<IActionResult> CambiarNombre(int id,string nombre)
+        {
+            #region EditarNombreDescripcion
+            try
+            {
+                var encuesta = await _repository.GetById<Encuesta>(id);
+                encuesta.Nombre = nombre;
+                await _repository.Update<Encuesta>(encuesta);
+                return Ok();
+            }
+            catch (MessageAlertException ex)
+            {
+                _logger.LogInformation(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return BadRequest();
             #endregion
         }
 
@@ -335,6 +404,8 @@ namespace EncuestasUABC.Controllers
 
         //    #endregion
         //}
+
+        #endregion
 
         #endregion
 

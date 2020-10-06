@@ -1,79 +1,61 @@
 ﻿@using EncuestasUABC.Models;
 @model Encuesta
 @{
-    ViewData["Title"] = "Editar ";
+    ViewData["Title"] = "Editar";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <input hidden asp-for="Id" />
-<div class="ibox p-4">
-    <div class="ibox-head pb-4">
-        <div class="ibox-title">
-            <div class="header-pagina">
-                <a asp-action="Creadas">
-                    <i class="fa fa-angle-left"></i>
-                </a>
-                <h1>
-                    @Model.Nombre
-                </h1>
+
+<div class="card">
+    <div class="card-header">
+        <a asp-action="Creadas" class="btn btn-primary bmd-btn-fab float-left mr-4" data-toggle="tooltip" data-placement="bottom" title="Regresar">
+            <i class="material-icons">keyboard_backspace</i>
+        </a>
+        <h1 class="mt-md-2">@ViewData["Title"] </h1>
+    </div>
+    <div class="card-body">
+        <div class="row" style="display:none" id="div_EditarNombreEncuesta">
+            <div class="col-10">
+                <input type="text" id="txt_NombreEncuesta" class="form-control form-lg" style="font-size:2.5rem" />
+            </div>
+            <div class="col-2 form-inline text-center">
+                <span class="btn-group-sm m-1">
+                    <button type="button" class="btn btn-success bmd-btn-fab" data-toggle="tooltip" data-placement="bottom" title="Guardar nombre de encuesta" id="btn_GuardarNombreEncuesta">
+                        <i class="material-icons">check</i>
+                    </button>
+                </span>
+                <span class="btn-group-sm m-1">
+                    <button type="button" class="btn btn-danger bmd-btn-fab" data-toggle="tooltip" data-placement="bottom" title="Cancelar edición de nombre" id="btn_CancelarEditarNombreEncuesta">
+                        <i class="material-icons">clear</i>
+                    </button>
+                </span>
             </div>
         </div>
-        <div class="ibox-tools">
-            <button class="btn btn-default ibox-collapse"><i class="fa fa-minus"></i></button>
-            <button class="btn btn-primary" id="btn_EditarNombre"><i class="fa fa-edit"></i></button>
+        <h1 style="cursor:pointer" id="h1_NombreEncuesta">
+            <span></span>
+            <i class="material-icons text-primary" style="display:none" title="Editar nombre de encuesta">edit</i>
+        </h1>
+       
+        <hr />
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover" id="table_Creadas">
+                <thead>
+                    <tr>
+                        <th style="width:40px">Activa</th>
+                        <th>Fecha</th>
+                        <th>Nombre</th>
+                        <th>Carrera</th>
+                        <th style="width:40px"></th>
+                        <th style="width:40px"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
         </div>
-    </div>
-    <div class="ibox-body">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group">
-                    @Html.Raw(Model.Descripcion)
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="text-center">
-    <button class="btn btn-primary" data-toggle="modal" data-target="#modal_CrearSeccion">Agregar Secciones</button>
-</div>
-<div class="ibox p-4">
-    <div class="ibox-head">
-        <div class="ibox-title">
-            <h2 class="page-title">Secciones</h2>
-        </div>
-        <div class="ibox-tools">
-            <button class="btn btn-primary"><i class="fa fa-edit"></i></button>
-            <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
-        </div>
-    </div>
-    <div class="ibox-body">
-        <table class="table">
-            <thead>
-                <tr>
-                    <td style="width:20px"></td>
-                    <td></td>
-                    <td style="width:20px"></td>
-                </tr>
-            </thead>
-            <tbody id="lista_secciones">
-                @foreach (var item in Model.EncuestaSecciones)
-                {
-                <tr>
-                    <td>
-                        <i class="fa fa-arrows-alt" style="cursor:pointer"></i>
-                    </td>
-                    <td>
-                        @item.Nombre
-                    </td>
-                    <td></td>
-                </tr>
-                }
-            </tbody>
-        </table>
     </div>
 </div>
 
-@await Html.PartialAsync("~/Views/Encuestas/PartialViews/_ModalEditarTituloDescripcion.cshtml", Model)
-@await Html.PartialAsync("~/Views/Encuestas/PartialViews/_ModalCrearSeccion.cshtml", Model)
 
 <script type="text/javascript" src="~/js/Encuestas/Editar.js"></script>
 

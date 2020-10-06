@@ -5,36 +5,79 @@ $(document).ready(function () {
         $("#modal_EditarNombreDescripcion").modal("show");
     });
 
-    $("#form_EditarNombreDescripcion").validate({
-        rules: {
-            Nombre: "required",
-            Descripcion: "required"
-        },
-        messages: {
-            Nombre: "El campo Nombre es obligatorio",
-            Descripcion: "El campo Apellido Paterno es obligatorio",
-        }
+    CargarEncuesta();
+
+    //#region EDITAR NOMBRE ENCUESTA
+    $("#h1_NombreEncuesta").click(function () {
+        $(this).hide();
+        $("#div_EditarNombreEncuesta").show();
     });
-    $("#lista_secciones").sortable();
-    var baseUrl = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
-    alert(baseUrl);
+
+    $("#h1_NombreEncuesta").mouseover(function () {
+        $(this).find("i").first().show();
+
+    });
+    $("#h1_NombreEncuesta").mouseout(function () {
+        $(this).find("i").first().hide();
+    });
+
+    $("#btn_CancelarEditarNombreEncuesta").click(function () {
+        $("#div_EditarNombreEncuesta").hide();
+        $("#h1_NombreEncuesta").show();
+        $("#txt_NombreEncuesta").val($("#h1_NombreEncuesta").find("span").first().text());
+    });
+    $("#btn_GuardarNombreEncuesta").click(function () {
+        CambiarNombreEncuesta();
+    });
+    //#endregion
+
+    MostrarMensajeEstado(enum_MessageAlertType.Success, "Mensajeeeeeeeeee");
 });
 
 
-
 function CargarEncuesta() {
+    var data = `&id=${parseInt($("#Id").val())}`;
     //Llamada generica de petición AJAX  
     $.ajax({
         //Url de la peticion
-        url: "",
+        url: `${window.urlproyecto}/Encuestas/GetEncuesta`,
         //Tipo de petición
-        type: "POST",
-        //Tipo de formato que se enviara al servidor.
-        contentType: "application/json",
-        //tipo de formato que regresará el servidor.
-        dataType: "json",
+        type: "GET",
         //Datos que se enviaran a la llamada
-        data: { buscar: txt_Search },
+        data: data,
+        //Accion al comenzar la carga de la peticion AJAX.
+        beforeSend: function () {
+            //Aqui regularmente se implementa un loading.
+            $(".loader-container").fadeIn();
+        }
+    }).done(function (data) {
+        //Se ejecuta cuando la peticion ha sido exitosa. 
+        //data es la respuesta que se recibe.
+        $("#h1_NombreEncuesta").find("span").first().text(data.nombre);
+        $("#txt_NombreEncuesta").val(data.nombre);
+    }).fail(function () {
+        //Se ejecuta cuando la peticion ha regresado algun error.
+        GenerarAlerta(enum_MessageAlertType.Danger, "No se pudo cargar la encuesta.");
+
+    }).always(function () {
+        //Se ejecuta al final de la peticion sea exitosa o no.
+        $(".loader-container").fadeOut();
+    });
+}
+
+
+//#region POST
+
+function CambiarNombreEncuesta() {
+    var data = `&id=${parseInt($("#Id").val())}&nombre=${$("#txt_NombreEncuesta").val()}`;
+    //Llamada generica de petición AJAX  
+    $.ajax({
+        //Url de la peticion
+        url: `${window.urlproyecto}/Encuestas/CambiarNombre`,
+        //Tipo de petición
+        type: "GET",
+        //Datos que se enviaran a la llamada
+        data: data,
         //Accion al comenzar la carga de la peticion AJAX.
         beforeSend: function () {
             //Aqui regularmente se implementa un loading.
@@ -42,9 +85,18 @@ function CargarEncuesta() {
     }).done(function (data) {
         //Se ejecuta cuando la peticion ha sido exitosa. 
         //data es la respuesta que se recibe.
+        $("#div_EditarNombreEncuesta").hide();
+        $("#h1_NombreEncuesta").show();
+        $("#h1_NombreEncuesta").find("span").first().text($("#txt_NombreEncuesta").val());
+        $('[data-toggle="tooltip"]').tooltip("hide");
     }).fail(function () {
         //Se ejecuta cuando la peticion ha regresado algun error.
+        GenerarAlerta(enum_MessageAlertType.Danger, "Ocurrió un error al guarda el Nombre de la encuesta.");
+        CargarEncuesta();
     }).always(function () {
         //Se ejecuta al final de la peticion sea exitosa o no.
     });
 }
+
+
+//#endregion 

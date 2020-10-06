@@ -51,7 +51,7 @@ $(document).ready(function () {
                         return `<span class="bmd-form-group is-filled">
                                     <div class="switch" >
                                         <label>
-                                            <input type="checkbox" checked=""><span class="bmd-switch-track"><div class="ripple-container"></div></span>
+                                            <input class="check_Activo" type="checkbox" checked data-id="${row.id}"><span class="bmd-switch-track"><div class="ripple-container"></div></span>
                                         </label>
                                     </div>
                                 </span>`;
@@ -59,7 +59,7 @@ $(document).ready(function () {
                         return `<span class="bmd-form-group is-filled">
                                     <div class="switch">
                                         <label>
-                                            <input type="checkbox" checked=""><span class="bmd-switch-track"><div class="ripple-container"></div></span>
+                                            <input class="check_Activo" type="checkbox" data-id="${row.id}"><span class="bmd-switch-track"><div class="ripple-container"></div></span>
                                         </label>
                                     </div>
                                 </span>`;
@@ -160,5 +160,33 @@ $(document).ready(function () {
         $("#text_EncuestaRestaurar").val(id);
         $("#span_NombreEncuestaRestaurar").text(nombreEncuesta);
         $("#modal_RestaurarEncuesta").modal("show");
+    });
+
+    $("#table_Creadas").on("change", ".check_Activo", function () {
+        var id = parseInt($(this).data("id"));
+        var activo = $(this).prop("checked");
+        var data = `&id=${id}&activo=${activo}`;
+        //Llamada generica de petición AJAX  
+        $.ajax({
+            //Url de la peticion
+            url: `${window.urlproyecto}/Encuestas/CambiarActivo`,
+            //Tipo de petición
+            type: "POST",
+            //Datos que se enviaran a la llamada
+            data: data,
+            //Accion al comenzar la carga de la peticion AJAX.
+            beforeSend: function () {
+                //Aqui regularmente se implementa un loading.
+            }
+        }).done(function (data) {
+            //Se ejecuta cuando la peticion ha sido exitosa. 
+            //data es la respuesta que se recibe.
+        }).fail(function () {
+            //Se ejecuta cuando la peticion ha regresado algun error.
+            GenerarAlerta(enum_MessageAlertType.Danger,"No se pudo actualizar el estatus de la encuesta.");
+        }).always(function () {
+            //Se ejecuta al final de la peticion sea exitosa o no.
+        });
+
     });
 });
