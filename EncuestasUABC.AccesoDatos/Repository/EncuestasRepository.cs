@@ -24,13 +24,33 @@ namespace EncuestasUABC.AccesoDatos.Repository
                 _context.Dispose();
         }
 
-        //public async Task<IEnumerable<Encuesta>> GetAll()
-        //{
-        //    #region GetAll
-        //    return await GetEncuestas();
-        //    #endregion
-        //}
+        public async Task<EncuestaSeccion> GetEncuestaSeccionById(int id, int idEncuesta)
+        {
+            #region GetAll
+            return await _context.EncuestaSecciones.FindAsync(id, idEncuesta);
+            #endregion
+        }
 
+        public async Task<Encuesta> GetById(int id)
+        {
+            #region GetById
+
+            return await _context.Encuestas
+                .Include(x => x.EncuestaSecciones)
+                .Select(x => new Encuesta
+                {
+                    Id = x.Id,
+                    Fecha = x.Fecha,
+                    UsuarioId = x.UsuarioId,
+                    Nombre = x.Nombre,
+                    Descripcion = x.Descripcion,
+                    EstatusEncuestaId = x.EstatusEncuestaId,
+                    CarreraId = x.CarreraId,
+                    EncuestaSecciones = x.EncuestaSecciones.Where(x => !x.Eliminado).ToList()
+                }).FirstOrDefaultAsync(x => x.Id == id);
+
+            #endregion
+        }
         //public async Task<Encuesta> Get(int id)
         //{
         //    #region GetAll
@@ -47,7 +67,7 @@ namespace EncuestasUABC.AccesoDatos.Repository
         //    return encuesta;
         //    #endregion
         //}
-       
+
         //private async Task<IEnumerable<Encuesta>> GetEncuestas()
         //{
         //    #region 

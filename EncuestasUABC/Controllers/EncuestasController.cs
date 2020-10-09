@@ -65,8 +65,9 @@ namespace EncuestasUABC.Controllers
             #region Edit
             try
             {
-                var encuesta = await _repository.GetById<Encuesta>(id);
-                return View(encuesta);
+                var encuesta = await _encuestasRepository.GetById(id);
+                var encuestaViewModel = _mapper.Map<EncuestaViewModel>(encuesta);
+                return View(encuestaViewModel);
             }
             catch (MessageAlertException ex)
             {
@@ -109,6 +110,7 @@ namespace EncuestasUABC.Controllers
             #endregion
         }
         #endregion
+
 
         #region AJAX
 
@@ -324,7 +326,7 @@ namespace EncuestasUABC.Controllers
         #region POST
 
         [HttpGet]
-        public async Task<IActionResult> CambiarNombre(int id,string nombre)
+        public async Task<IActionResult> CambiarNombre(int id, string nombre)
         {
             #region EditarNombreDescripcion
             try
@@ -346,65 +348,65 @@ namespace EncuestasUABC.Controllers
             #endregion
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> EditarNombreDescripcion(Encuesta model, bool encuestaEstatus = false)
-        //{
-        //    #region EditarNombreDescripcion
-        //    try
-        //    {
-        //        if (encuestaEstatus)
-        //            model.EstatusEncuestaId = (int)Enumerador.EstatusEncuesta.ACTIVA;
-        //        else
-        //            model.EstatusEncuestaId = (int)Enumerador.EstatusEncuesta.INACTIVA;
+        [HttpPost]
+        public async Task<IActionResult> CrearSeccion(int encuestaId, string nombre)
+        {
+            #region CrearSeccion
+            try
+            {
+                var secciones = await _repository.FindBy<EncuestaSeccion>(x => x.EncuestaId == encuestaId);
+                int orden = 1;
+                if (secciones.Any())
+                    orden = secciones.OrderBy(x => x.Orden).Last().Orden + 1;
+                var newSeccion = new EncuestaSeccion
+                {
+                    EncuestaId = encuestaId,
+                    Nombre = nombre,
+                    Orden = orden,
+                };
+                await _repository.Add<EncuestaSeccion>(newSeccion);
+                return Ok(newSeccion.Id);
 
-        //        var encuesta = await _encuestasRepository.Get(model.Id);
-        //        encuesta.Nombre = model.Nombre;
-        //        encuesta.Descripcion = model.Descripcion;
-        //        encuesta.EstatusEncuestaId = model.EstatusEncuestaId;
-        //        await _encuestasRepository.Update(encuesta);
-        //        ShowMessageSuccess(Constantes.Mensajes.ENCUESTAS_MSJ03);
-        //    }
-        //    catch (MessageAlertException ex)
-        //    {
-        //        _logger.LogInformation(ex.Message);
-        //        GenerarAlerta(ex);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex.Message);
-        //        ShowMessageException(ex.Message);
-        //    }
-        //    return RedirectToAction(nameof(Editar), new { id = model.Id });
-        //    #endregion
-        //}
+            }
+            catch (MessageAlertException ex)
+            {
+                _logger.LogInformation(ex.Message);
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest();
+            }
+            #endregion
+        }
 
-        //[HttpPost]
-        //public async Task<IActionResult> CrearSeccion(EncuestaSeccion model)
-        //{
-        //    #region Crear
-        //    try
-        //    {
-        //        var user = await _usuarioRepository.Get(User.Identity.Name);
-        //        var encuesta = await _encuestasRepository.Get(model.EncuestaId);
-        //        int orden = 1;
-        //        if (encuesta.EncuestaSecciones.Any())
-        //            orden = encuesta.EncuestaSecciones.OrderBy(x => x.Orden).Last().Orden + 1;
-        //        model.Orden = orden;
-        //        encuesta.EncuestaSecciones.Add(model);
-        //        await _encuestasRepository.Update(encuesta);
-        //        ShowMessageSuccess(Constantes.Mensajes.ENCUESTAS_MSJ05);
-        //        return RedirectToAction(nameof(Editar), new { id = model.EncuestaId });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex.Message);
-        //        ShowMessageException(ex.Message);
-        //    }
-        //    return RedirectToAction(nameof(Creadas));
+        #endregion
 
-        //    #endregion
-        //}
-
+        #region PUT
+        [HttpPut]
+        public async Task<IActionResult> DeleteSeccion(int id, int encuestaId)
+        {
+            #region DeleteSeccion
+            try
+            {
+                var encuestaSeccion = await _encuestasRepository.GetEncuestaSeccionById(id, encuestaId);
+                encuestaSeccion.Eliminado = true;
+                await _repository.Update<EncuestaSeccion>(encuestaSeccion);
+            }
+            catch (MessageAlertException ex)
+            {
+                _logger.LogInformation(ex.Message);
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest();
+            }
+            return Ok();
+            #endregion
+        }
         #endregion
 
         #endregion

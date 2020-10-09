@@ -1,5 +1,7 @@
-﻿@using EncuestasUABC.Models;
-@model Encuesta
+﻿@using EncuestasUABC.Models.ViewModels;
+@using EncuestasUABC.Utilidades;
+@using EncuestasUABC.Enumerador;
+@model EncuestaViewModel
 @{
     ViewData["Title"] = "Editar";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -15,8 +17,8 @@
     </div>
     <div class="card-body">
         <div class="row" style="display:none" id="div_EditarNombreEncuesta">
-            <div class="col-10">
-                <input type="text" id="txt_NombreEncuesta" class="form-control form-lg" style="font-size:2.5rem" />
+            <div class="col-8">
+                <input type="text" id="txt_NombreEncuesta" class="form-control form-lg" style="font-size:2.5rem" value="@Model.Nombre" />
             </div>
             <div class="col-2 form-inline text-center">
                 <span class="btn-group-sm m-1">
@@ -32,30 +34,82 @@
             </div>
         </div>
         <h1 style="cursor:pointer" id="h1_NombreEncuesta">
-            <span></span>
+            <span>@Model.Nombre</span>
             <i class="material-icons text-primary" style="display:none" title="Editar nombre de encuesta">edit</i>
         </h1>
-       
-        <hr />
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover" id="table_Creadas">
-                <thead>
-                    <tr>
-                        <th style="width:40px">Activa</th>
-                        <th>Fecha</th>
-                        <th>Nombre</th>
-                        <th>Carrera</th>
-                        <th style="width:40px"></th>
-                        <th style="width:40px"></th>
+        <table class="table table-hover" id="table_EncuestasSecciones">
+            <thead>
+                <tr>
+                    <th style="width:40px"></th>
+                    <th></th>
+                    <th style="width:40px"></th>
+                    <th style="width:40px"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.EncuestaSecciones.Any())
+                {
+                    @foreach (var seccion in Model.EncuestaSecciones)
+                    {
+                        <tr class="fila_Seccion">
+                            <td>
+                                <i class="material-icons">
+                                    height
+                                </i>
+                            </td>
+                            <td>
+                                @seccion.Nombre
+                            </td>
+                            <td>
+                                <span class="btn-group-sm">
+                                    <button class="btn btn-info bmd-btn-fab btn_Editar" data-id="@seccion.Id" data-toggle="tooltip" data-placement="bottom" title="Editar sección">
+                                        <i class="material-icons">edit</i>
+                                    </button>
+                                </span>
+                            </td>
+                            <td>
+                                <span class="btn-group-sm">
+                                    <button class="btn btn-danger bmd-btn-fab btn_Eliminar" data-id="@seccion.Id" data-toggle="tooltip" data-placement="bottom" title="Eliminar sección">
+                                        <i class="material-icons">delete</i>
+                                    </button>
+                                </span>
+                            </td>
+                        </tr>
+
+                    }
+                }
+                else
+                {
+                    <tr class="fila_SinSecciones">
+                        <td colspan="4" class="text-center">
+                            <h4>No se han encontrado secciones</h4>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
+                }
+            </tbody>
+        </table>
+
     </div>
 </div>
 
+<div class="row fixed-bottom d-flex justify-content-end mb-4 mr-4">
+    <div class="col-2 text-right">
+        <button class="btn btn-primary bmd-btn-fab" data-toggle="tooltip" data-placement="top" title="Guardar encuesta">
+            <i class="material-icons md-36">save</i>
+        </button>
+        <button class="btn btn-secondary bmd-btn-fab btn_AgregarSeccion" data-toggle="tooltip" data-placement="top" title="Agregar sección">
+            <i class="material-icons md-36">library_add</i>
+        </button>
+        <button class="btn btn-secondary bmd-btn-fab" data-toggle="tooltip" data-placement="top" title="Asignar alumnos">
+            <i class="material-icons md-36">group</i>
+        </button>
+    </div>
+</div>
+<partial name="~/Views/Encuestas/PartialViews/_ModalEliminarSeccion.cshtml" />
+<partial name="~/Views/Encuestas/PartialViews/_ModalCrearSeccion.cshtml" model="new EncuestaSeccionViewModel()"/>
+
 
 <script type="text/javascript" src="~/js/Encuestas/Editar.js"></script>
-
+<script type="text/javascript">
+    var enum_EstatusEncuesta=@(EnumHelper.EnumToString<EstatusEncuestaId>())
+</script>

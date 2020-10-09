@@ -35,6 +35,12 @@ namespace EncuestasUABC
             CreateMap<Encuesta, EncuestaViewModel>();
             CreateMap<EncuestaViewModel, Encuesta>();
 
+            CreateMap<EncuestaSeccion, EncuestaSeccionViewModel>();
+            CreateMap<EncuestaSeccionViewModel, EncuestaSeccion>();
+
+            CreateMap<EncuestaPregunta, EncuestaPreguntaViewModel>();
+            CreateMap<EncuestaPreguntaViewModel, EncuestaPregunta>();
+
         }
     }
 }

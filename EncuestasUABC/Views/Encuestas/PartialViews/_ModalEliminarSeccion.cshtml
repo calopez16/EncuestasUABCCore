@@ -1,0 +1,25 @@
+﻿@{
+    Layout = null;
+}
+
+<!-- Modal -->
+<div class="modal fade" id="modal_EliminarSeccion" tabindex="-1" role="dialog" aria-labelledby="modal_EliminarSeccion" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Eliminar Sección</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input hidden type="text" name="id" id="txt_SeccionEliminar" />
+                ¿Estas seguro de eliminar la sección <strong><span id="span_SeccionNombre"></span></strong>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-raised mr-2" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success btn-raised" id="btn_ConfirmarEliminarSeccion">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
