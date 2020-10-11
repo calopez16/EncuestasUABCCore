@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
 using EncuestasUABC.Models;
 using EncuestasUABC.Models.Catalogos;
+using EncuestasUABC.Models.Catalogos.Tipos;
 using EncuestasUABC.Models.ViewModels;
 using EncuestasUABC.Models.ViewModels.Catalogos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace EncuestasUABC
 {
@@ -40,6 +37,12 @@ namespace EncuestasUABC
 
             CreateMap<EncuestaPregunta, EncuestaPreguntaViewModel>();
             CreateMap<EncuestaPreguntaViewModel, EncuestaPregunta>();
+
+            CreateMap<EncuestaPreguntaOpcion, EncuestaPreguntaOpcionViewModel>();
+            CreateMap<EncuestaPreguntaOpcionViewModel, EncuestaPreguntaOpcion>();
+
+            CreateMap<TipoPregunta, TipoPreguntaViewModel>();
+            CreateMap<TipoPreguntaViewModel, TipoPregunta>();
 
         }
     }

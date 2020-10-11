@@ -64,15 +64,15 @@ namespace EncuestasUABC.AccesoDatos.Data
             {
                 b.HasKey(x => new { x.Id, x.EncuestaId, x.EncuestaSeccionId });
                 b.Property(e => e.Id).ValueGeneratedOnAdd();
-                b.HasOne(x => x.EncuestaSeccionIdNavigation).WithMany(x => x.EncuestaPreguntas).HasForeignKey(x => new { x.EncuestaId, x.EncuestaSeccionId });
+                b.HasOne(x => x.EncuestaSeccionIdNavigation).WithMany(x => x.EncuestaPreguntas).HasForeignKey(x => new {x.EncuestaSeccionId, x.EncuestaId });
                 b.HasOne(x => x.TipoPreguntaIdNavigation).WithMany(x => x.EncuestaPreguntas).HasForeignKey(x => x.TipoPreguntaId);
-                b.HasMany(x => x.SubPreguntas).WithOne(x => x.EncuestaPreguntaIdPadreNavigation).HasForeignKey(x => new { x.EncuestaIdPadre, x.EncuestaSeccionIdPadre, x.EncuestaPreguntaIdPadre });
+                b.HasMany(x => x.SubPreguntas).WithOne(x => x.EncuestaPreguntaIdPadreNavigation).HasForeignKey(x => new { x.EncuestaSeccionIdPadre, x.EncuestaIdPadre, x.EncuestaPreguntaIdPadre });
             });
             modelBuilder.Entity<EncuestaPreguntaOpcion>(b =>
             {
                 b.HasKey(x => new { x.Id, x.EncuestaId, x.EncuestaSeccionId, x.EncuestaPreguntaId });
                 b.Property(e => e.Id).ValueGeneratedOnAdd();
-                b.HasOne(x => x.EncuestaPreguntaIdNavigation).WithMany(x => x.Opciones).HasForeignKey(x => new { x.EncuestaId, x.EncuestaSeccionId,x.EncuestaPreguntaId });
+                b.HasOne(x => x.EncuestaPreguntaIdNavigation).WithMany(x => x.Opciones).HasForeignKey(x => new { x.EncuestaPreguntaId, x.EncuestaId, x.EncuestaSeccionId });
             });
         }
     }

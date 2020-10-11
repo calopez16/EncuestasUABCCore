@@ -1,0 +1,117 @@
+﻿@model EncuestasUABC.Models.ViewModels.EncuestaPreguntaViewModel
+@{
+    Layout = null;
+}
+
+<!-- Modal -->
+<div class="modal fade" id="modal_PreguntaCrear" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <form asp-action="Delete" class="modal-content" id="form_Pregunta">
+            <div class="modal-header">
+                <h5 class="modal-title" id="h5_ModalTituloCrearPregunta">Elige el tipo de pregunta</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <input class="position-absolute invisible" asp-for="EncuestaId" />
+                <input class="position-absolute invisible" asp-for="EncuestaSeccionId" />
+            </div>
+            <div class="modal-body">
+                <div id="div_tiposPregunta">
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-6 col-md-4 mt-4">
+                            <button type="button" class="btn btn-primary btn-lg btn_PreguntaAbierta" style="min-width:100%;min-height:150px">
+                                <i class="material-icons md-48">
+                                    text_format
+                                </i><br />
+                                <span>Abierta</span>
+                            </button>
+                        </div>
+                        <div class="col-6 col-md-4 mt-4">
+                            <button type="button" class="btn btn-primary btn-lg" style="min-width: 100%;min-height: 150px">
+                                <i class="material-icons md-36">
+                                    radio_button_checked
+                                </i><br />
+                                <span>Respuesta única</span>
+                            </button>
+                        </div>
+                        <div class="col-6 col-md-4 mt-4">
+                            <button type="button" class="btn btn-primary btn-lg" style="min-width:100%;min-height:150px">
+                                <i class="material-icons md-36">
+                                    check_box
+                                </i><br />
+                                <span>Múltiples respuestas</span>
+                            </button>
+                        </div>
+                        <div class="col-6 col-md-4 mt-4">
+                            <button type="button" class="btn btn-primary btn-lg" style="min-width:100%;min-height:150px">
+                                <i class="material-icons md-48">
+                                    read_more
+                                </i><br />
+                                <span>Condicional</span>
+                            </button>
+                        </div>
+                        <div class="col-6 col-md-4 mt-4">
+                            <button type="button" class="btn btn-primary btn-lg" style="min-width:100%;min-height:150px">
+                                <i class="material-icons md-48">
+                                    view_comfy
+                                </i><br />
+                                <span>Matriz</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="div_PreguntaDescripcion" style="display:none">
+                    <div class="form-group">
+                        <label asp-for="Descripcion" class="bmd-label-floating">Descripción</label>
+                        <input asp-for="Descripcion" class="form-control" id="txt_DescripcionPregunta" />
+                        <span asp-validation-for="Descripcion"></span>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="check_Obligatoria"> Pregunta obligatoria
+                        </label>
+                    </div>
+                </div>
+                <div class="div_PreguntaRadioCheck" style="display:none">
+                    <h5 class="text-center">Opciones</h5>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Descripción</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="3">
+                                    <h6 class="text-center">No se han agregado opciones</h6>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td style="width:40px">
+                                    <span class="btn-group-sm">
+                                        <button class="btn btn-primary bmd-btn-fab btn_Editar" data-toggle="tooltip" data-placement="bottom" title="Agregar opción">
+                                            <i class="material-icons">add</i>
+                                        </button>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-raised mr-2" style="display:none" id="btn_RegresarPreguntaAgregar">Regresar</button>
+                <button type="button" class="btn btn-success btn-raised" style="display:none" id="btn_GuardarPreguntaAgregar">Confirmar</button>
+            </div>
+        </form>
+    </div>
+</div>

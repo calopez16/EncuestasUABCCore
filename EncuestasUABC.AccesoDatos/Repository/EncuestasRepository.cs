@@ -1,6 +1,7 @@
 ﻿using EncuestasUABC.AccesoDatos.Data;
 using EncuestasUABC.AccesoDatos.Repository.Interfaces;
 using EncuestasUABC.Models;
+using EncuestasUABC.Models.Catalogos.Tipos;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -52,21 +53,38 @@ namespace EncuestasUABC.AccesoDatos.Repository
             #endregion
         }
 
-        public async Task<EncuestaSeccion> GetSeccionById(int id,int encuestaId)
+        public async Task<EncuestaSeccion> GetSeccionById(int id, int encuestaId)
         {
             #region GetSeccionById
 
             return await _context.EncuestaSecciones
                 .Include(x => x.EncuestaPreguntas)
+                .Include("EncuestaPreguntas.TipoPreguntaIdNavigation")
+                .Include(x => x.EncuestaIdNavigation)
                 .Select(x => new EncuestaSeccion
                 {
                     Id = x.Id,
-                    EncuestaId=x.EncuestaId,
+                    EncuestaId = x.EncuestaId,
                     Nombre = x.Nombre,
                     Descripcion = x.Descripcion,
-                    Orden=x.Orden,
-                    EncuestaPreguntas = x.EncuestaPreguntas.Where(x => !x.Eliminado).ToList()
-                }).FirstOrDefaultAsync(x => x.Id == id && x.EncuestaId==encuestaId);
+                    Orden = x.Orden,
+                    EncuestaPreguntas = x.EncuestaPreguntas.Where(x => !x.Eliminado).OrderBy(x => x.Orden).Select(y => new EncuestaPregunta
+                    {
+                        Id = y.Id,
+                        Descripcion = y.Descripcion,
+                        TipoPreguntaId = y.TipoPreguntaId,
+                        TipoPreguntaIdNavigation = new TipoPregunta
+                        {
+                            Descripcion = y.TipoPreguntaIdNavigation.Descripcion
+                        },
+                        Opciones = y.Opciones.ToList(),
+                        Obligatoria = y.Obligatoria
+                    }).ToList(),
+                    EncuestaIdNavigation = new Encuesta
+                    {
+                        Nombre = x.EncuestaIdNavigation.Nombre
+                    }
+                }).FirstOrDefaultAsync(x => x.Id == id && x.EncuestaId == encuestaId);
 
             #endregion
         }

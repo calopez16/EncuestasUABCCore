@@ -16,9 +16,7 @@ namespace EncuestasUABC.Models
         public string Descripcion { get; set; }
         public int Orden { get; set; }
         public bool Eliminado { get; set; } = false;
-
         
         public EncuestaPregunta EncuestaPreguntaIdNavigation { get; set; }
-
     }
 }

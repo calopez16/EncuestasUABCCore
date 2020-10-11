@@ -1,17 +1,14 @@
 const dateFormat = 'DD/MM/YYYY HH:mm:ss';
 
+var seccionId = 0;
 var encuestaId = 0;
+var tipoPreguntaId = 0;
 
 $(document).ready(function () {
+    seccionId = parseInt($("#Id").val());   
+    encuestaId = parseInt($("#EncuestaId").val());   
 
-    encuestaId = parseInt($("#Id").val());
-    $("#btn_EditarNombre").on("click", function () {
-        $("#modal_EditarNombreDescripcion").modal("show");
-    });
-
-    //CargarEncuesta();
-
-    //#region EDITAR NOMBRE ENCUESTA
+    //#region EDITAR NOMBRE SECCION
     $("#h1_SeccionNombre").click(function () {
         $(this).hide();
         $("#div_EditarSeccionNombre").show();
@@ -40,41 +37,17 @@ $(document).ready(function () {
     });
     //#endregion
 
-    //#region ELIMINAR SECCION
-    var encuestaSeccionId;
-    var botonEliminar;
-    $("#table_SeccionPreguntas").on("click", ".btn_Eliminar", function () {
-        encuestaSeccionId = parseInt($(this).data("id"));
-        $("#modal_SeccionEliminar").modal("show");
-        botonEliminar = this;
+    $(".btn_PreguntaAgregar").click(function () {
+        LimpiarCamposPreguntas();
+        $("#div_tiposPregunta").show();
+        $("#div_PreguntaDescripcion").hide();
+        $("#btn_RegresarPreguntaAgregar").hide();
+        $("#btn_GuardarPreguntaAgregar").hide();
+        $("#modal_PreguntaCrear").modal("show");
     });
-
-    $("#btn_ConfirmarEliminarSeccion").click(function () {
-        encuestaId = parseInt($("#Id").val());
-        eliminarSeccion(encuestaSeccionId, encuestaId, botonEliminar);
-    });
-    //#endregion
-
-    //#region CREAR SECCION
-    $(".btn_AgregarSeccion").click(function () {
-        $("#txt_CrearNombreSeccion").val("");
-        $("#modal_SeccionCrear").modal("show");
-        $("#txt_CrearNombreSeccion").next().text("");
-    });
-
-    $("#btn_CrearNombreSeccion").click(function () {
-        var isFormValid = $("#form_CrearSeccion").valid();
-        encuestaId = parseInt($("#Id").val());
-        var nombre = $("#txt_CrearNombreSeccion").val();
-        $("#txt_CrearNombreSeccion").next().text("");
-        if (isFormValid) {
-            crearSeccion(encuestaId, nombre);
-        }
-    });
-    //#endregion
-
-
+    
     //#region FUNCIONALIDAD TABLA PREGUNTAS
+
     $("#table_SeccionPreguntas tbody").sortable({ handle: '.ordenador' });
 
     $(".check_seleccionarTodos").click(function () {
@@ -86,9 +59,42 @@ $(document).ready(function () {
     });
 
     //#endregion
+
+    //#region MODAL AGREGAR PREGUNTAS
+
+    $(".btn_PreguntaAbierta").click(function () {
+        $("#div_tiposPregunta").hide();
+        $("#div_PreguntaDescripcion").show();
+        $("#h5_ModalTituloCrearPregunta").text("Crear pregunta abierta");
+        $("#btn_RegresarPreguntaAgregar").show();
+        $("#btn_GuardarPreguntaAgregar").show();
+        $("#txt_DescripcionPregunta").focus();
+        tipoPreguntaId = enum_TipoPregunta.Abierta;
+    });
+    $("#btn_RegresarPreguntaAgregar").click(function () {
+        $("#div_tiposPregunta").show();
+        $("#div_PreguntaDescripcion").hide();
+        $("#btn_RegresarPreguntaAgregar").hide();
+        $("#btn_GuardarPreguntaAgregar").hide();
+        LimpiarCamposPreguntas();
+        tipoPreguntaId = 0;
+    });
+
+
+    $("#btn_GuardarPreguntaAgregar").click(function () {
+        var isFormValid = $("#form_Pregunta").valid();
+        if (isFormValid) {
+            guardarPregunta();
+        }
+    });
+
+    //#endregion
 });
 
-
+function LimpiarCamposPreguntas() {
+    $("#txt_DescripcionPregunta").val("");
+    $("#check_Obligatoria").prop("checked", false);
+}
 //#region POST
 
 function cambiarSeccionNombre(id, encuestaId, nombre) {
@@ -120,48 +126,26 @@ function cambiarSeccionNombre(id, encuestaId, nombre) {
     });
 }
 
-function eliminarSeccion(id, encuestaId, boton) {
+function guardarPregunta() {
+    var descripcion = $("#txt_DescripcionPregunta").val();
+    var obligatoria = $("#check_Obligatoria").prop("checked");
+    var data = new FormData();
+    data.append("EncuestaId", encuestaId);
+    data.append("EncuestaSeccionId", seccionId);
+    data.append("Descripcion", descripcion);
+    data.append("TipoPreguntaId", tipoPreguntaId);
+    data.append("Obligatoria", obligatoria);
+
+    //Llamada generica de petición AJAX  
     $.ajax({
         //Url de la peticion
-        url: `${window.urlproyecto}/Encuestas/DeleteSeccion`,
-        //Tipo de petición
-        type: "PUT",
-        //Datos que se enviaran a la llamada
-        data: { id, encuestaId },
-        //Accion al comenzar la carga de la peticion AJAX.
-        beforeSend: function () {
-            //Aqui regularmente se implementa un loading.
-        }
-    }).done(function (data) {
-        //Se ejecuta cuando la peticion ha sido exitosa. 
-        //data es la respuesta que se recibe.
-        $(boton).closest("tr").remove();
-        $("#modal_SeccionEliminar").modal("hide");
-        if ($("#table_SeccionPreguntas tbody").find(".fila_Seccion").length == 0) {
-            var item = `<tr class="fila_SinSecciones">
-                        <td colspan="4" class="text-center">
-                            <h4>No se han encontrado secciones</h4>
-                        </td>
-                    </tr>`;
-            $("#table_SeccionPreguntas tbody").html(item);
-        }
-
-    }).fail(function () {
-        //Se ejecuta cuando la peticion ha regresado algun error.
-        GenerarAlerta(enum_MessageAlertType.Danger, "Ocurrió un error al tratar de eliminar la Sección.");
-    }).always(function () {
-        //Se ejecuta al final de la peticion sea exitosa o no.
-    });
-}
-
-function crearSeccion(encuestaId, nombre) {
-    $.ajax({
-        //Url de la peticion
-        url: `${window.urlproyecto}/Encuestas/CrearSeccion`,
+        url: `${window.urlproyecto}/Encuestas/CrearPregunta`,
         //Tipo de petición
         type: "POST",
         //Datos que se enviaran a la llamada
-        data: { encuestaId, nombre },
+        data: data,
+        processData: false,  // tell jQuery not to process the data
+        contentType: false,  // tell jQuery not to set contentType
         //Accion al comenzar la carga de la peticion AJAX.
         beforeSend: function () {
             //Aqui regularmente se implementa un loading.
@@ -169,51 +153,75 @@ function crearSeccion(encuestaId, nombre) {
     }).done(function (data) {
         //Se ejecuta cuando la peticion ha sido exitosa. 
         //data es la respuesta que se recibe.
-        var fila = ` <tr>
-                        <td class="ordenador" style="cursor:pointer;width:10px">
-                            <i class="material-icons text-secondary">
-                                drag_indicator
-                            </i>
-                        </td>
-                        <td style="width:40px">
-                            <span class="bmd-form-group is-filled"><div class="checkbox">
-                            <label>
-                                <input type="checkbox" class="check_Pregunta"><span class="checkbox-decorator"><span class="check"></span><div class="ripple-container"></div></span>
-                            </label>
-                        </div></span>
+        $("#modal_PreguntaCrear").modal("hide");
+        LimpiarCamposPreguntas();
 
-                        </td>
-                        <td>
-                            ${nombre}
-                        </td>
+        var tipoPregunta = getTipoPreguntaDescripcion(tipoPreguntaId);
+
+        var fila = `<tr class="fila_Pregunta">
+                            <td class="ordenador" style="cursor:pointer;width:40px">
+                                <i class="material-icons text-secondary">
+                                    drag_indicator
+                                </i>
+                            </td>
+                            <td style="width:40px">
+                               <span class="bmd-form-group is-filled"><div class="checkbox" style="margin-top:-5px">
+                                    <label>
+                                        <input type="checkbox" class="check_Pregunta"><span class="checkbox-decorator"><span class="check"></span><div class="ripple-container"></div></span>
+                                    </label>
+                                </div></span>
+                            </td>
+                            <td>
+                                ${descripcion}
+                            </td>
+                            <td>${tipoPregunta}</td>
+                            <td class="text-center">
+                                ${obligatoria ? '<i class="material-icons text-primary">done</i>':""}
+                            </td>
                         <td style="width:40px">
                             <span class="btn-group-sm">
-                                <button class="btn btn-info bmd-btn-fab btn_Editar" data-id="${data}" data-toggle="tooltip" data-placement="bottom" title="Editar sección">
+                                <button class="btn btn-info bmd-btn-fab btn_Editar" data-id="${data}" data-toggle="tooltip" data-placement="bottom" title="Editar pregunta">
                                     <i class="material-icons">edit</i>
                                 </button>
                             </span>
                         </td>
                         <td style="width:40px">
                             <span class="btn-group-sm">
-                                <button class="btn btn-danger bmd-btn-fab btn_Eliminar" data-id="${data}" data-toggle="tooltip" data-placement="bottom" title="Eliminar sección">
+                                <button class="btn btn-danger bmd-btn-fab btn_Eliminar" data-id="${data}" data-toggle="tooltip" data-placement="bottom" title="Eliminar pregunta">
                                     <i class="material-icons">delete</i>
                                 </button>
                             </span>
                         </td>
                     </tr>`;
-        if ($("#table_SeccionPreguntas tbody").find(".fila_SinSecciones").length) {
-            $("#table_SeccionPreguntas tbody").html(fila);
+        if ($(".fila_SinPregunta").length) {
+            $("#table_SeccionPregunta tbody").html(fila);
         } else {
-            $("#table_SeccionPreguntas tbody").append(fila);
+            $("#table_SeccionPregunta tbody").append(fila);
         }
-        $("#modal_SeccionCrear").modal("hide");
-        $('[data-toggle="tooltip"]').tooltip();
+        $('[data-toggle="tooltip"]').tooltip();       
 
     }).fail(function () {
         //Se ejecuta cuando la peticion ha regresado algun error.
-        GenerarAlerta(enum_MessageAlertType.Danger, "Ocurrió un error al tratar de eliminar la Sección.");
+        GenerarAlerta(enum_MessageAlertType.Danger, "Ocurrió un error al crear la pregunta.");
     }).always(function () {
         //Se ejecuta al final de la peticion sea exitosa o no.
     });
 }
+
+function getTipoPreguntaDescripcion(tipoPreguntaId) {
+    if (tipoPreguntaId == enum_TipoPregunta.Abierta) {
+        return "Abierta";
+    } else if (tipoPreguntaId == enum_TipoPregunta.Multiple) {
+        return "Múltiple";
+    } else if (tipoPreguntaId == enum_TipoPregunta.UnicaOpcion) {
+        return "Única Opción";
+    } else if (tipoPreguntaId == enum_TipoPregunta.Condicional) {
+        return "Condicional";
+    } else if (tipoPreguntaId == enum_TipoPregunta.Matriz) {
+        return "Matriz";
+    } else if (tipoPreguntaId == enum_TipoPregunta.SubPregunta) {
+        return "Sub Pregunta";
+    }
+}
+
 //#endregion

@@ -16,9 +16,9 @@
 <div class="card">
     <div class="card-header">
         <a asp-action="Editar" asp-route-id="@Model.EncuestaId" class="btn btn-primary bmd-btn-fab float-left mr-4" data-toggle="tooltip" data-placement="bottom" title="Regresar a edición de encuesta">
-            <i class="material-icons">keyboard_backspace</i>
+            <i class="material-icons md-36">navigate_before</i>
         </a>
-        <button class="btn btn-primary bmd-btn-fab btn_AgregarSeccion float-right mr-2" data-toggle="tooltip" data-placement="bottom" title="Agregar pregunta">
+        <button class="btn btn-primary bmd-btn-fab btn_PreguntaAgregar float-right mr-2" data-toggle="tooltip" data-placement="bottom" title="Agregar pregunta">
             <i class="material-icons md-36">add_task</i>
         </button>
         <div class="row" style="display:none;margin-top:-10px" id="div_EditarSeccionNombre">
@@ -42,6 +42,8 @@
             @ViewData["Title"]:<span class="ml-3">@Model.Nombre</span>
             <i class="material-icons text-primary" style="display:none" title="Editar nombre de sección">edit</i>
         </h1>
+        <span class="h5">Encuesta: @Model.EncuestaIdNavigation.Nombre</span>
+
     </div>
     <div class="card-body">
 
@@ -58,6 +60,8 @@
                         </div>
                     </th>
                     <th>Descripción</th>
+                    <th>Tipo de pregunta</th>
+                    <th class="text-center">Obligatoria</th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -83,39 +87,46 @@
                             <td>
                                 @pregunta.Descripcion
                             </td>
-                            <td style="width:40px">
-                                <span class="btn-group-sm">
-                                    <button class="btn btn-info bmd-btn-fab btn_Editar" data-id="@pregunta.Id" data-toggle="tooltip" data-placement="bottom" title="Editar pregunta">
-                                        <i class="material-icons">edit</i>
-                                    </button>
-                                </span>
+                            <td>@pregunta.TipoPreguntaIdNavigation.Descripcion</td>
+                            <td class="text-center">
+                                @if (pregunta.Obligatoria)
+                                {
+                                    <i class="material-icons text-primary">done</i>
+                                }
                             </td>
-                            <td style="width:40px">
-                                <span class="btn-group-sm">
-                                    <button class="btn btn-danger bmd-btn-fab btn_Eliminar" data-id="@pregunta.Id" data-toggle="tooltip" data-placement="bottom" title="Eliminar pregunta">
-                                        <i class="material-icons">delete</i>
-                                    </button>
-                                </span>
-                            </td>
-                        </tr>
+                        <td style="width:40px">
+                            <span class="btn-group-sm">
+                                <button class="btn btn-info bmd-btn-fab btn_Editar" data-id="@pregunta.Id" data-toggle="tooltip" data-placement="bottom" title="Editar pregunta">
+                                    <i class="material-icons">edit</i>
+                                </button>
+                            </span>
+                        </td>
+                        <td style="width:40px">
+                            <span class="btn-group-sm">
+                                <button class="btn btn-danger bmd-btn-fab btn_Eliminar" data-id="@pregunta.Id" data-toggle="tooltip" data-placement="bottom" title="Eliminar pregunta">
+                                    <i class="material-icons">delete</i>
+                                </button>
+                            </span>
+                        </td>
+                    </tr>
 
-                    }
+                }
                 }
                 else
                 {
-                    <tr class="fila_SinSecciones">
-                        <td colspan="4" class="text-center">
-                            <h4>No se han encontrado Preguntas</h4>
+                    <tr class="fila_SinPregunta">
+                        <td colspan="5" class="text-center">
+                            <h6>No se han encontrado Preguntas</h6>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
-
     </div>
 </div>
+<partial name="~/Views/Encuestas/PartialViews/_ModalPreguntaCrear.cshtml" model="new EncuestaPreguntaViewModel {EncuestaId=Model.EncuestaId,EncuestaSeccionId=Model.Id }" />
 
 <script type="text/javascript" src="~/js/Encuestas/EditarSeccion.js"></script>
 <script type="text/javascript">
-    var enum_EstatusEncuesta=@(EnumHelper.EnumToString<EstatusEncuestaId>())
+    var enum_TipoPregunta=@(EnumHelper.EnumToString<TipoPreguntaId>())
 </script>

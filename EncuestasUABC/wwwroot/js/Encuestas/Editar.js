@@ -86,7 +86,7 @@ $(document).ready(function () {
     });
 
     //Editar nombre de sección
-    $("#table_EncuestasSecciones tbody").on("click",".td_Seccion",function () {
+    $("#table_EncuestasSecciones tbody").on("click",".span_SeccionNombre",function () {
         $(".span_SeccionNombre").show();
         $(".span_SeccionNombre").prev().hide();
         $(this).closest("tr").find(".span_SeccionNombre").first().hide();
@@ -96,12 +96,12 @@ $(document).ready(function () {
         $('[data-toggle="tooltip"]').tooltip();       
     });
 
-    $("#table_EncuestasSecciones tbody").on("mouseover", ".td_Seccion",function () {
-        $(this).find(".span_SeccionNombre").first().find("i").first().show();
+    $("#table_EncuestasSecciones tbody").on("mouseover", ".span_SeccionNombre",function () {
+        $(this).find("i").first().show();
 
     });
-    $("#table_EncuestasSecciones tbody").on("mouseout", ".td_Seccion",function () {
-        $(this).find(".span_SeccionNombre").first().find("i").first().hide();
+    $("#table_EncuestasSecciones tbody").on("mouseout", ".span_SeccionNombre",function () {
+        $(this).find("i").first().hide();
     });
 
     $("#table_EncuestasSecciones tbody").on("click",".btn_CancelarEditarSeccionNombre",function () {
@@ -175,7 +175,7 @@ function eliminarSeccion(id, encuestaId, boton) {
         if ($("#table_EncuestasSecciones tbody").find(".fila_Seccion").length == 0) {
             var item = `<tr class="fila_SinSecciones">
                         <td colspan="4" class="text-center">
-                            <h4>No se han encontrado secciones</h4>
+                            <h6>No se han encontrado secciones</h6>
                         </td>
                     </tr>`;
             $("#table_EncuestasSecciones tbody").html(item);

@@ -44,6 +44,8 @@ namespace EncuestasUABC.Models.ViewModels
         public int Id { get; set; }
         public int EncuestaId { get; set; }
         public int EncuestaSeccionId { get; set; }
+        [Display(Name = "Descripción")]
+        [Required(ErrorMessage ="El campo {0} es requerido")]
         public string Descripcion { get; set; }
         public int TipoPreguntaId { get; set; }
         public bool Obligatoria { get; set; }
@@ -54,10 +56,34 @@ namespace EncuestasUABC.Models.ViewModels
         public bool Eliminado { get; set; } = false;
 
         public EncuestaSeccionViewModel EncuestaSeccionIdNavigation { get; set; }
-        //public TipoPregunta TipoPreguntaIdNavigation { get; set; }
+        public TipoPreguntaViewModel TipoPreguntaIdNavigation { get; set; }
         public EncuestaPreguntaViewModel EncuestaPreguntaIdPadreNavigation { get; set; }
         public virtual ICollection<EncuestaPreguntaViewModel> SubPreguntas { get; set; }
-        //public virtual ICollection<EncuestaPreguntaOpcion> Opciones { get; set; }
+        public virtual ICollection<EncuestaPreguntaOpcionViewModel> Opciones { get; set; }
 
     }
+
+    public class EncuestaPreguntaOpcionViewModel
+    {
+        public int Id { get; set; }
+        public int EncuestaId { get; set; }
+        public int EncuestaSeccionId { get; set; }
+        public int EncuestaPreguntaId { get; set; }
+        public string Descripcion { get; set; }
+        public int Orden { get; set; }
+        public bool Eliminado { get; set; } = false;
+
+        public EncuestaPreguntaViewModel EncuestaPreguntaIdNavigation { get; set; }
+    }
+
+    public class TipoPreguntaViewModel
+    {
+        public int Id { get; set; }
+        public string Descripcion { get; set; }
+        public bool Estatus { get; set; }
+
+        public virtual ICollection<EncuestaPreguntaViewModel> EncuestaPreguntas { get; set; }
+
+    }
+
 }

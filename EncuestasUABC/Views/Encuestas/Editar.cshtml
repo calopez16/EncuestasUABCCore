@@ -10,12 +10,13 @@
 <style>
     .ui-sortable-helper {
         display: table;
+        background:white;
     }
 </style>
 <div class="card">
     <div class="card-header">
         <a asp-action="Creadas" class="btn btn-primary bmd-btn-fab float-left mr-4" data-toggle="tooltip" data-placement="bottom" title="Regresar">
-            <i class="material-icons">keyboard_backspace</i>
+            <i class="material-icons md-36">navigate_before</i>
         </a>
         <a asp-action="Creadas" class="btn btn-info bmd-btn-fab float-right" data-toggle="tooltip" data-placement="bottom" title="Vista previa">
             <i class="material-icons">visibility</i>
@@ -129,8 +130,8 @@
                 else
                 {
                     <tr class="fila_SinSecciones">
-                        <td colspan="4" class="text-center">
-                            <h4>No se han encontrado secciones</h4>
+                        <td colspan="5" class="text-center">
+                            <h6>No se han encontrado secciones</h6>
                         </td>
                     </tr>
                 }

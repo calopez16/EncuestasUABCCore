@@ -89,7 +89,7 @@ namespace EncuestasUABC.Controllers
             #region EditarSeccion
             try
             {
-                var seccion = await _encuestasRepository.GetSeccionById(id,encuestaId);
+                var seccion = await _encuestasRepository.GetSeccionById(id, encuestaId);
                 var seccionViewModel = _mapper.Map<EncuestaSeccionViewModel>(seccion);
                 return View(seccionViewModel);
             }
@@ -406,14 +406,41 @@ namespace EncuestasUABC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CambiarSeccionNombre(int id,int encuestaId, string nombre)
+        public async Task<IActionResult> CambiarSeccionNombre(int id, int encuestaId, string nombre)
         {
             #region EditarNombreDescripcion
             try
             {
-                var seccion = await _encuestasRepository.GetEncuestaSeccionById(id,encuestaId);
+                var seccion = await _encuestasRepository.GetEncuestaSeccionById(id, encuestaId);
                 seccion.Nombre = nombre;
                 await _repository.Update<EncuestaSeccion>(seccion);
+                return Ok();
+            }
+            catch (MessageAlertException ex)
+            {
+                _logger.LogInformation(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return BadRequest();
+            #endregion
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CrearPregunta(EncuestaPreguntaViewModel model)
+        {
+            #region EditarNombreDescripcion
+            try
+            {
+                var newPregunta = _mapper.Map<EncuestaPregunta>(model);
+                var orden = 1;
+                var preguntas = await _repository.FindBy<EncuestaPregunta>(x => x.EncuestaId == model.EncuestaId && x.EncuestaSeccionId == model.EncuestaSeccionId && !x.Eliminado, x => x.OrderByDescending(x => x.Orden));
+                if (preguntas.Any())
+                    orden = preguntas.First().Orden + 1;
+                newPregunta.Orden = orden;
+                await _repository.Add<EncuestaPregunta>(newPregunta);
                 return Ok();
             }
             catch (MessageAlertException ex)
