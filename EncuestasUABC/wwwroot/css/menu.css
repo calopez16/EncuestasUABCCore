@@ -1,4 +1,8 @@
 ﻿/*Menu principal*/
+.menu-principal-nav{
+    z-index:2;
+}
+
 .menu-principal {
     position: absolute;
     top: 0px;

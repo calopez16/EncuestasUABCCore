@@ -3,22 +3,32 @@
 @using EncuestasUABC.Enumerador;
 @model EncuestaViewModel
 @{
-    ViewData["Title"] = "Editar";
+    ViewData["Title"] = "Editar encuesta";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <input hidden asp-for="Id" />
-
+<style>
+    .ui-sortable-helper {
+        display: table;
+    }
+</style>
 <div class="card">
     <div class="card-header">
         <a asp-action="Creadas" class="btn btn-primary bmd-btn-fab float-left mr-4" data-toggle="tooltip" data-placement="bottom" title="Regresar">
             <i class="material-icons">keyboard_backspace</i>
         </a>
-        <h1 class="mt-md-2">@ViewData["Title"] </h1>
-    </div>
-    <div class="card-body">
-        <div class="row" style="display:none" id="div_EditarNombreEncuesta">
+        <a asp-action="Creadas" class="btn btn-info bmd-btn-fab float-right" data-toggle="tooltip" data-placement="bottom" title="Vista previa">
+            <i class="material-icons">visibility</i>
+        </a>
+        <button class="btn btn-outline-primary bmd-btn-fab float-right mr-2 " data-toggle="tooltip" data-placement="bottom" title="Asignar alumnos">
+            <i class="material-icons md-36">group</i>
+        </button>
+        <button class="btn btn-primary bmd-btn-fab btn_AgregarSeccion float-right mr-2" data-toggle="tooltip" data-placement="bottom" title="Agregar sección">
+            <i class="material-icons md-36">library_add</i>
+        </button>
+        <div class="row" style="display:none;margin-top:-10px" id="div_EditarNombreEncuesta">
             <div class="col-8">
-                <input type="text" id="txt_NombreEncuesta" class="form-control form-lg" style="font-size:2.5rem" value="@Model.Nombre" />
+                <input type="text" id="txt_NombreEncuesta" class="form-control form-lg" style="font-size:2.5rem" value="@Model.Nombre" autocomplete="off" />
             </div>
             <div class="col-2 form-inline text-center">
                 <span class="btn-group-sm m-1">
@@ -33,17 +43,28 @@
                 </span>
             </div>
         </div>
-        <h1 style="cursor:pointer" id="h1_NombreEncuesta">
-            <span>@Model.Nombre</span>
+        <h1 class="mt-1" style="cursor:pointer;width:70%" id="h1_NombreEncuesta">
+            @ViewData["Title"]:<span class="ml-3">@Model.Nombre</span>
             <i class="material-icons text-primary" style="display:none" title="Editar nombre de encuesta">edit</i>
         </h1>
+    </div>
+    <div class="card-body">
+        
+        <h2 class="text-center">Secciones</h2>
         <table class="table table-hover" id="table_EncuestasSecciones">
             <thead>
                 <tr>
                     <th style="width:40px"></th>
+                    <th style="width:40px">
+                        <div class="checkbox" style="margin-top:-30px">
+                            <label>
+                                <input type="checkbox" class="check_seleccionarTodos">
+                            </label>
+                        </div>
+                    </th>
+                    <th>Nombre de la sección</th>
                     <th></th>
-                    <th style="width:40px"></th>
-                    <th style="width:40px"></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -52,22 +73,49 @@
                     @foreach (var seccion in Model.EncuestaSecciones)
                     {
                         <tr class="fila_Seccion">
-                            <td>
-                                <i class="material-icons">
-                                    height
+                            <td class="ordenador" style="cursor:pointer;width:40px">
+                                <i class="material-icons text-secondary">
+                                    drag_indicator
                                 </i>
                             </td>
-                            <td>
-                                @seccion.Nombre
+                            <td style="width:40px">
+                                <div class="checkbox" style="margin-top:-5px">
+                                    <label>
+                                        <input type="checkbox" class="check_Seccion">
+                                    </label>
+                                </div>
                             </td>
-                            <td>
+                            <td style="cursor:pointer" class="td_Seccion">
+                                <div class="row div_EditarSeccionNombre" style="display:none;margin-top:-10px">
+                                    <div class="col-8 ml-3">
+                                        <input type="text" class="form-control txt_SeccionNombre" value="@seccion.Nombre" autocomplete="off" />
+                                    </div>
+                                    <div class="col-2 form-inline text-center">
+                                        <span class="btn-group-sm m-1">
+                                            <button type="button" class="btn btn-success bmd-btn-fab btn_GuardarSeccionNombre" data-id="@seccion.Id" data-toggle="tooltip" data-placement="bottom" title="Guardar nombre de sección">
+                                                <i class="material-icons">check</i>
+                                            </button>
+                                        </span>
+                                        <span class="btn-group-sm m-1">
+                                            <button type="button" class="btn btn-danger bmd-btn-fab btn_CancelarEditarSeccionNombre" data-toggle="tooltip" data-placement="bottom" title="Cancelar edición de nombre">
+                                                <i class="material-icons">clear</i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <span class="mt-1 span_SeccionNombre h6">
+                                   <span class="ml-3">@seccion.Nombre</span>
+                                    <i class="material-icons text-primary md-18" style="display:none" title="Editar nombre de sección">edit</i>
+                                </span>
+                            </td>
+                            <td style="width:40px">
                                 <span class="btn-group-sm">
                                     <button class="btn btn-info bmd-btn-fab btn_Editar" data-id="@seccion.Id" data-toggle="tooltip" data-placement="bottom" title="Editar sección">
                                         <i class="material-icons">edit</i>
                                     </button>
                                 </span>
                             </td>
-                            <td>
+                            <td style="width:40px">
                                 <span class="btn-group-sm">
                                     <button class="btn btn-danger bmd-btn-fab btn_Eliminar" data-id="@seccion.Id" data-toggle="tooltip" data-placement="bottom" title="Eliminar sección">
                                         <i class="material-icons">delete</i>
@@ -92,21 +140,8 @@
     </div>
 </div>
 
-<div class="row fixed-bottom d-flex justify-content-end mb-4 mr-4">
-    <div class="col-2 text-right">
-        <button class="btn btn-primary bmd-btn-fab" data-toggle="tooltip" data-placement="top" title="Guardar encuesta">
-            <i class="material-icons md-36">save</i>
-        </button>
-        <button class="btn btn-secondary bmd-btn-fab btn_AgregarSeccion" data-toggle="tooltip" data-placement="top" title="Agregar sección">
-            <i class="material-icons md-36">library_add</i>
-        </button>
-        <button class="btn btn-secondary bmd-btn-fab" data-toggle="tooltip" data-placement="top" title="Asignar alumnos">
-            <i class="material-icons md-36">group</i>
-        </button>
-    </div>
-</div>
-<partial name="~/Views/Encuestas/PartialViews/_ModalEliminarSeccion.cshtml" />
-<partial name="~/Views/Encuestas/PartialViews/_ModalCrearSeccion.cshtml" model="new EncuestaSeccionViewModel()"/>
+<partial name="~/Views/Encuestas/PartialViews/_ModalSeccionEliminar.cshtml" />
+<partial name="~/Views/Encuestas/PartialViews/_ModalSeccionCrear.cshtml" model="new EncuestaSeccionViewModel()" />
 
 
 <script type="text/javascript" src="~/js/Encuestas/Editar.js"></script>

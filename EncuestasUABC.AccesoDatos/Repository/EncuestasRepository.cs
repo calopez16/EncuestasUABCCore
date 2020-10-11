@@ -51,36 +51,25 @@ namespace EncuestasUABC.AccesoDatos.Repository
 
             #endregion
         }
-        //public async Task<Encuesta> Get(int id)
-        //{
-        //    #region GetAll
-        //    return (await GetEncuestas())
-        //        .FirstOrDefault(x => x.Id == id);
-        //    #endregion
-        //}
 
-        //public async Task<Encuesta> Add(Encuesta encuesta)
-        //{
-        //    #region Add
-        //    await _context.Encuestas.AddAsync(encuesta);
-        //    await _context.SaveChangesAsync();
-        //    return encuesta;
-        //    #endregion
-        //}
+        public async Task<EncuestaSeccion> GetSeccionById(int id,int encuestaId)
+        {
+            #region GetSeccionById
 
-        //private async Task<IEnumerable<Encuesta>> GetEncuestas()
-        //{
-        //    #region 
-        //    return await _context.Encuestas
-        //        .Include(x => x.Usuario)
-        //        .Include(x => x.EstatusEncuesta)
-        //        .Include(x => x.Carrera)
-        //        .ThenInclude(x => x.UnidadAcademica)
-        //        .ThenInclude(x => x.Campus)
-        //        .Include(x => x.EncuestaSecciones)
-        //        .Where(x => x.EstatusEncuestaId != (int)Enumerador.EstatusEncuesta.ELIMINADA)
-        //        .ToListAsync();
-        //    #endregion
-        //}
+            return await _context.EncuestaSecciones
+                .Include(x => x.EncuestaPreguntas)
+                .Select(x => new EncuestaSeccion
+                {
+                    Id = x.Id,
+                    EncuestaId=x.EncuestaId,
+                    Nombre = x.Nombre,
+                    Descripcion = x.Descripcion,
+                    Orden=x.Orden,
+                    EncuestaPreguntas = x.EncuestaPreguntas.Where(x => !x.Eliminado).ToList()
+                }).FirstOrDefaultAsync(x => x.Id == id && x.EncuestaId==encuestaId);
+
+            #endregion
+        }
+
     }
 }

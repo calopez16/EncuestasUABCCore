@@ -143,7 +143,7 @@ $(document).ready(function () {
         }
     });
     $("#btn_CrearEncuesta").click(function () {
-        $("#modal_CrearEncuesta").modal("show");
+        $("#modal_EncuestaCrear").modal("show");
     });
 
     $("#table_Creadas").on("click", ".btn_Eliminar", function () {
@@ -151,7 +151,7 @@ $(document).ready(function () {
         var nombreEncuesta = $(this).data("nombre");
         $("#text_EncuestaEliminar").val(id);
         $("#span_NombreEncuesta").text(nombreEncuesta);
-        $("#modal_EliminarEncuesta").modal("show");
+        $("#modal_EncuestaEliminar").modal("show");
     });
 
     $("#table_Creadas").on("click", ".btn_Restaurar", function () {
@@ -159,7 +159,7 @@ $(document).ready(function () {
         var nombreEncuesta = $(this).data("nombre");
         $("#text_EncuestaRestaurar").val(id);
         $("#span_NombreEncuestaRestaurar").text(nombreEncuesta);
-        $("#modal_RestaurarEncuesta").modal("show");
+        $("#modal_EncuestaRestaurar").modal("show");
     });
 
     $("#table_Creadas").on("change", ".check_Activo", function () {

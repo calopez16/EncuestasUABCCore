@@ -83,6 +83,30 @@ namespace EncuestasUABC.Controllers
 
             #endregion
         }
+
+        public async Task<IActionResult> EditarSeccion(int id, int encuestaId)
+        {
+            #region EditarSeccion
+            try
+            {
+                var seccion = await _encuestasRepository.GetSeccionById(id,encuestaId);
+                var seccionViewModel = _mapper.Map<EncuestaSeccionViewModel>(seccion);
+                return View(seccionViewModel);
+            }
+            catch (MessageAlertException ex)
+            {
+                _logger.LogInformation(ex.Message);
+                GenerarAlerta(ex);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                ShowMessageException(ex.Message);
+            }
+            return RedirectToAction(nameof(Editar), new { id = encuestaId });
+
+            #endregion
+        }
         #endregion
 
         #region CREAR
@@ -325,7 +349,7 @@ namespace EncuestasUABC.Controllers
 
         #region POST
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> CambiarNombre(int id, string nombre)
         {
             #region EditarNombreDescripcion
@@ -381,6 +405,28 @@ namespace EncuestasUABC.Controllers
             #endregion
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CambiarSeccionNombre(int id,int encuestaId, string nombre)
+        {
+            #region EditarNombreDescripcion
+            try
+            {
+                var seccion = await _encuestasRepository.GetEncuestaSeccionById(id,encuestaId);
+                seccion.Nombre = nombre;
+                await _repository.Update<EncuestaSeccion>(seccion);
+                return Ok();
+            }
+            catch (MessageAlertException ex)
+            {
+                _logger.LogInformation(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return BadRequest();
+            #endregion
+        }
         #endregion
 
         #region PUT

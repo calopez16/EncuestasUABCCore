@@ -1,0 +1,121 @@
+﻿@using EncuestasUABC.Models.ViewModels;
+@using EncuestasUABC.Utilidades;
+@using EncuestasUABC.Enumerador;
+@model EncuestaSeccionViewModel
+@{
+    ViewData["Title"] = "Editar sección";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<input hidden asp-for="Id" />
+<input hidden asp-for="EncuestaId" />
+<style>
+    .ui-sortable-helper {
+        display: table;
+    }
+</style>
+<div class="card">
+    <div class="card-header">
+        <a asp-action="Editar" asp-route-id="@Model.EncuestaId" class="btn btn-primary bmd-btn-fab float-left mr-4" data-toggle="tooltip" data-placement="bottom" title="Regresar a edición de encuesta">
+            <i class="material-icons">keyboard_backspace</i>
+        </a>
+        <button class="btn btn-primary bmd-btn-fab btn_AgregarSeccion float-right mr-2" data-toggle="tooltip" data-placement="bottom" title="Agregar pregunta">
+            <i class="material-icons md-36">add_task</i>
+        </button>
+        <div class="row" style="display:none;margin-top:-10px" id="div_EditarSeccionNombre">
+            <div class="col-8">
+                <input type="text" id="txt_SeccionNombre" class="form-control form-lg" style="font-size:2.5rem" value="@Model.Nombre" autocomplete="off" />
+            </div>
+            <div class="col-2 form-inline text-center">
+                <span class="btn-group-sm m-1">
+                    <button type="button" class="btn btn-success bmd-btn-fab" data-toggle="tooltip" data-placement="bottom" title="Guardar nombre de sección" id="btn_GuardarSeccionNombre">
+                        <i class="material-icons">check</i>
+                    </button>
+                </span>
+                <span class="btn-group-sm m-1">
+                    <button type="button" class="btn btn-danger bmd-btn-fab" data-toggle="tooltip" data-placement="bottom" title="Cancelar edición de nombre" id="btn_CancelarEditarSeccionNombre">
+                        <i class="material-icons">clear</i>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <h1 class="mt-1" style="cursor:pointer;width:70%" id="h1_SeccionNombre">
+            @ViewData["Title"]:<span class="ml-3">@Model.Nombre</span>
+            <i class="material-icons text-primary" style="display:none" title="Editar nombre de sección">edit</i>
+        </h1>
+    </div>
+    <div class="card-body">
+
+        <h2 class="text-center">Preguntas</h2>
+        <table class="table table-hover" id="table_SeccionPregunta">
+            <thead>
+                <tr>
+                    <th style="width:40px"></th>
+                    <th style="width:40px">
+                        <div class="checkbox" style="margin-top:-30px;">
+                            <label>
+                                <input type="checkbox" class="check_seleccionarTodos">
+                            </label>
+                        </div>
+                    </th>
+                    <th>Descripción</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.EncuestaPreguntas.Any())
+                {
+                    @foreach (var pregunta in Model.EncuestaPreguntas)
+                    {
+                        <tr class="fila_Pregunta">
+                            <td class="ordenador" style="cursor:pointer;width:40px">
+                                <i class="material-icons text-secondary">
+                                    drag_indicator
+                                </i>
+                            </td>
+                            <td style="width:40px">
+                                <div class="checkbox" style="margin-top:-5px">
+                                    <label>
+                                        <input type="checkbox" class="check_Pregunta">
+                                    </label>
+                                </div>
+                            </td>
+                            <td>
+                                @pregunta.Descripcion
+                            </td>
+                            <td style="width:40px">
+                                <span class="btn-group-sm">
+                                    <button class="btn btn-info bmd-btn-fab btn_Editar" data-id="@pregunta.Id" data-toggle="tooltip" data-placement="bottom" title="Editar pregunta">
+                                        <i class="material-icons">edit</i>
+                                    </button>
+                                </span>
+                            </td>
+                            <td style="width:40px">
+                                <span class="btn-group-sm">
+                                    <button class="btn btn-danger bmd-btn-fab btn_Eliminar" data-id="@pregunta.Id" data-toggle="tooltip" data-placement="bottom" title="Eliminar pregunta">
+                                        <i class="material-icons">delete</i>
+                                    </button>
+                                </span>
+                            </td>
+                        </tr>
+
+                    }
+                }
+                else
+                {
+                    <tr class="fila_SinSecciones">
+                        <td colspan="4" class="text-center">
+                            <h4>No se han encontrado Preguntas</h4>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<script type="text/javascript" src="~/js/Encuestas/EditarSeccion.js"></script>
+<script type="text/javascript">
+    var enum_EstatusEncuesta=@(EnumHelper.EnumToString<EstatusEncuestaId>())
+</script>

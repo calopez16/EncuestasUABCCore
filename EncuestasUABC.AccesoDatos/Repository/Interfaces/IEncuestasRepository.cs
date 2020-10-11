@@ -11,5 +11,6 @@ namespace EncuestasUABC.AccesoDatos.Repository.Interfaces
     {
         Task<EncuestaSeccion> GetEncuestaSeccionById(int id, int idEncuesta);
         Task<Encuesta> GetById(int id);
+        Task<EncuestaSeccion> GetSeccionById(int id, int encuestaId);
     }
 }

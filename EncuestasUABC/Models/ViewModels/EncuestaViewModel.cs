@@ -36,7 +36,7 @@ namespace EncuestasUABC.Models.ViewModels
         public bool Eliminado { get; set; } = false;
 
         public EncuestaViewModel EncuestaIdNavigation { get; set; }
-        //public ICollection<EncuestaPregunta> EncuestaPreguntas { get; set; }
+        public ICollection<EncuestaPreguntaViewModel> EncuestaPreguntas { get; set; }
     }
 
     public class EncuestaPreguntaViewModel

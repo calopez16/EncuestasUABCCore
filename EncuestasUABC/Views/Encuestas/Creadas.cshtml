@@ -32,9 +32,9 @@
         </div>
     </div>
 </div>
-<partial name="~/Views/Encuestas/PartialViews/_ModalCrearEncuesta.cshtml" model="new EncuestasUABC.Models.ViewModels.EncuestaViewModel()" />
-<partial name="~/Views/Encuestas/PartialViews/_ModalEliminarEncuesta.cshtml" />
-<partial name="~/Views/Encuestas/PartialViews/_ModalRestaurarEncuesta.cshtml" />
+<partial name="~/Views/Encuestas/PartialViews/_ModalEncuestaCrear.cshtml" model="new EncuestasUABC.Models.ViewModels.EncuestaViewModel()" />
+<partial name="~/Views/Encuestas/PartialViews/_ModalEncuestaEliminar.cshtml" />
+<partial name="~/Views/Encuestas/PartialViews/_ModalEncuestaRestaurar.cshtml" />
 
 <script type="text/javascript">
     var enum_EstatusEncuesta=@(EnumHelper.EnumToString<EstatusEncuestaId>())

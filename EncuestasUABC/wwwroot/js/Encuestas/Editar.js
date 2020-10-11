@@ -1,20 +1,20 @@
 const dateFormat = 'DD/MM/YYYY HH:mm:ss';
 
-var idEncuesta = 0;
+var encuestaId = 0;
 
 $(document).ready(function () {
 
-    idEncuesta = parseInt($("#Id").val());
+    encuestaId = parseInt($("#Id").val());
     $("#btn_EditarNombre").on("click", function () {
         $("#modal_EditarNombreDescripcion").modal("show");
     });
-
-    //CargarEncuesta();
 
     //#region EDITAR NOMBRE ENCUESTA
     $("#h1_NombreEncuesta").click(function () {
         $(this).hide();
         $("#div_EditarNombreEncuesta").show();
+        $("#txt_NombreEncuesta").focus();
+        $("#txt_NombreEncuesta").select();
     });
 
     $("#h1_NombreEncuesta").mouseover(function () {
@@ -31,7 +31,7 @@ $(document).ready(function () {
         $("#txt_NombreEncuesta").val($("#h1_NombreEncuesta").find("span").first().text());
     });
     $("#btn_GuardarNombreEncuesta").click(function () {
-        CambiarNombreEncuesta();
+        cambiarNombreEncuesta();
     });
     //#endregion
 
@@ -40,78 +40,99 @@ $(document).ready(function () {
     var botonEliminar;
     $("#table_EncuestasSecciones").on("click", ".btn_Eliminar", function () {
         encuestaSeccionId = parseInt($(this).data("id"));
-        $("#modal_EliminarSeccion").modal("show");
+        $("#modal_SeccionEliminar").modal("show");
         botonEliminar = this;
     });
 
     $("#btn_ConfirmarEliminarSeccion").click(function () {
-        idEncuesta = parseInt($("#Id").val());
-        EliminarSeccion(encuestaSeccionId, idEncuesta, botonEliminar);
+        encuestaId = parseInt($("#Id").val());
+        eliminarSeccion(encuestaSeccionId, encuestaId, botonEliminar);
     });
     //#endregion
 
     //#region CREAR SECCION
     $(".btn_AgregarSeccion").click(function () {
         $("#txt_CrearNombreSeccion").val("");
-        $("#modal_CrearSeccion").modal("show");
+        $("#modal_SeccionCrear").modal("show");
         $("#txt_CrearNombreSeccion").next().text("");
     });
 
     $("#btn_CrearNombreSeccion").click(function () {
         var isFormValid = $("#form_CrearSeccion").valid();
-        idEncuesta = parseInt($("#Id").val());
+        encuestaId = parseInt($("#Id").val());
         var nombre = $("#txt_CrearNombreSeccion").val();
         $("#txt_CrearNombreSeccion").next().text("");
         if (isFormValid) {
-            CrearSeccion(idEncuesta, nombre);
+            crearSeccion(encuestaId, nombre);
         }      
+    });
+    //#endregion
+
+
+    //#region FUNCIONALIDAD TABLA SECCIONES
+    $("#table_EncuestasSecciones tbody").sortable({ handle: '.ordenador' });
+
+    $(".check_seleccionarTodos").click(function () {
+        if ($(this).prop("checked")) {
+            $(".check_Seccion").prop("checked", true);
+        } else {
+            $(".check_Seccion").prop("checked", false);
+        }
+    });
+    $("#table_EncuestasSecciones tbody").on("click", ".btn_Editar", function () {
+        encuestaId = parseInt($("#Id").val());
+        var seccionId = $(this).data("id");
+        editarSeccion(seccionId,encuestaId);
+    });
+
+    //Editar nombre de sección
+    $("#table_EncuestasSecciones tbody").on("click",".td_Seccion",function () {
+        $(".span_SeccionNombre").show();
+        $(".span_SeccionNombre").prev().hide();
+        $(this).closest("tr").find(".span_SeccionNombre").first().hide();
+        $(this).closest("tr").find(".span_SeccionNombre").first().prev().show();
+        $(this).closest("tr").find(".span_SeccionNombre").first().prev().find(".txt_SeccionNombre").first().focus();
+        $(this).closest("tr").find(".span_SeccionNombre").first().prev().find(".txt_SeccionNombre").first().select();
+        $('[data-toggle="tooltip"]').tooltip();       
+    });
+
+    $("#table_EncuestasSecciones tbody").on("mouseover", ".td_Seccion",function () {
+        $(this).find(".span_SeccionNombre").first().find("i").first().show();
+
+    });
+    $("#table_EncuestasSecciones tbody").on("mouseout", ".td_Seccion",function () {
+        $(this).find(".span_SeccionNombre").first().find("i").first().hide();
+    });
+
+    $("#table_EncuestasSecciones tbody").on("click",".btn_CancelarEditarSeccionNombre",function () {
+        $(this).closest(".div_EditarSeccionNombre").hide();
+        $(this).closest(".div_EditarSeccionNombre").next().show();
+        $(this).closest(".div_EditarSeccionNombre").find(".txt_SeccionNombre").first().val($(this).closest(".div_EditarSeccionNombre").next().find("span").first().text());
+    });
+    $("#table_EncuestasSecciones tbody").on("click", ".btn_GuardarSeccionNombre", function () {
+        //Seccion Id
+        var id = parseInt($(this).data("id"));
+        var encuestaId = parseInt($("#Id").val());
+        var nombre = $(this).closest(".div_EditarSeccionNombre").find(".txt_SeccionNombre").first().val();
+        cambiarSeccionNombre(id, encuestaId, nombre,this);
     });
     //#endregion
 });
 
 
-function CargarEncuesta() {
-    var data = `&id=${parseInt($("#Id").val())}`;
-    //Llamada generica de petición AJAX  
-    $.ajax({
-        //Url de la peticion
-        url: `${window.urlproyecto}/Encuestas/GetEncuesta`,
-        //Tipo de petición
-        type: "GET",
-        //Datos que se enviaran a la llamada
-        data: data,
-        //Accion al comenzar la carga de la peticion AJAX.
-        beforeSend: function () {
-            //Aqui regularmente se implementa un loading.
-            $(".loader-container").fadeIn();
-        }
-    }).done(function (data) {
-        //Se ejecuta cuando la peticion ha sido exitosa. 
-        //data es la respuesta que se recibe.
-        $("#h1_NombreEncuesta").find("span").first().text(data.nombre);
-        $("#txt_NombreEncuesta").val(data.nombre);
-
-    }).fail(function () {
-        //Se ejecuta cuando la peticion ha regresado algun error.
-        GenerarAlerta(enum_MessageAlertType.Danger, "No se pudo cargar la encuesta.");
-
-    }).always(function () {
-        //Se ejecuta al final de la peticion sea exitosa o no.
-        $(".loader-container").fadeOut();
-    });
+function editarSeccion(id,encuestaId) {
+    window.location = `${window.urlproyecto}/Encuestas/EditarSeccion?id=${id}&encuestaId=${encuestaId}`;
 }
 
-
 //#region POST
-
-function CambiarNombreEncuesta() {
+function cambiarNombreEncuesta() {
     var data = `&id=${parseInt($("#Id").val())}&nombre=${$("#txt_NombreEncuesta").val()}`;
     //Llamada generica de petición AJAX  
     $.ajax({
         //Url de la peticion
         url: `${window.urlproyecto}/Encuestas/CambiarNombre`,
         //Tipo de petición
-        type: "GET",
+        type: "POST",
         //Datos que se enviaran a la llamada
         data: data,
         //Accion al comenzar la carga de la peticion AJAX.
@@ -128,13 +149,13 @@ function CambiarNombreEncuesta() {
     }).fail(function () {
         //Se ejecuta cuando la peticion ha regresado algun error.
         GenerarAlerta(enum_MessageAlertType.Danger, "Ocurrió un error al guarda el Nombre de la encuesta.");
-        CargarEncuesta();
+        cargarEncuesta();
     }).always(function () {
         //Se ejecuta al final de la peticion sea exitosa o no.
     });
 }
 
-function EliminarSeccion(id, encuestaId, boton) {
+function eliminarSeccion(id, encuestaId, boton) {
     $.ajax({
         //Url de la peticion
         url: `${window.urlproyecto}/Encuestas/DeleteSeccion`,
@@ -150,7 +171,7 @@ function EliminarSeccion(id, encuestaId, boton) {
         //Se ejecuta cuando la peticion ha sido exitosa. 
         //data es la respuesta que se recibe.
         $(boton).closest("tr").remove();
-        $("#modal_EliminarSeccion").modal("hide");
+        $("#modal_SeccionEliminar").modal("hide");
         if ($("#table_EncuestasSecciones tbody").find(".fila_Seccion").length == 0) {
             var item = `<tr class="fila_SinSecciones">
                         <td colspan="4" class="text-center">
@@ -159,6 +180,7 @@ function EliminarSeccion(id, encuestaId, boton) {
                     </tr>`;
             $("#table_EncuestasSecciones tbody").html(item);
         }
+
     }).fail(function () {
         //Se ejecuta cuando la peticion ha regresado algun error.
         GenerarAlerta(enum_MessageAlertType.Danger, "Ocurrió un error al tratar de eliminar la Sección.");
@@ -167,7 +189,7 @@ function EliminarSeccion(id, encuestaId, boton) {
     });
 }
 
-function CrearSeccion(encuestaId, nombre) {
+function crearSeccion(encuestaId, nombre) {
     $.ajax({
         //Url de la peticion
         url: `${window.urlproyecto}/Encuestas/CrearSeccion`,
@@ -182,36 +204,64 @@ function CrearSeccion(encuestaId, nombre) {
     }).done(function (data) {
         //Se ejecuta cuando la peticion ha sido exitosa. 
         //data es la respuesta que se recibe.
-        var fila = ` <tr>
-                        <td>
-                            <i class="material-icons">
-                                height
-                            </i>
-                        </td>
-                        <td>
-                            ${nombre}
-                        </td>
-                        <td>
-                            <span class="btn-group-sm">
-                                <button class="btn btn-info bmd-btn-fab btn_Editar" data-id="${data}" data-toggle="tooltip" data-placement="bottom" title="Editar sección">
-                                    <i class="material-icons">edit</i>
-                                </button>
-                            </span>
-                        </td>
-                        <td>
-                            <span class="btn-group-sm">
-                                <button class="btn btn-danger bmd-btn-fab btn_Eliminar" data-id="${data}" data-toggle="tooltip" data-placement="bottom" title="Eliminar sección">
-                                    <i class="material-icons">delete</i>
-                                </button>
-                            </span>
-                        </td>
-                    </tr>`;
+        var fila = ` <tr class="fila_Seccion">
+                            <td class="ordenador" style="cursor:pointer;width:40px">
+                                <i class="material-icons text-secondary">
+                                    drag_indicator
+                                </i>
+                            </td>
+                            <td style="width:40px">
+                               <span class="bmd-form-group is-filled"><div class="checkbox" style="margin-top:-5px">
+                                    <label>
+                                        <input type="checkbox" class="check_Seccion"><span class="checkbox-decorator"><span class="check"></span><div class="ripple-container"></div></span>
+                                    </label>
+                                </div></span>
+                            </td>
+                            <td style="cursor:pointer" class="td_Seccion">
+                                <div class="row div_EditarSeccionNombre" style="display:none;margin-top:-10px">
+                                    <div class="col-8 ml-3">
+                                        <input type="text" class="form-control txt_SeccionNombre" value="${nombre}" autocomplete="off" />
+                                    </div>
+                                    <div class="col-2 form-inline text-center">
+                                        <span class="btn-group-sm m-1">
+                                            <button type="button" class="btn btn-success bmd-btn-fab btn_GuardarSeccionNombre" data-id="${data}" data-toggle="tooltip" data-placement="bottom" title="Guardar nombre de sección">
+                                                <i class="material-icons">check</i>
+                                            </button>
+                                        </span>
+                                        <span class="btn-group-sm m-1">
+                                            <button type="button" class="btn btn-danger bmd-btn-fab btn_CancelarEditarSeccionNombre" data-toggle="tooltip" data-placement="bottom" title="Cancelar edición de nombre">
+                                                <i class="material-icons">clear</i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <span class="mt-1 span_SeccionNombre h6">
+                                   <span class="ml-3">${nombre}</span>
+                                    <i class="material-icons text-primary md-18" style="display:none" title="Editar nombre de sección">edit</i>
+                                </span>
+                            </td>
+                            <td style="width:40px">
+                                <span class="btn-group-sm">
+                                    <button class="btn btn-info bmd-btn-fab btn_Editar" data-id="${data}" data-toggle="tooltip" data-placement="bottom" title="Editar sección">
+                                        <i class="material-icons">edit</i>
+                                    </button>
+                                </span>
+                            </td>
+                            <td style="width:40px">
+                                <span class="btn-group-sm">
+                                    <button class="btn btn-danger bmd-btn-fab btn_Eliminar" data-id="${data}" data-toggle="tooltip" data-placement="bottom" title="Eliminar sección">
+                                        <i class="material-icons">delete</i>
+                                    </button>
+                                </span>
+                            </td>
+                        </tr>`;
         if ($("#table_EncuestasSecciones tbody").find(".fila_SinSecciones").length) {
             $("#table_EncuestasSecciones tbody").html(fila);
         } else {
             $("#table_EncuestasSecciones tbody").append(fila);
         }
-        $("#modal_CrearSeccion").modal("hide");
+        $("#modal_SeccionCrear").modal("hide");
+        $('[data-toggle="tooltip"]').tooltip();
 
     }).fail(function () {
         //Se ejecuta cuando la peticion ha regresado algun error.
@@ -220,4 +270,33 @@ function CrearSeccion(encuestaId, nombre) {
         //Se ejecuta al final de la peticion sea exitosa o no.
     });
 }
+
+function cambiarSeccionNombre(id, encuestaId, nombre,btn) {
+    //Llamada generica de petición AJAX  
+    $.ajax({
+        //Url de la peticion
+        url: `${window.urlproyecto}/Encuestas/CambiarSeccionNombre`,
+        //Tipo de petición
+        type: "POST",
+        //Datos que se enviaran a la llamada
+        data: { id, encuestaId, nombre },
+        //Accion al comenzar la carga de la peticion AJAX.
+        beforeSend: function () {
+            //Aqui regularmente se implementa un loading.
+        }
+    }).done(function (data) {
+        //Se ejecuta cuando la peticion ha sido exitosa. 
+        //data es la respuesta que se recibe.
+        $(btn).closest(".div_EditarSeccionNombre").hide();
+        $(btn).closest(".div_EditarSeccionNombre").next().show();
+        $(btn).closest(".div_EditarSeccionNombre").next().find("span").first().text(nombre);
+        $('[data-toggle="tooltip"]').tooltip("hide");
+    }).fail(function () {
+        //Se ejecuta cuando la peticion ha regresado algun error.
+        GenerarAlerta(enum_MessageAlertType.Danger, "Ocurrió un error al guarda el Nombre de la encuesta.");
+    }).always(function () {
+        //Se ejecuta al final de la peticion sea exitosa o no.
+    });
+}
+
 //#endregion
