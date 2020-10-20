@@ -3,9 +3,7 @@
     public static class RolesSistema
     {
         public const string Administrador = "Administrador";
-        public const string Maestro = "Maestro";
-        public const string Coordinador = "Coordinador";
-        public const string Tutor = "Tutor";
+        public const string Administrativo = "Administrativo";
         public const string Alumno = "Alumno";
         public const string Egresado = "Egresado";
     }  
@@ -34,8 +32,8 @@
     public static class Defaults
     {
         public static string Contrasena = "Us@2020!";
-        public static string AdminEmail = "admin@uabc.edu.mx";
-
+        public static string AdminEmail = "admin@admin";
+        public static string AdminPass = "Admin123!";
     }
 
     public static class Alerts
@@ -60,6 +58,11 @@
 
     public static class Mensajes
     {
+        public const string Login_MSJ01 = "El usuario y/o contraseña son incorrectos.";
+        public const string Login_MSJ02 = "El usuario se encuentra deshabilitado.";
+        public const string Login_MSJ03 = "El usuario y/o contraseña son incorrectos.";
+        public const string Login_MSJ04 = "Ocurrió un error al iniciar sesión.";
+
         public const string USUARIOS_MSJ01 = "El usuario <strong>{0}</strong> se registró correctamente.";
         public const string USUARIOS_MSJ02 = "Ocurrió un error al registrar al usuario.";
         public const string USUARIOS_MSJ03 = "El correo <strong>{0}</strong> ya se encuentra registrado en el sistema.";
@@ -74,10 +77,11 @@
         public const string USUARIOS_MSJ12 = "El usuario <strong>{0}</strong> no se pudo restaurar correctamente.";
         public const string USUARIOS_MSJ13 = "Ocurrió un error al asignar el rol.";
         public const string USUARIOS_MSJ14 = "La constraseña se cambió correctamente, favor de iniciar sesión con la nueva contraseña.";
-        public const string USUARIOS_MSJ15 = "La constraseña no se puedo cambiar correctamente.";
+        public const string USUARIOS_MSJ15 = "La constraseña no se pudo cambiar correctamente.";
         public const string USUARIOS_MSJ16 = "La constraseña se cambió correctamente.";
         public const string Usuarios_Msj17 = "Los permisos del usuario <strong>{0}</strong> se han actualizado correctamente.";
         public const string Usuarios_Msj18 = "No se han podido actualizar los permisos del usuario <strong>{0}</strong>.";
+        public const string Usuarios_Msj19 = "La constraseña no coincide con la actual.";
 
         public const string ENCUESTAS_MSJ01 = "La Encuesta se creó correctamente.";
         public const string ENCUESTAS_MSJ02 = "La Encuesta no se pudo crear correctamente.";

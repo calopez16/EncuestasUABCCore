@@ -1,6 +1,5 @@
 ﻿using EncuestasUABC.Models.Catalogos;
 using System;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EncuestasUABC.Models
 {

@@ -1,6 +1,4 @@
 ﻿
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace EncuestasUABC.Models
 {
     public class Egresado

@@ -28,7 +28,6 @@ namespace EncuestasUABC.AccesoDatos.Data
         public DbSet<EstatusEncuesta> EstatusEncuesta { get; set; }
         public DbSet<Administrativo> Administrativos { get; set; }
         public DbSet<Permiso> Permisos { get; set; }
-        public DbSet<Rol> RolesSistema { get; set; }
         public DbSet<TipoPregunta> TiposPregunta { get; set; }
         public DbSet<UnidadAcademica> UnidadesAcademicas { get; set; }
         public DbSet<UsuarioPermiso> UsuariosPermisos { get; set; }
@@ -36,14 +35,29 @@ namespace EncuestasUABC.AccesoDatos.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-          
-            modelBuilder.Entity<UsuarioPermiso>().HasKey(x => new { x.PermisoId, x.UsuarioId });
-
             #region ApplicationUser
             modelBuilder.Entity<ApplicationUser>().HasOne(x => x.Alumno).WithOne(x => x.UsuarioIdNavigation).HasForeignKey<Alumno>(e => e.UsuarioId);
             modelBuilder.Entity<ApplicationUser>().HasOne(x => x.Egresado).WithOne(x => x.UsuarioIdNavigation).HasForeignKey<Egresado>(e => e.UsuarioId);
             modelBuilder.Entity<ApplicationUser>().HasOne(x => x.Administrativo).WithOne(x => x.UsuarioIdNavigation).HasForeignKey<Administrativo>(e => e.UsuarioId);
-            modelBuilder.Entity<ApplicationUser>().HasOne(x => x.RolIdNavigation).WithMany(x => x.Usuarios).HasForeignKey(x => x.RolId);
+
+            modelBuilder.Entity<ApplicationUser>(p =>
+            {
+                p.Property(x => x.Nombre).HasMaxLength(80);
+                p.Property(x => x.ApellidoPaterno).HasMaxLength(80);
+                p.Property(x => x.ApellidoMaterno).HasMaxLength(80);
+            });
+
+            modelBuilder.Entity<Permiso>(b =>
+            {
+                b.HasKey(x => new { x.Id });
+                b.HasOne(x => x.PermisoIdPadreNavigation).WithMany(x => x.PermisosHijos).HasForeignKey(x => x.PermisoIdPadre);
+            });
+            modelBuilder.Entity<UsuarioPermiso>(b =>
+            {
+                b.HasKey(x => new { x.PermisoId, x.UsuarioId });
+                b.HasOne(x => x.UsuarioIdNavigation).WithMany(x => x.Permisos).HasForeignKey(x => x.UsuarioId);
+                b.HasOne(x => x.PermisoIdNavigation).WithMany(x => x.Usuarios).HasForeignKey(x => x.PermisoId);
+            });
             #endregion
 
             modelBuilder.Entity<Carrera>().HasMany(x => x.Alumnos).WithOne(x => x.CarreraIdNavigation).HasForeignKey(x => x.CarreraId);
@@ -64,7 +78,7 @@ namespace EncuestasUABC.AccesoDatos.Data
             {
                 b.HasKey(x => new { x.Id, x.EncuestaId, x.EncuestaSeccionId });
                 b.Property(e => e.Id).ValueGeneratedOnAdd();
-                b.HasOne(x => x.EncuestaSeccionIdNavigation).WithMany(x => x.EncuestaPreguntas).HasForeignKey(x => new {x.EncuestaSeccionId, x.EncuestaId });
+                b.HasOne(x => x.EncuestaSeccionIdNavigation).WithMany(x => x.EncuestaPreguntas).HasForeignKey(x => new { x.EncuestaSeccionId, x.EncuestaId });
                 b.HasOne(x => x.TipoPreguntaIdNavigation).WithMany(x => x.EncuestaPreguntas).HasForeignKey(x => x.TipoPreguntaId);
                 b.HasMany(x => x.SubPreguntas).WithOne(x => x.EncuestaPreguntaIdPadreNavigation).HasForeignKey(x => new { x.EncuestaSeccionIdPadre, x.EncuestaIdPadre, x.EncuestaPreguntaIdPadre });
             });

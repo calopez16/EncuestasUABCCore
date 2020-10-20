@@ -3,10 +3,7 @@ using EncuestasUABC.AccesoDatos.Repository.Interfaces;
 using EncuestasUABC.Models;
 using EncuestasUABC.Models.Catalogos.Tipos;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace EncuestasUABC.AccesoDatos.Repository
@@ -38,6 +35,7 @@ namespace EncuestasUABC.AccesoDatos.Repository
 
             return await _context.Encuestas
                 .Include(x => x.EncuestaSecciones)
+
                 .Select(x => new Encuesta
                 {
                     Id = x.Id,
@@ -86,6 +84,48 @@ namespace EncuestasUABC.AccesoDatos.Repository
                     }
                 }).FirstOrDefaultAsync(x => x.Id == id && x.EncuestaId == encuestaId);
 
+            #endregion
+        }
+
+        public async Task<EncuestaPregunta> GetPreguntaById(int id, int encuestaId, int seccionId)
+        {
+            #region GetPreguntaById
+            return await _context.EncuestaPreguntas.FindAsync(id, encuestaId, seccionId);
+            #endregion
+        }
+
+
+        public async Task<EncuestaPregunta> GetPreguntaByIdDetalle(int id, int encuestaId, int seccionId)
+        {
+            #region GetPreguntaByIdDetalle
+            return await _context.EncuestaPreguntas
+                .Include(x => x.TipoPreguntaIdNavigation)
+                .Include(x => x.EncuestaPreguntaIdPadreNavigation)
+                .Include(x => x.Opciones)
+                .Where(x => !x.Eliminado)
+                .OrderBy(x => x.Orden)
+                .Select(x => new EncuestaPregunta
+                {
+                    Id = x.Id,
+                    EncuestaId = x.EncuestaId,
+                    EncuestaSeccionId = x.EncuestaSeccionId,
+                    Descripcion = x.Descripcion,
+                    Obligatoria = x.Obligatoria,
+                    Eliminado = x.Eliminado,
+                    TipoPreguntaId = x.TipoPreguntaId,
+                    TipoPreguntaIdNavigation = new TipoPregunta
+                    {
+                        Descripcion = x.TipoPreguntaIdNavigation.Descripcion
+                    },
+                    Opciones = x.Opciones
+                    .OrderBy(o => o.Orden)
+                    .Where(w => !w.Eliminado)
+                    .Select(w => new EncuestaPreguntaOpcion
+                    {
+                        Id = w.Id,
+                        Descripcion = w.Descripcion
+                    }).ToList()
+                }).FirstOrDefaultAsync(x => x.Id == id && x.EncuestaId == encuestaId && x.EncuestaSeccionId == seccionId);
             #endregion
         }
 

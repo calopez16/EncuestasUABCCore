@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using EncuestasUABC.AccesoDatos.Repository.Interfaces;
+using EncuestasUABC.Constantes;
+using EncuestasUABC.Enumerador;
 using EncuestasUABC.Models;
 using EncuestasUABC.Models.Catalogos;
 using EncuestasUABC.Utilidades;
@@ -10,7 +14,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
@@ -24,20 +27,29 @@ namespace EncuestasUABC.Controllers
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IRepository _repository;
         private readonly IHttpContextAccessor _httpContextAccessor;
-
+        private readonly IMapper _mapper;
         public AccountController(ILogger<UsuariosController> logger,
-          SignInManager<ApplicationUser> signInManager,
-          IUsuarioRepository usuarioRepository,
-          IRepository repository,
-          IHttpContextAccessor httpContextAccessor)
+            SignInManager<ApplicationUser> signInManager,
+            IUsuarioRepository usuarioRepository,
+            IRepository repository,
+            IHttpContextAccessor httpContextAccessor,
+            IMapper mapper)
         {
             _logger = logger;
             _signInManager = signInManager;
             _usuarioRepository = usuarioRepository;
-            _httpContextAccessor = httpContextAccessor;
             _repository = repository;
+            _httpContextAccessor = httpContextAccessor;
+            _mapper = mapper;
         }
+
         #region Login
+
+        /// <summary>
+        /// Devuelve la vista de Inicio de Sesión.
+        /// </summary>
+        /// <param name="returnUrl">Url al que se redireccionará al hacer Login. (No implementado aún)</param>
+        /// <returns></returns>
         [AllowAnonymous]
         public async Task<IActionResult> Login(string returnUrl = null)
         {
@@ -48,6 +60,11 @@ namespace EncuestasUABC.Controllers
             #endregion
         }
 
+        /// <summary>
+        /// Llamada para iniciar sesión en la applicación.
+        /// </summary>
+        /// <param name="model">Contiene la información para el inicio de sesión.</param>
+        /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model)
@@ -57,30 +74,31 @@ namespace EncuestasUABC.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    // This doesn't count login failures towards account lockout
-                    // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                    var user = await _usuarioRepository.Get(model.Email);
+                    var user = await _repository.FirstOrDefault<ApplicationUser>(x => x.Email.Equals(model.Email));
                     if (user != null)
                     {
-                        var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
-
-                        if (result.Succeeded)
+                        if ((await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false)).Succeeded)
                         {
-                            List<Permiso> permisos;
-                            if (user.RolIdNavigation.Descripcion.Equals(Constantes.RolesSistema.Administrador))
-                            {
-                                permisos = await _usuarioRepository.AllPermisos();
-                            }
+                            List<PermisoViewModel> todosPermisos = new List<PermisoViewModel>();
+                            if (user.Email.Equals(Defaults.AdminEmail))
+                                todosPermisos = _mapper.Map<List<PermisoViewModel>>(await _repository.GetAll<Permiso>());
                             else
+                                todosPermisos = _mapper.Map<List<PermisoViewModel>>(await _usuarioRepository.PermisosByUser(user.Id));
+
+                            var permisosAcciones = todosPermisos.Where(x => !x.Menu).ToList();
+                            var permisosMenu = todosPermisos.Where(x => x.Menu && !x.PermisoIdPadre.HasValue).OrderBy(x => x.Orden).ToList();
+                            foreach (var menu in permisosMenu)
                             {
-                                permisos = await _usuarioRepository.PermisosUsuario(user.Id);
+                                menu.PermisosHijos = todosPermisos.Where(x => x.PermisoIdPadre == menu.Id).OrderBy(x => x.Descripcion).ToList();
                             }
-                            HttpContext.Session.SetString("UsuarioInfo", JsonConvert.SerializeObject(new UsuarioInfoViewModel
+                            HttpContext.Session.SetString("UsuarioInfo", JsonConvert.SerializeObject(new UsuarioSessionInfoViewModel
                             {
                                 Id = user.Id,
                                 NombreCompleto = $"{user.Nombre} {user.ApellidoPaterno} {user.ApellidoMaterno}",
-                                Rol = user.RolIdNavigation.Descripcion,
-                                Permisos = permisos
+                                Rol = await _usuarioRepository.GetRolByUser(user),
+                                Email = user.Email,
+                                PermisosMenu = permisosMenu,
+                                PermisosAcciones = permisosAcciones
                             }, new JsonSerializerSettings
                             {
                                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
@@ -89,15 +107,17 @@ namespace EncuestasUABC.Controllers
                             _logger.LogInformation("User logged in.");
                             return RedirectToAction("Index", "Home");
                         }
+                        else TempData["InvalidLogin"] = Mensajes.Login_MSJ01;
                     }
+                    else TempData["InvalidLogin"] = Mensajes.Login_MSJ03;
 
 
-                    TempData["InvalidLogin"] = "El usuario y/o contraseña son incorrectos.";
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
+                TempData["InvalidLogin"] = Mensajes.Login_MSJ03;
             }
             return View(model);
 
@@ -107,15 +127,37 @@ namespace EncuestasUABC.Controllers
 
         #region Logout
 
+        [HttpPost]
+        public async Task<IActionResult> LogOut()
+        {
+            #region LogOut
+
+            await _signInManager.SignOutAsync();
+            HttpContext.Session.Clear();
+            _logger.LogInformation("User logged out.");
+            return RedirectToAction(nameof(Login));
+
+            #endregion
+        }
+
+        #endregion
+
         #region Perfil
+        /// <summary>
+        /// Redirecciona a la vista del Perfil del usuario actual.
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Perfil()
         {
             #region Perfil
             try
             {
-                var usuarioInfo = JsonConvert.DeserializeObject<UsuarioInfoViewModel>(_httpContextAccessor.HttpContext.Session.GetString("UsuarioInfo"));
-                var user = await _usuarioRepository.GetById(usuarioInfo.Id);
-                return View(user);
+                var usuarioInfo = _httpContextAccessor.GetUsuarioInfoViewModel();
+                var user = await _repository.FirstOrDefault<ApplicationUser>(x => x.Id.Equals(usuarioInfo.Id));
+                var userRol = await _usuarioRepository.GetRolByUser(user);
+                var userResult = _mapper.Map<ApplicationUserViewModel>(user);
+                userResult.Rol = userRol;
+                return View(userResult);
             }
             catch (MessageAlertException ex)
             {
@@ -126,15 +168,16 @@ namespace EncuestasUABC.Controllers
             {
                 _logger.LogInformation(ex.Message);
             }
-            finally
-            {
-                await Campus();
-            }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Home");
 
             #endregion
         }
 
+        /// <summary>
+        /// Llamada para actualizar la información del usuario.
+        /// </summary>
+        /// <param name="model">Contiene la información del usuario.</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Perfil(ApplicationUserViewModel model)
         {
@@ -142,36 +185,32 @@ namespace EncuestasUABC.Controllers
 
             try
             {
-                var user = await _usuarioRepository.Get(model.UserName);
-                if (!model.Email.Equals(user.Email))
-                {
-                    if ((await _usuarioRepository.Get(model.Email)) != null)
-                        throw new MessageAlertException(Enumerador.MessageAlertType.Information, string.Format(Constantes.Mensajes.USUARIOS_MSJ03, model.Email));
-                }
-                         
+                var user = await _repository.FirstOrDefault<ApplicationUser>(x => x.Email.Equals(model.Email));
+                if (user == null)
+                    throw new MessageAlertException(MessageAlertType.Warning, Mensajes.USUARIOS_MSJ07);
+               
                 user.Nombre = model.Nombre;
                 user.ApellidoPaterno = model.ApellidoPaterno;
                 user.ApellidoMaterno = model.ApellidoMaterno;
-                user.Email = model.Email;
-                user.UserName = model.Email;
-                user.NormalizedEmail = model.Email.ToUpper();
-                user.NormalizedUserName = model.Email.ToUpper();
 
-                var resultUpdate = await _usuarioRepository.Update(user);
-                if (!resultUpdate.Succeeded)
-                    throw new MessageAlertException(Enumerador.MessageAlertType.Warning, string.Format(Constantes.Mensajes.USUARIOS_MSJ08, user.Email));
-                ShowMessageSuccess(string.Format(Constantes.Mensajes.USUARIOS_MSJ06, user.Email));
+                if (!(await _usuarioRepository.Update(user)).Succeeded)
+                    throw new MessageAlertException(MessageAlertType.Warning, string.Format(Mensajes.USUARIOS_MSJ08, user.Email));
+
+                ShowMessageSuccess(string.Format(Mensajes.USUARIOS_MSJ06, user.Email));
                 return RedirectToAction(nameof(Perfil));
             }
             catch (MessageAlertException ex)
             {
-                _logger.LogInformation(ex.Message);
+                _logger.LogError(ex.Message);
                 GenerarAlerta(ex);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 ShowMessageException(ex.Message);
+            }
+            finally
+            {
             }
             return View(model);
 
@@ -180,74 +219,43 @@ namespace EncuestasUABC.Controllers
         #endregion
 
         #region CambiarContrasena
+        /// <summary>
+        /// Llamada para cambiar la contraseña del usuario desde la vista de Perfil.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> CambiarContrasenaPerfil(string contrasenaActual, string contrasena)
+        public async Task<IActionResult> CambiarContrasena(CambiarContrasenaViewModel model)
         {
             #region CambiarContrasena
 
             try
             {
-                var usuarioInfo = JsonConvert.DeserializeObject<UsuarioInfoViewModel>(_httpContextAccessor.HttpContext.Session.GetString("UsuarioInfo"));
-                var user = await _usuarioRepository.GetById(usuarioInfo.Id);
-                var result = await _usuarioRepository.CambiarContrasena(user, contrasenaActual, contrasena);
-                if (result.Succeeded)
+                var usuarioInfo = _httpContextAccessor.GetUsuarioInfoViewModel();
+                var user = await _repository.FirstOrDefault<ApplicationUser>(x => x.Id.Equals(usuarioInfo.Id));
+                var result = await _usuarioRepository.CambiarContrasena(user, model.OldPassword, model.Password);
+                if (!result.Succeeded)
                 {
-                    TempData["InfoLogin"] = Constantes.Mensajes.USUARIOS_MSJ14;
-                    await LogOut();
+                    if (result.Errors.Any(x => x.Code.Equals("PasswordMismatch")))
+                        throw new MessageAlertException(MessageAlertType.Warning, Mensajes.Usuarios_Msj19);
+                    throw new MessageAlertException(MessageAlertType.Warning, Mensajes.USUARIOS_MSJ15);
                 }
-                else
-                {
-                    throw new MessageAlertException(Enumerador.MessageAlertType.Warning, Constantes.Mensajes.USUARIOS_MSJ15);
-                }
+
+                ShowMessageSuccess(Mensajes.USUARIOS_MSJ14);
             }
             catch (MessageAlertException ex)
             {
-                _logger.LogInformation(ex.Message);
-                return BadRequest(ex);
+                _logger.LogError(ex.Message);
+                GenerarAlerta(ex);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return BadRequest(ex);
+                ShowMessageException(ex.Message);
             }
             return RedirectToAction(nameof(Perfil));
             #endregion
         }
-        #endregion
-
-        [HttpPost]
-        public async Task<IActionResult> LogOut()
-        {
-            #region LogOut
-
-            await _signInManager.SignOutAsync();
-            _logger.LogInformation("User logged out.");
-            return View(nameof(Login));
-
-            #endregion
-        }
-
-        #endregion
-
-        #region ViewBags
-
-        public async Task Campus()
-        {
-            #region Campus
-
-            try
-            {
-                ViewBag.Campus = new SelectList(await _repository.GetAll<Campus>(), "Id", "Nombre");
-
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-            }
-
-            #endregion
-        }
-
 
         #endregion
     }

@@ -40,6 +40,8 @@ $(document).ready(function () {
     var botonEliminar;
     $("#table_EncuestasSecciones").on("click", ".btn_Eliminar", function () {
         encuestaSeccionId = parseInt($(this).data("id"));
+        var descripcion = $(this).data("nombre");
+        $("#span_SeccionNombre").text(descripcion);
         $("#modal_SeccionEliminar").modal("show");
         botonEliminar = this;
     });

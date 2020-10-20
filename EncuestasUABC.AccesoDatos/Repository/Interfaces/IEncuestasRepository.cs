@@ -1,8 +1,5 @@
 ﻿using EncuestasUABC.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace EncuestasUABC.AccesoDatos.Repository.Interfaces
@@ -12,5 +9,7 @@ namespace EncuestasUABC.AccesoDatos.Repository.Interfaces
         Task<EncuestaSeccion> GetEncuestaSeccionById(int id, int idEncuesta);
         Task<Encuesta> GetById(int id);
         Task<EncuestaSeccion> GetSeccionById(int id, int encuestaId);
+        Task<EncuestaPregunta> GetPreguntaById(int id, int encuestaId, int seccionId);
+        Task<EncuestaPregunta> GetPreguntaByIdDetalle(int id, int encuestaId, int seccionId);
     }
 }

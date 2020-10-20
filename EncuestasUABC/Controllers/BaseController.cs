@@ -1,9 +1,7 @@
 ﻿using EncuestasUABC.Constantes;
 using EncuestasUABC.Models;
 using EncuestasUABC.Utilidades;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace EncuestasUABC.Controllers

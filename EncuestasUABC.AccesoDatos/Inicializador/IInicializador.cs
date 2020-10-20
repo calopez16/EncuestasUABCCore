@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EncuestasUABC.AccesoDatos.Inicializador
+﻿namespace EncuestasUABC.AccesoDatos.Inicializador
 {
     public interface IInicializador
     {

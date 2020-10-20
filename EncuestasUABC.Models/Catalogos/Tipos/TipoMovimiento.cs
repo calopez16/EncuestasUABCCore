@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
-
-namespace EncuestasUABC.Models.Catalogos.Tipos
+﻿namespace EncuestasUABC.Models.Catalogos.Tipos
 {
     public class TipoMovimiento
     {

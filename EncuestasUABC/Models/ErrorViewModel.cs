@@ -1,5 +1,3 @@
-using System;
-
 namespace EncuestasUABC.Models
 {
     public class ErrorViewModel

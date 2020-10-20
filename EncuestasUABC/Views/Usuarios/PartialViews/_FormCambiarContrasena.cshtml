@@ -1,4 +1,5 @@
-﻿
+﻿@using EncuestasUABC.ViewModels
+@model CambiarContrasenaViewModel
 @{
     Layout = null;
 }
@@ -6,30 +7,29 @@
     <div class="row col-md-6">
         <div class="col-12">
             <div class="form-group">
-                <label class="bmd-label-floating" for="txt_contrasena">Nueva Contraseña</label>
-                <input name="contrasena" class="form-control" type="password" id="txt_contrasena" />
-                <span class="field-validation-error"></span>
-
+                <label asp-for="Password" class="bmd-label-floating"></label>
+                <input asp-for="Password" class="form-control" id="txt_contrasena" type="password">
+                <span asp-validation-for="Password"></span>
             </div>
         </div>
         <div class="col-12">
             <div class="form-group">
-                <label class="bmd-label-floating" for="txt_confirmarContrasena">Confirmar Contraseña</label>
-                <input class="form-control" type="password" id="txt_confirmarContrasena" />
-                <span class="field-validation-error"></span>
+                <label asp-for="ConfirmPassword" class="bmd-label-floating"></label>
+                <input asp-for="ConfirmPassword" class="form-control" id="txt_confirmarContrasena" type="password">
+                <span asp-validation-for="ConfirmPassword"></span>
             </div>
         </div>
     </div>
     <div class="col-md-6">
         <div class="alert alert-warning div_CaracteristicasContraAlert">
             La contraseña debe tener las siguientes características:
-            <ul class="list-unstyled">
-                <li><i id="Logitud" class="d-none material-icons">check_circle</i> La longitud debe ser por lo menos de<strong> 6 carácteres</strong></li>
-                <li><i id="Mayusculas" class="d-none material-icons">check_circle</i> Debe contener <strong>Mayúsculas</strong></li>
-                <li><i id="Minusculas" class="d-none material-icons">check_circle</i> Debe contener <strong>Minúsculas</strong></li>
-                <li><i id="Numeros" class="d-none material-icons">check_circle</i> Debe contener <strong>un Número</strong></li>
-                <li><i id="Caract" class="d-none material-icons">check_circle</i> Debe contener <strong>un caracter especial</strong></li>
-                <li class="font-weight-bold"><i id="ContrasNoCoinciden" class="d-none material-icons">check_circle</i> <strong>Las contraseñas coinciden</strong></li>
+            <ul>
+                <li><i id="Logitud" class="fa fa-check-circle d-none"></i> La longitud debe ser por lo menos de<strong> 6 carácteres</strong></li>
+                <li><i id="Mayusculas" class="fa fa-check-circle d-none"></i> Debe contener <strong>Mayúsculas</strong></li>
+                <li><i id="Minusculas" class="fa fa-check-circle d-none"></i> Debe contener <strong>Minúsculas</strong></li>
+                <li><i id="Numeros" class="fa fa-check-circle d-none"></i> Debe contener <strong>un Número</strong></li>
+                <li><i id="Caract" class="fa fa-check-circle d-none"></i> Debe contener <strong>un caracter especial</strong></li>
+                <li class="font-weight-bold"><i id="ContrasNoCoinciden" class="fa fa-check-circle d-none"></i> <strong>Las contraseñas coinciden</strong></li>
             </ul>
         </div>
     </div>

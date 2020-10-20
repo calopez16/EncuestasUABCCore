@@ -1,118 +1,115 @@
-﻿@using EncuestasUABC.Enumerador;
-@model ApplicationUser;
+﻿@using EncuestasUABC.ViewModels;
+@model ApplicationUserViewModel
 @{
     ViewData["Title"] = "Perfil";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<div class="form-row">
+    <div class="col-md-8">
+        <h1 class="ml-4 mt-2">@ViewData["Title"]</h1>
+    </div>
+</div>
+<hr />
 
 <div class="card">
-    <div class="card-header">
-        <h1 class="mt-2">@ViewData["Title"]</h1>
-    </div>
     <div class="card-body">
-        <div class="row">
-            <div class="col-lg-3 col-md-4">
-                <div class="ibox">
-                    <div class="ibox-body text-center">
-                        <div class="m-t-20">
-                            <img class="img-circle" src="~/img/admin-avatar.png" width="100" />
-                        </div>
-                        <h5 class="font-strong m-b-10 m-t-10">@Model.Nombre @Model.ApellidoPaterno @Model.ApellidoMaterno</h5>
-                        <div class="m-b-20 text-muted">@Model.RolIdNavigation.Descripcion</div>
-                    </div>
-                </div>
-                <div class="ibox">
-                    <div class="ibox-body">
-                        <h4 class="text-center">
-                            @Model.Email
-                        </h4>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-9 col-md-8">
-                <div class="ibox">
-                    <div class="ibox-body">
-                        <ul class="nav nav-tabs tabs-line">
-                            <li class="nav-item">
-                                <a class="nav-link active" href="#informacion" data-toggle="tab">
-                                    <i class="fa fa-user"></i> Informacion
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#cambiarContrasena" data-toggle="tab">
-                                    <i class="fa fa-lock"></i> Cambiar contraseña
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="tab-content">
-                            <div class="tab-pane fade show active" id="informacion">
-                                <form asp-action="Perfil" id="form_Usuario">
-                                    <input hidden asp-for="UserName" />
-                                    <div class="row">
-                                        <div class="col-md-6 col-lg-3">
-                                            <div class="form-group">
-                                                <label asp-for="Nombre" class="bmd-label-floating"></label>
-                                                <input asp-for="Nombre" class="form-control" type="text" maxlength="80" autocomplete="off">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-lg-3">
-                                            <div class="form-group">
-                                                <label asp-for="ApellidoPaterno" class="bmd-label-floating"></label>
-                                                <input asp-for="ApellidoPaterno" class="form-control" type="text" maxlength="80" autocomplete="off">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-lg-3">
-                                            <div class="form-group">
-                                                <label asp-for="ApellidoMaterno" class="bmd-label-floating"></label>
-                                                <input asp-for="ApellidoMaterno" class="form-control" type="text" maxlength="80" autocomplete="off">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-lg-3">
-                                            <div class="form-group">
-                                                <label asp-for="Email" class="bmd-label-floating"></label>
-                                                <input asp-for="Email" class="form-control mask-email" type="text" placeholder="usuario@uabc.edu.mx" autocomplete="off">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <input hidden asp-for="RolId" />
-                                    @if (Model.RolId == (int)RolId.Coordinador || Model.RolId == (int)RolId.Administrativo || Model.RolId == (int)RolId.Tutor)
-                                    {
-                                        @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormMaestro.cshtml", Model)
-                                    }
-                                    else if (Model.RolId == (int)RolId.Egresado)
-                                    {
-                                        @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormEgresado.cshtml", Model)
-                                    }
-                                    else if (Model.RolId == (int)RolId.Alumno)
-                                    {
-                                        @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormAlumno.cshtml", Model)
-
-                                    }
-                                    <div class="card-footer text-center">
-                                        <button type="submit" class="btn btn-primary btn-raised">Guardar</button>
-                                    </div>
-                                </form>
+        <div class="ibox">
+            <div class="ibox-body">
+                <div class="row">
+                    <div class="col-lg-3 col-md-4 p-5">
+                        <div class="ibox">
+                            <div class="ibox-body text-center">
+                                <div class="m-t-20">
+                                    <i class="material-icons md-128 text-primary">account_circle</i>
+                                </div>
+                                <h5 class="font-strong m-b-10 m-t-10">@Model.Nombre @Model.ApellidoPaterno @Model.ApellidoMaterno</h5>
+                                <div class="m-b-20 text-muted">@Model.Rol</div>
                             </div>
-                            <div class="tab-pane fade show" id="cambiarContrasena">
-                                <form asp-action="CambiarContrasenaPerfil" onsubmit="return ContrasenaValida(true)">
-                                    <div class="row">
-                                        <div class="row col-md-6">
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label for="contrasenaActual" class="bmd-label-floating">Contraseña Actual</label>
-                                                    <input name="contrasenaActual" id="contrasenaActual" class="form-control" type="password" />
-                                                    <span class="field-validation-error"></span>
+                        </div>
+                        <div class="ibox">
+                            <div class="ibox-body">
+                                <h4 class="text-center">
+                                    @Model.Email
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-9 col-md-8">
+                        <div class="ibox">
+                            <div class="ibox-body">
+                                <ul class="nav nav-tabs tabs-line">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" href="#informacion" data-toggle="tab">
+                                            <i class="fa fa-user"></i> Informacion
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#cambiarContrasena" data-toggle="tab">
+                                            <i class="fa fa-lock"></i> Cambiar contraseña
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane fade show active" id="informacion">
+                                        <form asp-action="Perfil">
+                                            <input hidden asp-for="Email" />
+                                            <input hidden asp-for="Rol" />
+                                            <div class="row">
+                                                <div class="col-md-6 col-lg-3">
+                                                    <div class="form-group">
+                                                        <label asp-for="Nombre" class="bmd-label-floating"></label>
+                                                        <input asp-for="Nombre" class="form-control" autocomplete="off">
+                                                        <span asp-validation-for="Nombre"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-lg-3">
+                                                    <div class="form-group">
+                                                        <label asp-for="ApellidoPaterno" class="bmd-label-floating"></label>
+                                                        <input asp-for="ApellidoPaterno" class="form-control">
+                                                        <span asp-validation-for="ApellidoPaterno"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-lg-3">
+                                                    <div class="form-group">
+                                                        <label asp-for="ApellidoMaterno" class="bmd-label-floating"></label>
+                                                        <input asp-for="ApellidoMaterno" class="form-control" autocomplete="off">
+                                                        <span asp-validation-for="ApellidoMaterno"></span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                            <div class="row">
+                                                <div class="col-12 d-flex justify-content-center">
+                                                    <button type="submit" class="btn btn-raised btn-primary d-flex align-content-between">
+                                                        <i class="material-icons mr-2" style="margin-top:-3px">save</i> Guardar
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
-                                    @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormCambiarContrasena.cshtml")
-
-                                    <div class="card-footer text-center">
-                                        <button type="submit" class="btn btn-primary btn-raised">Guardar</button>
+                                    <div class="tab-pane fade show" id="cambiarContrasena">
+                                        <form asp-action="CambiarContrasena" onsubmit="return ContrasenaValida()" id="form_CambiarContrasena">
+                                            <div class="row">
+                                                <div class="row col-md-6">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="txt_OldPassword" class="bmd-label-floating">Contraseña Actual</label>
+                                                            <input name="OldPassword" class="form-control" type="password" id="txt_OldPassword">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <partial name="~/Views/Usuarios/PartialViews/_FormCambiarContrasena.cshtml" model="new CambiarContrasenaViewModel()" />
+                                            <div class="row">
+                                                <div class="col-12 d-flex justify-content-center">
+                                                    <button type="submit" class="btn btn-raised btn-primary d-flex align-content-between">
+                                                        <i class="material-icons mr-2" style="margin-top:-3px">save</i> Cambiar Contraseña
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
-                                </form>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -4,6 +4,7 @@
 // Write your JavaScript code.
 $(document).ready(() => {
     $('[data-toggle="tooltip"]').tooltip();
+    
 });
 
 $(window).on("load", function () {

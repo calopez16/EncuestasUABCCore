@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using EncuestasUABC.Models.Relaciones;
+using System.Collections.Generic;
 
 namespace EncuestasUABC.Models.Catalogos
 {
@@ -14,9 +14,9 @@ namespace EncuestasUABC.Models.Catalogos
         public int? PermisoIdPadre { get; set; }
         public bool Estatus { get; set; }
 
-
-        [ForeignKey(nameof(PermisoIdPadre))]
         public Permiso PermisoIdPadreNavigation { get; set; }
         public virtual ICollection<Permiso> PermisosHijos { get; set; }
+        public virtual ICollection<UsuarioPermiso> Usuarios { get; set; }
+
     }
 }

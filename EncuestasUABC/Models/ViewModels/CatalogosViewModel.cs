@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace EncuestasUABC.Models.ViewModels.Catalogos
+﻿namespace EncuestasUABC.Models.ViewModels.Catalogos
 {
     public class CampusViewModel
     {
@@ -30,10 +25,4 @@ namespace EncuestasUABC.Models.ViewModels.Catalogos
 
     }
 
-    public class RolViewModel
-    {
-        public int Id { get; set; }
-        public string Descripcion { get; set; }
-        public bool Estatus { get; set; }
-    }
 }

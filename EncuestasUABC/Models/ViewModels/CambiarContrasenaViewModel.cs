@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace EncuestasUABC.Models.Usuarios
+namespace EncuestasUABC.ViewModels
 {
     public class CambiarContrasenaViewModel
     {
@@ -11,7 +11,7 @@ namespace EncuestasUABC.Models.Usuarios
         [Required(ErrorMessage = "El campo {0} es requerido")]
         public string Password { get; set; }
         [Display(Name = "Confirmar Contraseña")]
-        [Required(ErrorMessage = "El campo {0} es requerido")]
+        [Required(ErrorMessage ="El campo {0} es requerido")]
         [Compare(nameof(Password))]
         public string ConfirmPassword { get; set; }
     }

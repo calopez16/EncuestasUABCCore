@@ -100,3 +100,7 @@ a.bmd-btn-fab {
 .field-validation-error{
     color:red;
 }
+
+.select2-container {
+    min-width: 20px !important;
+}

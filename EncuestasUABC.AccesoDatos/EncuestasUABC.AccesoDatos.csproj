@@ -9,6 +9,8 @@
     <Compile Remove="Migrations\20200913044714_122.Designer.cs" />
     <Compile Remove="Migrations\20201011035538_CorreccionEncuestaPreguntaOpcion.cs" />
     <Compile Remove="Migrations\20201011035538_CorreccionEncuestaPreguntaOpcion.Designer.cs" />
+    <Compile Remove="Migrations\20201020023134_asd.cs" />
+    <Compile Remove="Migrations\20201020023134_asd.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

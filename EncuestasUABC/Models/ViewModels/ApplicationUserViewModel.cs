@@ -1,7 +1,4 @@
-﻿
-
-using EncuestasUABC.Models.ViewModels.Catalogos;
-using Microsoft.AspNetCore.Identity;
+﻿using EncuestasUABC.Models.ViewModels.Catalogos;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -22,9 +19,6 @@ namespace EncuestasUABC.Models
         [Display(Name = "Apellido Materno")]
         [MaxLength(80)]
         public string ApellidoMaterno { get; set; }
-        [Display(Name = "Rol")]
-        [Required(ErrorMessage = "El {0} es requerido")]
-        public int RolId { get; set; }
         public string UserName { get; set; }
 
         [Display(Name = "Correo")]
@@ -32,10 +26,10 @@ namespace EncuestasUABC.Models
         public string Email { get; set; }
         public bool Activo { get; set; } = true;
 
-        public RolViewModel RolIdNavigation { get; set; }
         public AdministrativoViewModel Administrativo { get; set; }
         public AlumnoViewModel Alumno { get; set; }
         public EgresadoViewModel Egresado { get; set; }
+        public string Rol { get; set; }
 
     }
 
@@ -99,7 +93,7 @@ namespace EncuestasUABC.Models
         public bool Menu { get; set; }
         public int? PermisoIdPadre { get; set; }
         public bool Estatus { get; set; }
-
+        public int Orden { get; set; }
 
         public PermisoViewModel PermisoIdPadreNavigation { get; set; }
         public ICollection<PermisoViewModel> PermisosHijos { get; set; }

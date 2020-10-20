@@ -5,8 +5,8 @@ var encuestaId = 0;
 var tipoPreguntaId = 0;
 
 $(document).ready(function () {
-    seccionId = parseInt($("#Id").val());   
-    encuestaId = parseInt($("#EncuestaId").val());   
+    seccionId = parseInt($("#Id").val());
+    encuestaId = parseInt($("#EncuestaId").val());
 
     //#region EDITAR NOMBRE SECCION
     $("#h1_SeccionNombre").click(function () {
@@ -45,10 +45,10 @@ $(document).ready(function () {
         $("#btn_GuardarPreguntaAgregar").hide();
         $("#modal_PreguntaCrear").modal("show");
     });
-    
+
     //#region FUNCIONALIDAD TABLA PREGUNTAS
 
-    $("#table_SeccionPreguntas tbody").sortable({ handle: '.ordenador' });
+    $("#table_SeccionPregunta tbody").sortable({ handle: '.ordenador' });
 
     $(".check_seleccionarTodos").click(function () {
         if ($(this).prop("checked")) {
@@ -56,6 +56,21 @@ $(document).ready(function () {
         } else {
             $(".check_Pregunta").prop("checked", false);
         }
+    });
+
+    //Eliminar Pregunta
+    var encuestaPreguntaId;
+    var botonEliminar;
+    $("#table_SeccionPregunta tbody").on("click", ".btn_Eliminar", function () {
+        encuestaPreguntaId = parseInt($(this).data("id"));
+        var descripcion = $(this).data("descripcion");
+        $("#span_PreguntaNombre").text(descripcion);
+        $("#modal_PreguntaEliminar").modal("show");
+        botonEliminar = this;
+    });
+
+    $("#btn_ConfirmarEliminarPregunta").click(function () {
+        eliminarPregunta(encuestaPreguntaId, encuestaId, seccionId, botonEliminar);
     });
 
     //#endregion
@@ -78,6 +93,7 @@ $(document).ready(function () {
         $("#btn_GuardarPreguntaAgregar").hide();
         LimpiarCamposPreguntas();
         tipoPreguntaId = 0;
+        $("#h5_ModalTituloCrearPregunta").text("Elige el tipo de pregunta");
     });
 
 
@@ -176,7 +192,7 @@ function guardarPregunta() {
                             </td>
                             <td>${tipoPregunta}</td>
                             <td class="text-center">
-                                ${obligatoria ? '<i class="material-icons text-primary">done</i>':""}
+                                ${obligatoria ? '<i class="material-icons text-primary">done</i>' : ""}
                             </td>
                         <td style="width:40px">
                             <span class="btn-group-sm">
@@ -198,7 +214,7 @@ function guardarPregunta() {
         } else {
             $("#table_SeccionPregunta tbody").append(fila);
         }
-        $('[data-toggle="tooltip"]').tooltip();       
+        $('[data-toggle="tooltip"]').tooltip();
 
     }).fail(function () {
         //Se ejecuta cuando la peticion ha regresado algun error.
@@ -219,9 +235,48 @@ function getTipoPreguntaDescripcion(tipoPreguntaId) {
         return "Condicional";
     } else if (tipoPreguntaId == enum_TipoPregunta.Matriz) {
         return "Matriz";
-    } else if (tipoPreguntaId == enum_TipoPregunta.SubPregunta) {
-        return "Sub Pregunta";
+    } else if (tipoPreguntaId == enum_TipoPregunta.SelectList) {
+        return "Select List";
     }
 }
+
+//#endregion
+
+//#region PUT
+
+function eliminarPregunta(id, encuestaId, seccionId, boton) {
+    $.ajax({
+        //Url de la peticion
+        url: `${window.urlproyecto}/Encuestas/DeletePregunta`,
+        //Tipo de petición
+        type: "PUT",
+        //Datos que se enviaran a la llamada
+        data: { id, encuestaId, seccionId },
+        //Accion al comenzar la carga de la peticion AJAX.
+        beforeSend: function () {
+            //Aqui regularmente se implementa un loading.
+        }
+    }).done(function (data) {
+        //Se ejecuta cuando la peticion ha sido exitosa. 
+        //data es la respuesta que se recibe.
+        $(boton).closest("tr").remove();
+        $("#modal_PreguntaEliminar").modal("hide");
+        if ($("#table_SeccionPregunta tbody").find(".fila_Pregunta").length == 0) {
+            var item = ` <tr class="fila_SinPregunta">
+                        <td colspan="7" class="text-center">
+                            <h6>No se han encontrado Preguntas</h6>
+                        </td>
+                    </tr>`;
+            $("#table_SeccionPregunta tbody").html(item);
+        }
+
+    }).fail(function () {
+        //Se ejecuta cuando la peticion ha regresado algun error.
+        GenerarAlerta(enum_MessageAlertType.Danger, "Ocurrió un error al tratar de eliminar la pregunta.");
+    }).always(function () {
+        //Se ejecuta al final de la peticion sea exitosa o no.
+    });
+}
+
 
 //#endregion

@@ -21,7 +21,7 @@ namespace EncuestasUABC.Enumerador
         UnicaOpcion,
         Condicional,
         Matriz,
-        SubPregunta
+        SelectList
     }
 
     public enum MessageAlertType

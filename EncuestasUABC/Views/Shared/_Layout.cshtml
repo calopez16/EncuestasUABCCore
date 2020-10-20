@@ -1,10 +1,8 @@
-﻿@using EncuestasUABC.ViewModels;
-@using EncuestasUABC.Enumerador;
+﻿@using EncuestasUABC.Enumerador;
 @using EncuestasUABC.Utilidades;
-@using EncuestasUABC.Extensions;
+@using EncuestasUABC.ViewModels;
+@{UsuarioSessionInfoViewModel usuarioInfo = HttpContext.GetUsuarioInfoViewModel(); }
 
-@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
-@{UsuarioInfoViewModel usuarioInfo = HttpContextAccessor.HttpContext.GetUsuarioInfoViewModel(); }
 
 <!DOCTYPE html>
 <html lang="es">
@@ -18,7 +16,9 @@
 
     <!--Plugins Styles-->
     <link rel="stylesheet" href="~/lib/DataTables/datatables.bootstrap4.css" />
-    <link rel="stylesheet" type="text/css" href="~/lib/easyEditor/easyeditor.css" />
+    <link rel="stylesheet" href="~/lib/selec2/css/select2.css" />
+    <link rel="stylesheet" href="~/lib/selec2/css/select2-bootstrap.css" />
+
 
     <!--Site style-->
     <link rel="stylesheet" href="~/css/site.css" />
@@ -27,80 +27,46 @@
     <!--Jquery-->
     <script type="text/javascript" src="~/lib/jquery/jquery.js"></script>
 
+    <script type="text/javascript" src="~/lib/selec2/js/select2.js"></script>
+
+
 </head>
 <body class="fixed-navbar">
-    @{var url = HttpContextAccessor.HttpContext.Request.Scheme + "://" + HttpContextAccessor.HttpContext.Request.Host + HttpContextAccessor.HttpContext.Request.PathBase; }
+    @{var url = HttpContext.HttpContext.Request.Scheme + "://" + HttpContext.HttpContext.Request.Host + HttpContext.HttpContext.Request.PathBase; }
     <script type="text/javascript">
             window.urlproyecto='@url';
     </script>
     <div class="loader-container">
         <div class="loader"></div>
     </div>
-    <!--Double navigation-->
-    <header>
-        <!-- Image and text -->
-        <nav class="navbar navbar-light bg-primary menu-principal-nav" style="position:fixed;width:100%;background:#ddeff9">
-            <div class="form-row w-100 d-flex justify-content-between">
-                <div class="col-2">
-                    <button type="button" class="btn btn-light bmd-btn-fab float-left text-primary btn_Menu btn_MenuAbrir">
-                        <i class="material-icons md-24">menu</i>
-                    </button>
-                </div>
-                <div class="col-8 d-flex justify-content-end">
-                    <ul class="nav nav-pills">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                                <i class="material-icons md-48 text-light float-left mr-3" style="margin-top:-15px">account_circle</i>
-                                @usuarioInfo.NombreCompleto
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a asp-action="Perfil" asp-controller="Account" class="dropdown-item">
-                                    <i class="material-icons float-left mr-2">person</i>
-                                    Perfil
-                                </a>
-                                <a asp-action="Ayuda" asp-controller="Home" class="dropdown-item">
-                                    <i class="material-icons float-left mr-2">support</i>
-                                    Ayuda
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="##" onclick="$('#form_Logout').submit()">
-                                    <i class="material-icons float-left mr-2">exit_to_app</i>
-                                    Cerrar Sesión
-                                </a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        <nav class="menu-principal">
-            <div class="menu-opciones p-0 bg-light shadow">
-                <nav class="navbar navbar-light">
-                    <div class="row">
-                        <div class="col-12">
-                            <h4 class="text-primary mt-2 text-center">
-                                <a asp-action="Index" asp-controller="Home" class="btn btn-lg">
-                                    <img src="~/img/EncuestasUABCLogo.svg" style="width:40px" />
-                                    Encuestas UABC
-                                </a>
-                            </h4>
-                        </div>
-                        <div class="col-12">
-                            <hr />
-                        </div>
-                        <div class="col-3">
-                            <i class="material-icons md-74 text-primary">account_circle</i>
-                        </div>
-                        <div class="col-9 mt-2">
-                            <h5>@usuarioInfo.NombreCompleto</h5>
-                            <p>@usuarioInfo.Rol</p>
-                        </div>
-                    </div>
-                </nav>
+
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar -->
+        <div class="bg-light border-right" id="sidebar-wrapper">
+            <div class="list-group list-group-flush">
                 <div class="row">
                     <div class="col-12">
+                        <h4 class="text-primary mt-2 text-center">
+                            <img src="~/img/Logo-icon.png" style="width:40px" />
+                            Sistema Recibos
+                        </h4>
+                        <hr />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <span class="text-primary">@usuarioInfo.Rol</span>
+                        <hr />
+                    </div>
+                    <div class="col-12">
                         <ul class="opciones">
-                            @foreach (var permiso in usuarioInfo.Permisos)
+                            <li>
+                                <a asp-action="Perfil" asp-controller="Account" class="opciones-item btn btn-primary text-left p-3 pl-4 m-0">
+                                    <i class="material-icons float-left clearfix">person</i>
+                                    <span class="pl-3">Perfil</span>
+                                </a>
+                            </li>
+                            @foreach (var permiso in usuarioInfo.PermisosMenu)
                             {
                                 <li>
                                     @if (!permiso.PermisosHijos.Any())
@@ -138,8 +104,6 @@
                     </div>
                     <div class="col-12">
                         <hr />
-                    </div>
-                    <div class="col-12">
                         <ul class="opciones">
                             <li>
                                 <a class="opciones-item btn btn-primary text-left p-3 pl-4 m-0" href="##" onclick="$('#form_Logout').submit()">
@@ -149,36 +113,68 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="col-12 d-flex justify-content-center">
-                        <button type="button" class="btn btn-primary bmd-btn-fab text-light btn_Menu btn_MenuCerrar">
-                            <i class="material-icons">menu_open</i>
-                        </button>
-                    </div>
                 </div>
             </div>
-        </nav>
-        <div class="fondo-negro" style="display:none"></div>
-    </header>
-    <!--/.Double navigation-->
-    <!--Main layout-->
-    <main style="padding-top:110px;background:#f3f6fa">
-        <div class="container-fluid">
-            @RenderBody()
         </div>
-    </main>
-    <!--/Main layout-->
-    <!--Footer-->
-    <footer class="page-footer text-center text-md-left pt-4">
-        <!--Copyright-->
-        <div class="footer-copyright py-3 text-center">
-            <div class="container-fluid">
-                © @DateTime.Now.Year Copyright: Encuestas UABC
+        <!-- /#sidebar-wrapper -->
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <nav class="navbar navbar-expand-lg navbar-light bg-primary border-bottom shadow-none">
+                <div class="form-row w-100 d-flex justify-content-between">
+                    <div class="col-2">
+                        <button type="button" class="btn btn-light bmd-btn-fab float-left text-primary" id="menu-toggle">
+                            <i class="material-icons">menu</i>
+                        </button>
+                    </div>
+                    <div class="col-8 d-flex justify-content-end">
+                        <ul class="nav nav-pills">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                    <i class="material-icons md-48 text-light float-left mr-3" style="margin-top:-15px">account_circle</i>
+                                    @usuarioInfo.NombreCompleto
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a asp-action="Perfil" asp-controller="Account" class="dropdown-item">
+                                        <i class="material-icons float-left mr-2">person</i>
+                                        Perfil
+                                    </a>
+                                    <a asp-action="Ayuda" asp-controller="Home" class="dropdown-item">
+                                        <i class="material-icons float-left mr-2">support</i>
+                                        Ayuda
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="##" onclick="$('#form_Logout').submit()">
+                                        <i class="material-icons float-left mr-2">exit_to_app</i>
+                                        Cerrar Sesión
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                    </ul>
+                </div>
+            </nav>
+
+            <div class="container-fluid p-4">
+                @RenderBody()
+                <footer class="page-footer text-center text-md-left pt-4">
+                    <!--Copyright-->
+                    <div class="footer-copyright py-3 text-center">
+                        <div class="container-fluid">
+                            © @DateTime.Now.Year Copyright: Recibos
+                        </div>
+                    </div>
+                    <!--/.Copyright-->
+                </footer>
             </div>
         </div>
-        <!--/.Copyright-->
-    </footer>
-    <!--/.Footer-->
-    <!--PLUGINS-->
+        <!-- /#page-content-wrapper -->
+    </div>
+
     <script type="text/javascript" src="~/lib/jquery-ui/jquery-ui.min.js"></script>
     <script type="text/javascript" src="~/lib/DataTables/datatables.js"></script>
     <script type="text/javascript" src="~/lib/DataTables/datatables.bootstrap4.js"></script>

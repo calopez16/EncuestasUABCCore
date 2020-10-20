@@ -4,16 +4,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EncuestasUABC.AccesoDatos.Repository.Interfaces;
+using EncuestasUABC.Constantes;
 using EncuestasUABC.Enumerador;
 using EncuestasUABC.Models;
-using EncuestasUABC.Models.Catalogos;
 using EncuestasUABC.Models.Paginacion;
 using EncuestasUABC.Models.Relaciones;
+using EncuestasUABC.Models.Usuarios;
 using EncuestasUABC.Utilidades;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace EncuestasUABC.Controllers
@@ -76,35 +78,37 @@ namespace EncuestasUABC.Controllers
                 model.UserName = model.Email;
                 model.Activo = true;
 
-                if ((await _usuarioRepository.Get(model.UserName)) != null)
-                    throw new MessageAlertException(MessageAlertType.Information, string.Format(Constantes.Mensajes.USUARIOS_MSJ03, model.Email));
-                if (model.RolId == (int)RolId.Administrador)
+                if ((await _repository.FindBy<ApplicationUser>(x => x.Email.Equals(model.Email))).Any())
+                    throw new MessageAlertException(MessageAlertType.Information, string.Format(Mensajes.USUARIOS_MSJ03, model.Email));
+                if (model.Rol == RolesSistema.Administrador)
                 {
                     model.Alumno = null;
                     model.Administrativo = null;
                     model.Egresado = null;
                 }
-                else if (model.RolId == (int)RolId.Alumno)
+                else if (model.Rol.Equals(RolesSistema.Alumno))
                 {
                     model.Administrativo = null;
                     model.Egresado = null;
                 }
-                else if (model.RolId == (int)RolId.Egresado)
+                else if (model.Rol.Equals(RolesSistema.Egresado))
                 {
                     model.Alumno = null;
                     model.Administrativo = null;
                 }
                 else
                 {
-                    model.Administrativo = null;
+                    model.Alumno = null;
+                    model.Egresado = null;
                 }
                 var newApplicationUser = _mapper.Map<ApplicationUser>(model);
-
                 var result = await _usuarioRepository.Create(newApplicationUser);
                 if (!result.Succeeded)
-                    throw new MessageAlertException(MessageAlertType.Danger, Constantes.Mensajes.USUARIOS_MSJ05);
+                    throw new MessageAlertException(MessageAlertType.Danger, Mensajes.USUARIOS_MSJ05);
 
-                ShowMessageSuccess(string.Format(Constantes.Mensajes.USUARIOS_MSJ01, model.Email));
+                await _usuarioRepository.SetRolToUser(newApplicationUser, model.Rol);
+
+                ShowMessageSuccess(string.Format(Mensajes.USUARIOS_MSJ01, model.Email));
                 return RedirectToAction(nameof(Index));
             }
             catch (MessageAlertException ex)
@@ -134,8 +138,11 @@ namespace EncuestasUABC.Controllers
 
             try
             {
-                var user = await _usuarioRepository.Get(email);
+                var user = await _repository.FirstOrDefault<ApplicationUser>(x => x.Email.Equals(email), x => x.Administrativo, x => x.Alumno, x => x.Egresado);
+                if (user == null)
+                    throw new MessageAlertException(MessageAlertType.Warning, Mensajes.USUARIOS_MSJ07);
                 var userResult = _mapper.Map<ApplicationUserViewModel>(user);
+                userResult.Rol = await _usuarioRepository.GetRolByUser(user);
                 return View(userResult);
             }
             catch (MessageAlertException ex)
@@ -164,11 +171,40 @@ namespace EncuestasUABC.Controllers
 
             try
             {
-                var user = await _usuarioRepository.Get(model.UserName);
+                var user = await _repository.FirstOrDefault<ApplicationUser>(x => x.Email.Equals(model.Email));
+                if (user == null)
+                    throw new MessageAlertException(MessageAlertType.Warning, Mensajes.USUARIOS_MSJ07);
+                var userRol = await _usuarioRepository.GetRolByUser(user);
+
                 if (!model.Email.Equals(user.Email))
                 {
-                    if ((await _usuarioRepository.Get(model.Email)) != null)
-                        throw new MessageAlertException(MessageAlertType.Information, string.Format(Constantes.Mensajes.USUARIOS_MSJ03, model.Email));
+                    if ((await _repository.FindBy<ApplicationUser>(x => x.Email.Equals(model.Email))).Any())
+                        throw new MessageAlertException(MessageAlertType.Information, string.Format(Mensajes.USUARIOS_MSJ03, model.Email));
+                }
+
+                if (model.Rol == RolesSistema.Administrador)
+                {
+                    model.Alumno = null;
+                    model.Administrativo = null;
+                    model.Egresado = null;
+                }
+                else if (model.Rol.Equals(RolesSistema.Alumno))
+                {
+                    model.Administrativo = null;
+                    model.Egresado = null;
+                    user.Alumno = _mapper.Map<Alumno>(model.Alumno);
+                }
+                else if (model.Rol.Equals(RolesSistema.Egresado))
+                {
+                    model.Alumno = null;
+                    model.Administrativo = null;
+                    user.Egresado = _mapper.Map<Egresado>(model.Egresado);
+                }
+                else
+                {
+                    model.Alumno = null;
+                    model.Egresado = null;
+                    user.Administrativo = _mapper.Map<Administrativo>(model.Administrativo);
                 }
                 user.Nombre = model.Nombre;
                 user.ApellidoPaterno = model.ApellidoPaterno;
@@ -177,12 +213,21 @@ namespace EncuestasUABC.Controllers
                 user.UserName = model.Email;
                 user.NormalizedEmail = model.Email.ToUpper();
                 user.NormalizedUserName = model.Email.ToUpper();
-                user.RolId = model.RolId;
 
-                var resultUpdate = await _usuarioRepository.Update(user);
-                if (!resultUpdate.Succeeded)
-                    throw new MessageAlertException(MessageAlertType.Warning, string.Format(Constantes.Mensajes.USUARIOS_MSJ08, user.Email));
-                ShowMessageSuccess(string.Format(Constantes.Mensajes.USUARIOS_MSJ06, user.Email));
+                if (!(await _usuarioRepository.Update(user)).Succeeded)
+                    throw new MessageAlertException(MessageAlertType.Warning, string.Format(Mensajes.USUARIOS_MSJ08, user.Email));
+
+                if (!userRol.Equals(model.Rol))
+                {
+                    if ((await _usuarioRepository.RemoveRolOfUser(user, userRol)).Succeeded)
+                    {
+                        var resultSetRol = await _usuarioRepository.SetRolToUser(user, model.Rol);
+                        if (!(await _usuarioRepository.SetRolToUser(user, model.Rol)).Succeeded)
+                            throw new MessageAlertException(MessageAlertType.Warning, Mensajes.USUARIOS_MSJ13);
+                    }
+                }
+
+                ShowMessageSuccess(string.Format(Mensajes.USUARIOS_MSJ06, user.Email));
                 return RedirectToAction(nameof(Index));
             }
             catch (MessageAlertException ex)
@@ -212,9 +257,9 @@ namespace EncuestasUABC.Controllers
 
             try
             {
-                var permisos = await _usuarioRepository.AllPermisos();
-                var user = await _usuarioRepository.Get(email);
-                var permisosUsuario = await _usuarioRepository.AllPermisosByUser(user.Id);
+                var permisos = await _usuarioRepository.Permisos();
+                var user = await _repository.FirstOrDefault<ApplicationUser>(x => x.Email.Equals(email));
+                var permisosUsuario = await _usuarioRepository.PermisosByUser(user.Id);
                 ViewBag.PermisosUsuario = _mapper.Map<List<PermisoViewModel>>(permisosUsuario);
                 var permisosResult = _mapper.Map<List<PermisoViewModel>>(permisos);
                 ViewBag.Email = email;
@@ -241,23 +286,23 @@ namespace EncuestasUABC.Controllers
 
             try
             {
-                var user = await _usuarioRepository.Get(email);
+                var user = await _repository.FirstOrDefault<ApplicationUser>(x => x.Email.Equals(email));
                 List<UsuarioPermiso> usuarioPermisos = new List<UsuarioPermiso>();
                 foreach (var permisoid in idPermiso)
                 {
                     usuarioPermisos.Add(new UsuarioPermiso
                     {
                         PermisoId = permisoid,
-                        UsuarioId=user.Id
+                        UsuarioId = user.Id
                     });
                 }
 
                 user.Permisos = usuarioPermisos;
-                var result=await _usuarioRepository.Update(user);
-                if(result.Succeeded)
-                    ShowMessageSuccess(string.Format(Constantes.Mensajes.Usuarios_Msj17, user.Email));
+                var result = await _usuarioRepository.Update(user);
+                if (result.Succeeded)
+                    ShowMessageSuccess(string.Format(Mensajes.Usuarios_Msj17, user.Email));
                 else
-                    throw new MessageAlertException(MessageAlertType.Warning, string.Format(Constantes.Mensajes.Usuarios_Msj18, user.Email));
+                    throw new MessageAlertException(MessageAlertType.Warning, string.Format(Mensajes.Usuarios_Msj18, user.Email));
 
             }
             catch (MessageAlertException ex)
@@ -284,12 +329,12 @@ namespace EncuestasUABC.Controllers
             #region Delete
             try
             {
-                var user = await _usuarioRepository.Get(email);
+                var user = await _repository.FirstOrDefault<ApplicationUser>(x => x.Email.Equals(email));
                 user.Activo = false;
                 var resultUpdate = await _usuarioRepository.Update(user);
                 if (!resultUpdate.Succeeded)
-                    throw new MessageAlertException(MessageAlertType.Warning, string.Format(Constantes.Mensajes.USUARIOS_MSJ11, user.Email));
-                ShowMessageSuccess(string.Format(Constantes.Mensajes.USUARIOS_MSJ09, email));
+                    throw new MessageAlertException(MessageAlertType.Warning, string.Format(Mensajes.USUARIOS_MSJ11, user.Email));
+                ShowMessageSuccess(string.Format(Mensajes.USUARIOS_MSJ09, email));
             }
             catch (MessageAlertException ex)
             {
@@ -312,13 +357,13 @@ namespace EncuestasUABC.Controllers
             #region Restore
             try
             {
-                var user = await _usuarioRepository.Get(email);
+                var user = await _repository.FirstOrDefault<ApplicationUser>(x => x.Email.Equals(email));
                 user.Activo = true;
                 var resultUpdate = await _usuarioRepository.Update(user);
                 if (!resultUpdate.Succeeded)
-                    throw new MessageAlertException(MessageAlertType.Warning, string.Format(Constantes.Mensajes.USUARIOS_MSJ12, user.Email));
+                    throw new MessageAlertException(MessageAlertType.Warning, string.Format(Mensajes.USUARIOS_MSJ12, user.Email));
 
-                ShowMessageSuccess(string.Format(Constantes.Mensajes.USUARIOS_MSJ10, email));
+                ShowMessageSuccess(string.Format(Mensajes.USUARIOS_MSJ10, email));
 
             }
             catch (MessageAlertException ex)
@@ -340,21 +385,21 @@ namespace EncuestasUABC.Controllers
         #region CambiarContrasena
 
         [HttpPost]
-        public async Task<IActionResult> CambiarContrasena(string email, string contrasena)
+        public async Task<IActionResult> CambiarContrasena(CambiarContrasenaViewModel model)
         {
             #region CambiarContrasena
 
             try
             {
-                var user = await _usuarioRepository.Get(email);
-                var result = await _usuarioRepository.CambiarContrasena(user, contrasena);
+                var user = await _repository.FirstOrDefault<ApplicationUser>(x => x.Email.Equals(model.Email));
+                var result = await _usuarioRepository.CambiarContrasena(user, model.Password);
                 if (result.Succeeded)
                 {
-                    ShowMessageSuccess(Constantes.Mensajes.USUARIOS_MSJ16);
+                    ShowMessageSuccess(Mensajes.USUARIOS_MSJ16);
                 }
                 else
                 {
-                    throw new MessageAlertException(Enumerador.MessageAlertType.Warning, Constantes.Mensajes.USUARIOS_MSJ15);
+                    throw new MessageAlertException(MessageAlertType.Warning, Mensajes.USUARIOS_MSJ15);
                 }
             }
             catch (MessageAlertException ex)
@@ -367,7 +412,7 @@ namespace EncuestasUABC.Controllers
                 _logger.LogError(ex.Message);
                 ShowMessageException(ex.Message);
             }
-            return RedirectToAction(nameof(Edit), new { email });
+            return RedirectToAction(nameof(Edit), new { model.Email });
             #endregion
         }
         #endregion
@@ -414,7 +459,7 @@ namespace EncuestasUABC.Controllers
         {
             #region Roles
 
-            ViewBag.Roles = new SelectList(await _repository.GetAll<Rol>(), "Id", "Descripcion");
+            ViewBag.Roles = new SelectList(await _roleManager.Roles.ToListAsync(), "Name", "Name");
 
             #endregion
         }
@@ -449,8 +494,8 @@ namespace EncuestasUABC.Controllers
                     else usuarios = usuarios.OrderByDescending(x => x.ApellidoMaterno).ToList();
                     break;
                 case 4:
-                    if (ordenacion.Equals("asc")) usuarios = usuarios.OrderBy(x => x.RolIdNavigation.Descripcion).ToList();
-                    else usuarios = usuarios.OrderByDescending(x => x.RolIdNavigation.Descripcion).ToList();
+                    if (ordenacion.Equals("asc")) usuarios = usuarios.OrderBy(x => x.Rol).ToList();
+                    else usuarios = usuarios.OrderByDescending(x => x.Rol).ToList();
                     break;
                 default:
                     usuarios = usuarios.OrderBy(x => x.UserName).ToList();

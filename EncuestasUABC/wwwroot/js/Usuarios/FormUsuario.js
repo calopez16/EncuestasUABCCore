@@ -22,13 +22,13 @@ $(document).ready(function () {
         $("#div_Maestro").hide();
         $("#div_Alumno").hide();
         $("#div_Egresado").hide();
-        var rolId = parseInt($(this).val());
-        if (rolId == enum_Roles.Administrativo || rolId == enum_Roles.Coordinador || rolId == enum_Roles.Tutor) {
+        var rolId = $(this).val();
+        if (rolId =="Administrativo") {
             $("#div_Maestro").show();
-        } else if (rolId == enum_Roles.Alumno) {
+        } else if (rolId =="Alumno") {
             $("#div_Alumno").show();
 
-        } else if (rolId == enum_Roles.Egresado) {
+        } else if (rolId == "Egresado") {
             $("#div_Egresado").show();
         }
     });

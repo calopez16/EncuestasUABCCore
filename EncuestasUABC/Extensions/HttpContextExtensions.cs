@@ -1,39 +1,51 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using EncuestasUABC.Models.Catalogos;
 using EncuestasUABC.ViewModels;
 using System.Collections.Generic;
-using System.Linq;
+using EncuestasUABC.Models;
 
-namespace EncuestasUABC.Extensions
+namespace EncuestasUABC
 {
     public static class HttpContextExtensions
     {
-        public static UsuarioInfoViewModel GetUsuarioInfoViewModel(this HttpContext httpContext)
+        public static UsuarioSessionInfoViewModel GetUsuarioInfoViewModel(this IHttpContextAccessor httpContextAssesor)
         {
             #region GetUsuarioInfoViewModel
-            UsuarioInfoViewModel usuarioInfo = new UsuarioInfoViewModel();
-            string usuarioInfoJson = httpContext.Session.GetString("UsuarioInfo");
+            UsuarioSessionInfoViewModel usuarioInfo = new UsuarioSessionInfoViewModel();
+            string usuarioInfoJson = httpContextAssesor.HttpContext.Session.GetString("UsuarioInfo");
             if (!string.IsNullOrEmpty(usuarioInfoJson))
             {
-                usuarioInfo = JsonConvert.DeserializeObject<UsuarioInfoViewModel>(httpContext.Session.GetString("UsuarioInfo"));
+                usuarioInfo = JsonConvert.DeserializeObject<UsuarioSessionInfoViewModel>(httpContextAssesor.HttpContext.Session.GetString("UsuarioInfo"));
             }
             #endregion
             return usuarioInfo;
         }
 
-        public static List<Permiso> GetUsuarioPermisosMenu(this HttpContext httpContext)
+        public static List<PermisoViewModel> GetUsuarioPermisosMenu(this IHttpContextAccessor httpContextAssesor)
         {
             #region GetUsuarioInfoViewModel
-            List<Permiso> permiso = new List<Permiso>();
-            string usuarioInfoJson = httpContext.Session.GetString("UsuarioInfo");
+            List<PermisoViewModel> permiso = new List<PermisoViewModel>();
+            string usuarioInfoJson = httpContextAssesor.HttpContext.Session.GetString("UsuarioInfo");
             if (!string.IsNullOrEmpty(usuarioInfoJson))
             {
-                var usuario = JsonConvert.DeserializeObject<UsuarioInfoViewModel>(httpContext.Session.GetString("UsuarioInfo"));
-                permiso = usuario.Permisos.Where(x=>x.Menu).ToList();
+                var usuario = JsonConvert.DeserializeObject<UsuarioSessionInfoViewModel>(httpContextAssesor.HttpContext.Session.GetString("UsuarioInfo"));
+                permiso = usuario.PermisosMenu;
             }
             #endregion
             return permiso;
+        }
+
+        public static string GetUsuarioId(this IHttpContextAccessor httpContextAssesor)
+        {
+            #region GetUsuarioInfoViewModel
+            UsuarioSessionInfoViewModel usuarioInfo = new UsuarioSessionInfoViewModel();
+            string usuarioInfoJson = httpContextAssesor.HttpContext.Session.GetString("UsuarioInfo");
+            if (!string.IsNullOrEmpty(usuarioInfoJson))
+            {
+                usuarioInfo = JsonConvert.DeserializeObject<UsuarioSessionInfoViewModel>(httpContextAssesor.HttpContext.Session.GetString("UsuarioInfo"));
+            }
+            #endregion
+            return usuarioInfo.Id;
         }
     }
 }

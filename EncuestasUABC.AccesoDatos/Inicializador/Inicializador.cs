@@ -34,21 +34,32 @@ namespace EncuestasUABC.AccesoDatos.Inicializador
             {
             }
 
-            if (_context.ApplicationUser.Any(x => x.Email.Equals(Defaults.AdminEmail))) return;        
-
-            _userManager.CreateAsync(new ApplicationUser
+            if (!_context.Roles.Any(x => x.Name.Equals(RolesSistema.Administrador)))
             {
-                UserName = Defaults.AdminEmail,
-                Email = Defaults.AdminEmail,
-                EmailConfirmed = true,
-                Nombre = "Admin",
-                ApellidoPaterno="Admin",
-                ApellidoMaterno="Admin",
-                Activo =true,
-                RolId=(int)RolId.Administrador
+                _roleManager.CreateAsync(new IdentityRole(RolesSistema.Administrador)).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole(RolesSistema.Administrativo)).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole(RolesSistema.Alumno)).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole(RolesSistema.Egresado)).GetAwaiter().GetResult();
+            }
+            if (!_context.ApplicationUser.Any(x => x.UserName.Equals(Defaults.AdminEmail)))
+            {
+                _userManager.CreateAsync(new ApplicationUser
+                {
+                    UserName = Defaults.AdminEmail,
+                    Email = Defaults.AdminEmail,
+                    EmailConfirmed = true,
+                    Nombre = "Admin",
+                    ApellidoPaterno = "Admin",
+                    ApellidoMaterno = "Admin",
+                    Activo = true
+                }, Defaults.AdminPass).GetAwaiter().GetResult();
 
-            }, "Admin123!").GetAwaiter().GetResult();
-          
+                ApplicationUser usuario = _context.ApplicationUser
+                    .FirstOrDefault(x => x.Email.Equals(Defaults.AdminEmail));
+
+                _userManager.AddToRoleAsync(usuario, RolesSistema.Administrador).GetAwaiter().GetResult();
+            }
+
         }
     }
 }

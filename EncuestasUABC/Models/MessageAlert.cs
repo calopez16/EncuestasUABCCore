@@ -1,10 +1,4 @@
-﻿using EncuestasUABC.Enumerador;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace EncuestasUABC.Models
+﻿namespace EncuestasUABC.Models
 {
     public class MessageAlert
     {

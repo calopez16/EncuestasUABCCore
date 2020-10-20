@@ -94,28 +94,28 @@
                                     <i class="material-icons text-primary">done</i>
                                 }
                             </td>
-                        <td style="width:40px">
-                            <span class="btn-group-sm">
-                                <button class="btn btn-info bmd-btn-fab btn_Editar" data-id="@pregunta.Id" data-toggle="tooltip" data-placement="bottom" title="Editar pregunta">
-                                    <i class="material-icons">edit</i>
-                                </button>
-                            </span>
-                        </td>
-                        <td style="width:40px">
-                            <span class="btn-group-sm">
-                                <button class="btn btn-danger bmd-btn-fab btn_Eliminar" data-id="@pregunta.Id" data-toggle="tooltip" data-placement="bottom" title="Eliminar pregunta">
-                                    <i class="material-icons">delete</i>
-                                </button>
-                            </span>
-                        </td>
-                    </tr>
+                            <td style="width:40px">
+                                <span class="btn-group-sm">
+                                    <button class="btn btn-info bmd-btn-fab btn_Editar" data-id="@pregunta.Id" data-toggle="tooltip" data-placement="bottom" title="Editar pregunta">
+                                        <i class="material-icons">edit</i>
+                                    </button>
+                                </span>
+                            </td>
+                            <td style="width:40px">
+                                <span class="btn-group-sm">
+                                    <button class="btn btn-danger bmd-btn-fab btn_Eliminar" data-id="@pregunta.Id" data-descripcion="@pregunta.Descripcion" data-toggle="tooltip" data-placement="bottom" title="Eliminar pregunta">
+                                        <i class="material-icons">delete</i>
+                                    </button>
+                                </span>
+                            </td>
+                        </tr>
 
-                }
+                    }
                 }
                 else
                 {
                     <tr class="fila_SinPregunta">
-                        <td colspan="5" class="text-center">
+                        <td colspan="7" class="text-center">
                             <h6>No se han encontrado Preguntas</h6>
                         </td>
                     </tr>
@@ -125,6 +125,7 @@
     </div>
 </div>
 <partial name="~/Views/Encuestas/PartialViews/_ModalPreguntaCrear.cshtml" model="new EncuestaPreguntaViewModel {EncuestaId=Model.EncuestaId,EncuestaSeccionId=Model.Id }" />
+<partial name="~/Views/Encuestas/PartialViews/_ModalPreguntaEliminar.cshtml" />
 
 <script type="text/javascript" src="~/js/Encuestas/EditarSeccion.js"></script>
 <script type="text/javascript">

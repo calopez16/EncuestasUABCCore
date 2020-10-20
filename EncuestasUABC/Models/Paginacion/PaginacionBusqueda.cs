@@ -1,5 +1,4 @@
 ﻿
-
 namespace EncuestasUABC.Models.Paginacion
 {
     public class PaginacionBusqueda

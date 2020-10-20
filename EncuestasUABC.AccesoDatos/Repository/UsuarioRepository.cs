@@ -29,53 +29,27 @@ namespace EncuestasUABC.AccesoDatos.Repositories
             if (_userManager != null)
                 _userManager.Dispose();
         }
-
-        public async Task<List<ApplicationUser>> GetAll()
+        public async Task<List<ApplicationUser>> GetAll(string rol = null, bool activo = true)
         {
             #region GetAll
-
-            return await _context.ApplicationUser
-                .Include(x => x.RolIdNavigation)
-                .Where(x => x.Activo && !x.Email.Equals(Defaults.AdminEmail)).ToListAsync();
-
-            #endregion
-        }
-
-        public async Task<List<ApplicationUser>> GetAll(string rol)
-        {
-            #region GetAll
-            return await _context.ApplicationUser
-                        .Include(x => x.RolIdNavigation)
-                        .Where(x => x.Activo && x.RolIdNavigation.Descripcion.Equals(rol) && !x.Email.Equals(Defaults.AdminEmail)).ToListAsync();
-            #endregion
-        }
-
-        public async Task<ApplicationUser> GetById(string id)
-        {
-            #region Get
-
-            return await _context.ApplicationUser
-                 .Include(x => x.Alumno)
-                 .Include(x => x.Egresado)
-                 .Include(x => x.Administrativo)
-                 .Include(x => x.RolIdNavigation)
-                 .FirstOrDefaultAsync(x => x.Id.Equals(id));
-
-            #endregion
-        }
-
-        public async Task<ApplicationUser> Get(string userName)
-        {
-            #region Get
-
-            return await _context.ApplicationUser
-                 .Include(x => x.Alumno).ThenInclude(x => x.CarreraIdNavigation).ThenInclude(x => x.UnidadAcademicaIdNavigation).ThenInclude(x => x.CampusIdNavigation)
-                 .Include(x => x.Egresado)
-                 .Include(x => x.Administrativo)
-                 .Include(x => x.RolIdNavigation)
-                 .Include(x => x.Permisos)
-                  .Where(x => x.UserName.Equals(userName))
-                  .FirstOrDefaultAsync();
+            var usuarios = await (from user in _context.ApplicationUser
+                                  join userRoles in _context.UserRoles on user.Id equals userRoles.UserId
+                                  join role in _context.Roles on userRoles.RoleId equals role.Id
+                                  where user.Activo == activo && !user.Email.Equals(Defaults.AdminEmail)
+                                  select new ApplicationUser
+                                  {
+                                      Id = user.Id,
+                                      Email = user.Email,
+                                      Nombre = user.Nombre,
+                                      ApellidoPaterno = user.ApellidoPaterno,
+                                      ApellidoMaterno = user.ApellidoMaterno,
+                                      UserName = user.UserName,
+                                      Rol = role.Name
+                                  })
+                                    .ToListAsync();
+            if (!string.IsNullOrEmpty(rol))
+                usuarios = usuarios.Where(x => x.Rol.Equals(rol)).ToList();
+            return usuarios;
 
             #endregion
         }
@@ -87,7 +61,34 @@ namespace EncuestasUABC.AccesoDatos.Repositories
             return await _userManager.CreateAsync(user, Defaults.Contrasena);
 
             #endregion
-        }  
+        }
+
+        public async Task<string> GetRolByUser(ApplicationUser user)
+        {
+            #region GetRolByUser
+
+            return (await _userManager.GetRolesAsync(user)).FirstOrDefault();
+
+            #endregion
+        }
+
+        public async Task<IdentityResult> SetRolToUser(ApplicationUser user, string rol)
+        {
+            #region SetRolToUser
+
+            return await _userManager.AddToRoleAsync(user, rol);
+
+            #endregion
+        }
+
+        public async Task<IdentityResult> RemoveRolOfUser(ApplicationUser user, string rol)
+        {
+            #region RemoveRolOfUser
+
+            return await _userManager.RemoveFromRoleAsync(user, rol);
+
+            #endregion
+        }
 
         public async Task<IdentityResult> Update(ApplicationUser user)
         {
@@ -97,6 +98,7 @@ namespace EncuestasUABC.AccesoDatos.Repositories
 
             #endregion
         }
+
         public async Task<IdentityResult> CambiarContrasena(ApplicationUser user, string nuevaContrasena)
         {
             #region CambiarContrasena
@@ -114,36 +116,28 @@ namespace EncuestasUABC.AccesoDatos.Repositories
 
             #endregion
         }
-        public async Task<List<Permiso>> PermisosUsuario(string userId)
+
+        public async Task<List<Permiso>> PermisosByUser(string userId)
         {
-            #region PermisosUsuario
-            return await _context.UsuariosPermisos
+            #region PermisosAll
+            var permisos = await _context.UsuariosPermisos
                 .Include(x => x.PermisoIdNavigation)
-                .Include(x => x.PermisoIdNavigation.PermisosHijos)
-                .Where(x => x.UsuarioId.Equals(userId) && !x.PermisoIdNavigation.PermisoIdPadre.HasValue)
-                .OrderBy(x => x.PermisoIdNavigation.Descripcion)
-                .Select(x => x.PermisoIdNavigation).ToListAsync();
-            #endregion
-        }
-        public async Task<List<Permiso>> AllPermisosByUser(string userId)
-        {
-            #region AllPermisosByUser
-            return await _context.UsuariosPermisos
                 .Where(x => x.UsuarioId.Equals(userId))
+                .OrderBy(x => x.PermisoIdNavigation.Descripcion)
                 .Select(x => x.PermisoIdNavigation)
                 .ToListAsync();
+            return permisos;
             #endregion
         }
 
-        public async Task<List<Permiso>> AllPermisos()
+        public async Task<List<Permiso>> Permisos()
         {
-            #region AllPermisos
+            #region Permisos
             return await _context.Permisos
                 .Include(x => x.PermisosHijos)
                 .ThenInclude(x => x.PermisosHijos)
-                .Where(x => !x.PermisoIdPadre.HasValue)
-                .OrderBy(x => x.PermisoIdPadreNavigation.Descripcion)
-                .ToListAsync();
+                .ThenInclude(x => x.PermisosHijos)
+                .Where(x => x.Menu && !x.PermisoIdPadre.HasValue).ToListAsync();
             #endregion
         }
     }
