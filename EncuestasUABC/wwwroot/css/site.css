@@ -104,3 +104,11 @@ a.bmd-btn-fab {
 .select2-container {
     min-width: 20px !important;
 }
+
+.tooltip {
+    top: 0;
+}
+
+.select2-container {
+    width: 100% !important;
+}

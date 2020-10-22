@@ -14,6 +14,8 @@ using EncuestasUABC.Enumerador;
 using EncuestasUABC.Models.ViewModels;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using EncuestasUABC.Models.SelectViewModel;
+using Microsoft.IdentityModel.Tokens;
 
 namespace EncuestasUABC.Controllers
 {
@@ -518,7 +520,7 @@ namespace EncuestasUABC.Controllers
         #region ELIMINAR PREGUNTA
 
         [HttpPut]
-        public async Task<IActionResult> DeletePregunta(int id, int encuestaId,int seccionId)
+        public async Task<IActionResult> DeletePregunta(int id, int encuestaId, int seccionId)
         {
             #region DeletePregunta
             try
@@ -541,6 +543,54 @@ namespace EncuestasUABC.Controllers
             #endregion
         }
 
+        #endregion
+
+        #region SELECTCARRERAS
+        [HttpGet]
+        public async Task<IActionResult> Carreras(SelectViewModel selectViewModel)
+        {
+            #region Carreras
+            try
+            {
+                var carreras = await _repository
+                    .FindBy<Carrera>(null, x => x.OrderBy(x => x.Nombre), x => x.UnidadAcademicaIdNavigation, x => x.UnidadAcademicaIdNavigation.CampusIdNavigation);
+                int totalRegistros = carreras.Count();
+                if (!string.IsNullOrEmpty(selectViewModel.search))
+                {
+                    selectViewModel.search = selectViewModel.search.ToLower();
+                    carreras = carreras.Where(x =>
+                                              x.Nombre.ToLower().Contains(selectViewModel.search)
+                                              || x.UnidadAcademicaIdNavigation.Nombre.ToLower().Contains(selectViewModel.search)
+                                              || x.UnidadAcademicaIdNavigation.CampusIdNavigation.Nombre.ToLower().Contains(selectViewModel.search)).ToList();
+                    totalRegistros = carreras.Count();
+                }
+
+
+                var skip = (selectViewModel.page * selectViewModel.perPage) - selectViewModel.perPage;
+                return Ok(new
+                {
+                    results = carreras.Skip(skip).Take(selectViewModel.perPage).Select(x => new
+                    {
+                        x.Id,
+                        text = x.Nombre,
+                        unidadacademica = x.UnidadAcademicaIdNavigation.Nombre,
+                        campus = x.UnidadAcademicaIdNavigation.CampusIdNavigation.Nombre
+                    }),
+                    totalRegistros
+                });
+            }
+            catch (MessageAlertException ex)
+            {
+                _logger.LogInformation(ex.Message);
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest();
+            }
+            #endregion
+        }
         #endregion
 
         #endregion

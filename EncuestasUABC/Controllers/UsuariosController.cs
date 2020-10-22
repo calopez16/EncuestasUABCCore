@@ -221,7 +221,6 @@ namespace EncuestasUABC.Controllers
                 {
                     if ((await _usuarioRepository.RemoveRolOfUser(user, userRol)).Succeeded)
                     {
-                        var resultSetRol = await _usuarioRepository.SetRolToUser(user, model.Rol);
                         if (!(await _usuarioRepository.SetRolToUser(user, model.Rol)).Succeeded)
                             throw new MessageAlertException(MessageAlertType.Warning, Mensajes.USUARIOS_MSJ13);
                     }
