@@ -10,5 +10,6 @@ namespace EncuestasUABC.Models.SelectViewModel
         public string search { get; set; }
         public int page { get; set; }
         public int perPage { get; set; }
+        public int id { get; set; }
     }
 }

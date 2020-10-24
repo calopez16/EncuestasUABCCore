@@ -142,6 +142,7 @@ $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
         }
     });
+
     $("#btn_CrearEncuesta").click(function () {
         $("#modal_EncuestaCrear").modal("show");
     });
@@ -189,11 +190,15 @@ $(document).ready(function () {
         });
     });
 
-    $('#CarreraId').select2({
+    cargarSelectCarreras();
+});
+
+function cargarSelectCarreras() {
+    $('.select_Carrera').select2({
         delay: 250,
         language: "es",
         ajax: {
-            url: `${window.urlproyecto}/Encuestas/Carreras`,
+            url: `${window.urlproyecto}/Carrera/Select`,
             delay: 1000,
             //Tipo de petición http
             type: "GET",
@@ -201,7 +206,8 @@ $(document).ready(function () {
                 var query = {
                     search: params.term,
                     page: params.page || 1,
-                    perPage: 10
+                    perPage: 10,
+                    id: $(this).data("id")
                 }
                 // Query parameters will be ?search=[term]&page=[page]
                 return query;
@@ -221,26 +227,23 @@ $(document).ready(function () {
         templateSelection: formatRepoSelection
     });
 
-    $('#CarreraId').one('select2:open', function (e) {
+    $('.select_Carrera').one('select2:open', function (e) {
         $('input.select2-search__field').prop('placeholder', 'Buscar Campus / Unidad Academica / Carrera');
     });
+
     function formatRepo(repo) {
         if (repo.loading) {
             return repo.text;
         }
-
         var $container = $(`<div>
                             <h5>${repo.text}</h5>
                             <h6><strong>Unidad acad&eacute;mica: </strong>${repo.unidadacademica}</h6>
                             <h6><strong>Campus: </strong>${repo.campus}</h6>
                         </div>`);
-
         return $container;
     }
 
     function formatRepoSelection(repo) {
-
-        return repo.text;
+        return `${repo.text} ${repo.unidadacademica ? `/ ${repo.unidadacademica}` : ""} ${repo.campus ? `/ ${repo.campus}` : ""}`;
     }
-
-});
+}

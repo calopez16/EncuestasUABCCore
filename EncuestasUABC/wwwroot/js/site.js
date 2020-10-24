@@ -4,8 +4,21 @@
 // Write your JavaScript code.
 $(document).ready(() => {
     $('[data-toggle="tooltip"]').tooltip();
+
+    $('select').on('select2:open', function (e) {
+        $('.select2-dropdown').hide();
+        setTimeout(function () {
+            $('.select2-dropdown').slideDown(50, "easeInOutQuint");
+            $('input.select2-search__field').focus();
+        }, 50);
+    });
+
+   //#region SELECT DE CARRERAS
+
+    //#endregion
 });
 
 $(window).on("load", function () {
     $(".loader-container").fadeOut();
 });
+

@@ -38,12 +38,12 @@ namespace EncuestasUABC.Models
         public int Id { get; set; }
         public string UsuarioId { get; set; }
         public string Matricula { get; set; }
-        public int Semestre { get; set; }
+        public int? Semestre { get; set; }
         public string PeriodoIngreso { get; set; }
         [EmailAddress(ErrorMessage = "El correo no es válido")]
         public string CorreoAlterno { get; set; }
         public string Celular { get; set; }
-        public DateTime FechaNacimiento { get; set; }
+        public DateTime? FechaNacimiento { get; set; }
         public int? CarreraId { get; set; }
 
         public CarreraViewModel CarreraIdNavigation { get; set; }
