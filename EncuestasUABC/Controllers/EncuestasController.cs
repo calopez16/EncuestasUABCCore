@@ -426,7 +426,7 @@ namespace EncuestasUABC.Controllers
                     orden = preguntas.First().Orden + 1;
                 newPregunta.Orden = orden;
                 await _repository.Add<EncuestaPregunta>(newPregunta);
-                return Ok();
+                return Ok(newPregunta.Id);
             }
             catch (MessageAlertException ex)
             {

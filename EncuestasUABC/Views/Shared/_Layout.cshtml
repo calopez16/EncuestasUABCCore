@@ -2,12 +2,11 @@
 @using EncuestasUABC.Utilidades;
 @using EncuestasUABC.ViewModels;
 @{UsuarioSessionInfoViewModel usuarioInfo = HttpContext.GetUsuarioInfoViewModel(); }
-
-
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
     <title>@ViewData["Title"] - Encuestas UABC</title>
 
     <!-- Material Design -->
@@ -23,7 +22,7 @@
     <link rel="stylesheet" href="~/css/Menu.css" />
 
     <!--Jquery-->
-    <script type="text/javascript" src="~/lib/jquery/jquery.js"></script>
+    <script type="text/javascript" src="~/lib/jquery/jquery-3.5.1.min.js"></script>
     <script type="text/javascript" src="~/lib/selec2/js/select2.js"></script>
     <script type="text/javascript" src="~/lib/selec2/js/i18n/es.js"></script>
 
@@ -65,35 +64,35 @@
                             </li>
                             @foreach (var permiso in usuarioInfo.PermisosMenu)
                             {
-                                <li>
-                                    @if (!permiso.PermisosHijos.Any())
+                            <li>
+                                @if (!permiso.PermisosHijos.Any())
                                     {
 
-                                        <a class="opciones-item btn btn-primary text-left p-3 pl-4 m-0" href="@Url.Action(permiso.Action,permiso.Controller)">
-                                            <i class="material-icons float-left">@permiso.Icono</i>
-                                            <span class="pl-3" style="vertical-align:middle">@permiso.Descripcion</span>
-                                        </a>
+                                <a class="opciones-item btn btn-primary text-left p-3 pl-4 m-0" href="@Url.Action(permiso.Action,permiso.Controller)">
+                                    <i class="material-icons float-left">@permiso.Icono</i>
+                                    <span class="pl-3" style="vertical-align:middle">@permiso.Descripcion</span>
+                                </a>
                                     }
                                     else
                                     {
-                                        <a class="opciones-item btn btn-primary text-left p-3 pl-4">
-                                            <i class="material-icons float-left">@permiso.Icono</i>
-                                            <span class="pl-3">@permiso.Descripcion</span>
-                                            <i class="material-icons float-right">keyboard_arrow_down</i>
-                                        </a>
-                                        <ul style="display:none">
-                                            @foreach (var permisoHijo in permiso.PermisosHijos)
+                                <a class="opciones-item btn btn-primary text-left p-3 pl-4">
+                                    <i class="material-icons float-left">@permiso.Icono</i>
+                                    <span class="pl-3">@permiso.Descripcion</span>
+                                    <i class="material-icons float-right">keyboard_arrow_down</i>
+                                </a>
+                                <ul style="display:none">
+                                    @foreach (var permisoHijo in permiso.PermisosHijos)
                                             {
-                                                <li>
-                                                    <a class="sub-opciones-item btn btn-secondary text-left p-3 pl-4" href="@Url.Action(permisoHijo.Action,permisoHijo.Controller)">
-                                                        <i class="material-icons float-left">@permisoHijo.Icono</i>
-                                                        <span class="pl-3">@permisoHijo.Descripcion</span>
-                                                    </a>
-                                                </li>
+                                    <li>
+                                        <a class="sub-opciones-item btn btn-secondary text-left p-3 pl-4" href="@Url.Action(permisoHijo.Action,permisoHijo.Controller)">
+                                            <i class="material-icons float-left">@permisoHijo.Icono</i>
+                                            <span class="pl-3">@permisoHijo.Descripcion</span>
+                                        </a>
+                                    </li>
                                             }
-                                        </ul>
+                                </ul>
                                     }
-                                </li>
+                            </li>
                             }
                         </ul>
                         <form asp-action="Logout" asp-controller="Account" id="form_Logout">
@@ -103,7 +102,7 @@
                         <hr />
                         <ul class="opciones">
                             <li>
-                                <a class="opciones-item btn btn-primary text-left p-3 pl-4 m-0" href="##" onclick="$('#form_Logout').submit()">
+                                <a class="opciones-item btn btn-primary text-left p-3 pl-4 m-0" href="##" onclick="$('#form_Logout').submit();">
                                     <i class="material-icons float-left clearfix">exit_to_app</i>
                                     <span class="pl-3">Cerrar Sesión</span>
                                 </a>
@@ -140,7 +139,7 @@
                                         Ayuda
                                     </a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="##" onclick="$('#form_Logout').submit()">
+                                    <a class="dropdown-item" href="##" onclick="$('#form_Logout').submit();">
                                         <i class="material-icons float-left mr-2">exit_to_app</i>
                                         Cerrar Sesión
                                     </a>
@@ -171,17 +170,16 @@
         </div>
         <!-- /#page-content-wrapper -->
     </div>
+    <script type="text/javascript" src="~/lib/popper/umd/popper.js"></script>
+    <script type="text/javascript" src="~/lib/material-design/js/material-design.js"></script>
 
     <script type="text/javascript" src="~/lib/jquery-ui/jquery-ui.min.js"></script>
     <script type="text/javascript" src="~/lib/DataTables/datatables.js"></script>
     <script type="text/javascript" src="~/lib/DataTables/datatables.bootstrap4.js"></script>
-    <script type="text/javascript" src="~/lib/popper/umd/popper.js"></script>
-    <script type="text/javascript" src="~/lib/material-design/js/material-design.js"></script>
     <script type="text/javascript" src="~/lib/bootstrap-notify/bootstrap-notify.js"></script>
     <script type="text/javascript" src="~/lib/cookiejs/cookiejs.js"></script>
     <script type="text/javascript" src="~/lib/jquery-validation/jquery.validate.min.js"></script>
     <script type="text/javascript" src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
-
     <!--JS Site-->
     <script type="text/javascript" src="~/js/site.js"></script>
     <script type="text/javascript" src="~/js/Menu.js"></script>
@@ -197,7 +195,6 @@
     <script type="text/javascript">
         var enum_MessageAlertType = @(EnumHelper.EnumToString<MessageAlertType>());
     </script>
-    @RenderSection("Scripts", required: false)
 
 </body>
 </html>

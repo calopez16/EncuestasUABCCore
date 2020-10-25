@@ -40,7 +40,7 @@ $(document).ready(function () {
     $(".btn_PreguntaAgregar").click(function () {
         LimpiarCamposPreguntas();
         $("#div_tiposPregunta").show();
-        $("#div_PreguntaDescripcion").hide();
+        ocultarFormulariosPreguntas();
         $("#btn_RegresarPreguntaAgregar").hide();
         $("#btn_GuardarPreguntaAgregar").hide();
         $("#modal_PreguntaCrear").modal("show");
@@ -76,19 +76,90 @@ $(document).ready(function () {
     //#endregion
 
     //#region MODAL AGREGAR PREGUNTAS
+    $("#table_opciones tbody").sortable({ handle: '.ordenador' });
 
     $(".btn_PreguntaAbierta").click(function () {
         $("#div_tiposPregunta").hide();
-        $("#div_PreguntaDescripcion").show();
+        $("#div_PreguntaDescripcion").fadeIn();
         $("#h5_ModalTituloCrearPregunta").text("Crear pregunta abierta");
         $("#btn_RegresarPreguntaAgregar").show();
         $("#btn_GuardarPreguntaAgregar").show();
         $("#txt_DescripcionPregunta").focus();
         tipoPreguntaId = enum_TipoPregunta.Abierta;
     });
+
+    $(".btn_RespuestaUnica").click(function () {
+        $("#div_tiposPregunta").hide();
+        $("#div_PreguntaDescripcion").fadeIn();
+        $("#div_PreguntaRadioCheck").fadeIn();
+        $("#h5_ModalTituloCrearPregunta").html("Crear pregunta respuesta única");
+        $("#btn_RegresarPreguntaAgregar").show();
+        $("#btn_GuardarPreguntaAgregar").show();
+        $("#txt_DescripcionPregunta").focus();
+        tipoPreguntaId = enum_TipoPregunta.UnicaOpcion;
+    });
+    $(".btn_RespuestaMultiple").click(function () {
+        $("#div_tiposPregunta").hide();
+        $("#div_PreguntaDescripcion").fadeIn();
+        $("#div_PreguntaRadioCheck").fadeIn();
+        $("#h5_ModalTituloCrearPregunta").html("Crear pregunta respuesta múltiple");
+        $("#btn_RegresarPreguntaAgregar").show();
+        $("#btn_GuardarPreguntaAgregar").show();
+        $("#txt_DescripcionPregunta").focus();
+        tipoPreguntaId = enum_TipoPregunta.Multiple;
+    });
+    $("#btn_AgregarOpcion").click(function () {
+        var descripcionOpcion = $("#txt_DescripcionOpcion");
+        $("#span_DescripcionMsg").text("");
+        if (descripcionOpcion.val() == "") {
+            $("#span_DescripcionMsg").text("El campo Descripción es requerido");
+            return;
+        }
+        var item = `<tr class="tr_Opcion">
+                        <td class="ordenador" style="cursor:pointer;width:40px">
+                            <i class="material-icons text-secondary mt-2">
+                                drag_indicator
+                            </i>
+                        </td>
+                        <td>
+                            <input type="text" class="txt_DescripcionOpcion form-control" placeholder="Descripción" value="${descripcionOpcion.val()}"/>
+                            <input hidden class="txt_OpcionId" value="0"/>                                   
+                        </td>
+                        <td>
+                            <span class="btn-group-sm">
+                                <button type="button" class="btn btn-danger bmd-btn-fab btn_EliminarOpcion" data-toggle="tooltip" data-placement="bottom" title="Eliminar opción">
+                                    <i class="material-icons">remove</i>
+                                </button>
+                            </span>
+                        </td>
+                    </tr>`;
+        if (!$("#table_opciones").find(".tr_Opcion").length) {
+            $("#table_opciones tbody").html(item);
+        } else {
+            $("#table_opciones tbody").append(item);
+        }
+        descripcionOpcion.val("");
+        $('[data-toggle="tooltip"]').tooltip("hide");
+        $('[data-toggle="tooltip"]').tooltip();
+        $("#table_opciones tbody").sortable({ handle: '.ordenador' });
+        descripcionOpcion.focus();
+    });
+    $("#table_opciones tbody").on("click", ".btn_EliminarOpcion", function () {
+        $('[data-toggle="tooltip"]').tooltip("hide");
+        $(this).closest(".tr_Opcion").remove();
+        if ($("#table_opciones").find(".tr_Opcion").length < 1) {
+            var item = `<tr>
+                            <td colspan="3">
+                                <h6 class="text-center">No se han agregado opciones</h6>
+                            </td>
+                        </tr>`;
+            $("#table_opciones tbody").html(item);
+        }
+    });
+
     $("#btn_RegresarPreguntaAgregar").click(function () {
-        $("#div_tiposPregunta").show();
-        $("#div_PreguntaDescripcion").hide();
+        $("#div_tiposPregunta").fadeIn();
+        ocultarFormulariosPreguntas();
         $("#btn_RegresarPreguntaAgregar").hide();
         $("#btn_GuardarPreguntaAgregar").hide();
         LimpiarCamposPreguntas();
@@ -98,10 +169,21 @@ $(document).ready(function () {
 
 
     $("#btn_GuardarPreguntaAgregar").click(function () {
-        var isFormValid = $("#form_Pregunta").valid();
-        if (isFormValid) {
-            guardarPregunta();
+        if (!$("#form_Pregunta").valid())
+            return;
+        if (tipoPreguntaId == enum_TipoPregunta.Multiple || tipoPreguntaId == enum_TipoPregunta.UnicaOpcion) {
+            if (!$("#table_opciones").find(".tr_Opcion").length) {
+                GenerarAlerta(enum_MessageAlertType.Information, "Es necesario agregar por lo menos una opción")
+                return;
+            }
+        } else if (tipoPreguntaId == enum_TipoPregunta.Condicional) {
+            return;
+        } else if (tipoPreguntaId == enum_TipoPregunta.Matriz) {
+            return;
+        } else if (tipoPreguntaId == enum_TipoPregunta.SelectList) {
+            return;
         }
+        guardarPregunta();
     });
 
     //#endregion
@@ -110,7 +192,22 @@ $(document).ready(function () {
 function LimpiarCamposPreguntas() {
     $("#txt_DescripcionPregunta").val("");
     $("#check_Obligatoria").prop("checked", false);
+    var item = `<tr>
+                    <td colspan="3">
+                        <h6 class="text-center">No se han agregado opciones</h6>
+                    </td>
+                </tr>`;
+    $("#table_opciones tbody").html(item);
+    $("#txt_DescripcionOpcion").val("");
+    $("#span_DescripcionMsg").text("");
 }
+
+function ocultarFormulariosPreguntas() {
+    $("#div_PreguntaDescripcion").hide();
+    $("#div_PreguntaRadioCheck").hide();
+}
+
+
 //#region POST
 
 function cambiarSeccionNombre(id, encuestaId, nombre) {
@@ -151,7 +248,11 @@ function guardarPregunta() {
     data.append("Descripcion", descripcion);
     data.append("TipoPreguntaId", tipoPreguntaId);
     data.append("Obligatoria", obligatoria);
-
+    $(".tr_Opcion").each(function (i, item) {
+        var descripcionOpcion = $(".txt_DescripcionOpcion").eq(i).val();
+        data.append(`Opciones[${i}].Descripcion`, descripcionOpcion);
+        data.append(`Opciones[${i}].orden`, i + 1);
+    });
     //Llamada generica de petición AJAX  
     $.ajax({
         //Url de la peticion

@@ -8,12 +8,20 @@
     <div class="modal-dialog modal-lg" role="document">
         <form asp-action="Delete" class="modal-content" id="form_Pregunta">
             <div class="modal-header">
-                <h5 class="modal-title" id="h5_ModalTituloCrearPregunta">Elige el tipo de pregunta</h5>
+                <span class="btn-group-sm">
+                    <button type="button" class="btn btn-primary bmd-btn-fab" style="display:none" id="btn_RegresarPreguntaAgregar" data-toggle="tooltip" data-placement="bottom" title="Regresar">
+                        <i class="material-icons">navigate_before</i>
+                    </button>
+                </span>
+                <h5 class="modal-title ml-2" id="h5_ModalTituloCrearPregunta">Elige el tipo de pregunta</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <input class="position-absolute invisible" asp-for="EncuestaId" />
                 <input class="position-absolute invisible" asp-for="EncuestaSeccionId" />
+                <input class="position-absolute invisible" asp-for="TipoPreguntaId" />
+                <input class="position-absolute invisible" asp-for="Id" />
+
             </div>
             <div class="modal-body">
                 <div id="div_tiposPregunta">
@@ -27,7 +35,7 @@
                             </button>
                         </div>
                         <div class="col-6 col-md-4 mt-4">
-                            <button type="button" class="btn btn-primary btn-lg" style="min-width: 100%;min-height: 150px">
+                            <button type="button" class="btn btn-primary btn-lg btn_RespuestaUnica" style="min-width: 100%;min-height: 150px">
                                 <i class="material-icons md-36">
                                     radio_button_checked
                                 </i><br />
@@ -35,7 +43,7 @@
                             </button>
                         </div>
                         <div class="col-6 col-md-4 mt-4">
-                            <button type="button" class="btn btn-primary btn-lg" style="min-width:100%;min-height:150px">
+                            <button type="button" class="btn btn-primary btn-lg btn_RespuestaMultiple" style="min-width:100%;min-height:150px">
                                 <i class="material-icons md-36">
                                     check_box
                                 </i><br />
@@ -76,18 +84,18 @@
                     </div>
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" id="check_Obligatoria"> Pregunta obligatoria
+                            <input asp-for="Obligatoria" type="checkbox" checked="@Model.Obligatoria" id="check_Obligatoria" value="true"> Pregunta obligatoria
                         </label>
                     </div>
                 </div>
-                <div class="div_PreguntaRadioCheck" style="display:none">
+                <div id="div_PreguntaRadioCheck" style="display:none">
                     <h5 class="text-center">Opciones</h5>
-                    <table class="table">
+                    <table class="table" id="table_opciones">
                         <thead>
                             <tr>
-                                <th></th>
+                                <th style="width:40px"></th>
                                 <th>Descripción</th>
-                                <th></th>
+                                <th style="width:40px"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -96,14 +104,17 @@
                                     <h6 class="text-center">No se han agregado opciones</h6>
                                 </td>
                             </tr>
+                            
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td></td>
-                                <td></td>
+                                <td colspan="2">
+                                    <input type="text" class="form-control" placeholder="Descripción" id="txt_DescripcionOpcion"/>
+                                    <span class="text-danger" id="span_DescripcionMsg"></span>
+                                </td>
                                 <td style="width:40px">
                                     <span class="btn-group-sm">
-                                        <button class="btn btn-primary bmd-btn-fab btn_Editar" data-toggle="tooltip" data-placement="bottom" title="Agregar opción">
+                                        <button type="button" class="btn btn-primary bmd-btn-fab" id="btn_AgregarOpcion" data-toggle="tooltip" data-placement="bottom" title="Agregar opción">
                                             <i class="material-icons">add</i>
                                         </button>
                                     </span>
@@ -112,12 +123,8 @@
                         </tfoot>
                     </table>
                 </div>
-
-
-
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger btn-raised mr-2" style="display:none" id="btn_RegresarPreguntaAgregar">Regresar</button>
                 <button type="button" class="btn btn-success btn-raised" style="display:none" id="btn_GuardarPreguntaAgregar">Confirmar</button>
             </div>
         </form>
