@@ -5,8 +5,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <meta content="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Encuestas UABC</title>
 
     <!-- Material Design -->
@@ -23,8 +23,7 @@
 
     <!--Jquery-->
     <script type="text/javascript" src="~/lib/jquery/jquery-3.5.1.min.js"></script>
-    <script type="text/javascript" src="~/lib/selec2/js/select2.js"></script>
-    <script type="text/javascript" src="~/lib/selec2/js/i18n/es.js"></script>
+
 
 </head>
 <body class="fixed-navbar">
@@ -64,35 +63,35 @@
                             </li>
                             @foreach (var permiso in usuarioInfo.PermisosMenu)
                             {
-                            <li>
-                                @if (!permiso.PermisosHijos.Any())
+                                <li>
+                                    @if (!permiso.PermisosHijos.Any())
                                     {
 
-                                <a class="opciones-item btn btn-primary text-left p-3 pl-4 m-0" href="@Url.Action(permiso.Action,permiso.Controller)">
-                                    <i class="material-icons float-left">@permiso.Icono</i>
-                                    <span class="pl-3" style="vertical-align:middle">@permiso.Descripcion</span>
-                                </a>
+                                        <a class="opciones-item btn btn-primary text-left p-3 pl-4 m-0" href="@Url.Action(permiso.Action,permiso.Controller)">
+                                            <i class="material-icons float-left">@permiso.Icono</i>
+                                            <span class="pl-3" style="vertical-align:middle">@permiso.Descripcion</span>
+                                        </a>
                                     }
                                     else
                                     {
-                                <a class="opciones-item btn btn-primary text-left p-3 pl-4">
-                                    <i class="material-icons float-left">@permiso.Icono</i>
-                                    <span class="pl-3">@permiso.Descripcion</span>
-                                    <i class="material-icons float-right">keyboard_arrow_down</i>
-                                </a>
-                                <ul style="display:none">
-                                    @foreach (var permisoHijo in permiso.PermisosHijos)
-                                            {
-                                    <li>
-                                        <a class="sub-opciones-item btn btn-secondary text-left p-3 pl-4" href="@Url.Action(permisoHijo.Action,permisoHijo.Controller)">
-                                            <i class="material-icons float-left">@permisoHijo.Icono</i>
-                                            <span class="pl-3">@permisoHijo.Descripcion</span>
+                                        <a class="opciones-item btn btn-primary text-left p-3 pl-4">
+                                            <i class="material-icons float-left">@permiso.Icono</i>
+                                            <span class="pl-3">@permiso.Descripcion</span>
+                                            <i class="material-icons float-right">keyboard_arrow_down</i>
                                         </a>
-                                    </li>
+                                        <ul style="display:none">
+                                            @foreach (var permisoHijo in permiso.PermisosHijos)
+                                            {
+                                                <li>
+                                                    <a class="sub-opciones-item btn btn-secondary text-left p-3 pl-4" href="@Url.Action(permisoHijo.Action,permisoHijo.Controller)">
+                                                        <i class="material-icons float-left">@permisoHijo.Icono</i>
+                                                        <span class="pl-3">@permisoHijo.Descripcion</span>
+                                                    </a>
+                                                </li>
                                             }
-                                </ul>
+                                        </ul>
                                     }
-                            </li>
+                                </li>
                             }
                         </ul>
                         <form asp-action="Logout" asp-controller="Account" id="form_Logout">
@@ -180,6 +179,8 @@
     <script type="text/javascript" src="~/lib/cookiejs/cookiejs.js"></script>
     <script type="text/javascript" src="~/lib/jquery-validation/jquery.validate.min.js"></script>
     <script type="text/javascript" src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript" src="~/lib/selec2/js/select2.js"></script>
+    <script type="text/javascript" src="~/lib/selec2/js/i18n/es.js"></script>
     <!--JS Site-->
     <script type="text/javascript" src="~/js/site.js"></script>
     <script type="text/javascript" src="~/js/Menu.js"></script>
