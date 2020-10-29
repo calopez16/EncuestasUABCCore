@@ -1,4 +1,4 @@
-$(document).ready(function () {
+﻿$(document).ready(function () {
     cargarSelectCarreras();
     $("#btn_Guardar").click(function () {
         var isFormValid = true;
@@ -63,7 +63,7 @@ function cargarSelectCarreras() {
         ajax: {
             url: `${window.urlproyecto}/Carrera/Select`,
             delay: 1000,
-            //Tipo de petici�n http
+            //Tipo de petición http
             type: "GET",
             data: function (params) {
                 var query = {
@@ -90,7 +90,7 @@ function cargarSelectCarreras() {
     });
 
     $('#select_Carrera').one('select2:open', function (e) {
-        $('input.select2-search__field').prop('placeholder', 'Buscar Campus / Unidad Academica / Carrera');
+        $('input.select2-search__field').prop('placeholder', 'Buscar Campus / Unidad Académica / Carrera');
     });
 
     function formatRepo(repo) {

@@ -1,23 +1,23 @@
-
+Ôªø
 $(document).ready(function () {
     $('#table_Creadas').DataTable({
         // ServerSide Setups
         serverSide: true,
-        //Habilita la paginaciÛn
+        //Habilita la paginaci√≥n
         paging: true,
-        // PeticiÛn AJAX
+        // Petici√≥n AJAX
         ajax: {
-            //URL de donde se obtendr·n los datos paginados.
+            //URL de donde se obtendr√°n los datos paginados.
             url: `${window.urlproyecto}/Encuestas/CreadasPaginado`,
-            //Tipo de peticiÛn http
+            //Tipo de petici√≥n http
             type: "POST",
             //Tipo de formato que se enviara al servidor.
             contentType: "application/json",
-            //tipo de formato que regresar· el servidor.
+            //tipo de formato que regresar√° el servidor.
             dataType: "json",
             //data: Datos que se enviaran al controlador.
             data: function (filtros) {
-                //La variable "filtros" contiene los valores necesarios para la paginaciÛn.
+                //La variable "filtros" contiene los valores necesarios para la paginaci√≥n.
 
                 var datos = {
                     draw: filtros.draw,
@@ -29,17 +29,17 @@ $(document).ready(function () {
                     OtrosFiltros: []
                 };
 
-                //En caso de que se necesiten enviar m·s par·metros agregar alguna de las siguientes lÌneas.
+                //En caso de que se necesiten enviar m√°s par√°metros agregar alguna de las siguientes l√≠neas.
                 //datos.OtrosFiltros.push(OtroParametro); //Variable
                 //datos.OtrosFiltros.push("Valor1"); //string
                 //datos.OtrosFiltros.push(2); //Numero                
 
-                //La variable data se convierte a formato JSON y se retorna a "data" para enviarla a la peticiÛn.
+                //La variable data se convierte a formato JSON y se retorna a "data" para enviarla a la petici√≥n.
                 return JSON.stringify(datos);
             }
         },
         ordering: true,// Habilita el ordenamiento de la tabla.
-        //Se especifica la informaciÛn de las columnas
+        //Se especifica la informaci√≥n de las columnas
         columns: [
             {
                 data: 'estatusEncuestaId',
@@ -128,10 +128,10 @@ $(document).ready(function () {
         language: {
             processing: 'Cargando',
             search: "Buscar _INPUT_",
-            lengthMenu: "Elementos por p&#225;gina:  _MENU_",
+            lengthMenu: "Elementos por p√°gina:  _MENU_",
             info: "Mostrando _START_ - _END_ de _TOTAL_ elementos",
             infoEmpty: "Mostrando _START_ - _END_ de _TOTAL_ elementos",
-            emptyTable: "No hay informaci&#243;n",
+            emptyTable: "No hay informaci√≥n",
             paginate: {
                 previous: "Anterior",
                 next: "Siguiente"
@@ -167,11 +167,11 @@ $(document).ready(function () {
         var id = parseInt($(this).data("id"));
         var activo = $(this).prop("checked");
         var data = `&id=${id}&activo=${activo}`;
-        //Llamada generica de peticiÛn AJAX  
+        //Llamada generica de petici√≥n AJAX  
         $.ajax({
             //Url de la peticion
             url: `${window.urlproyecto}/Encuestas/CambiarActivo`,
-            //Tipo de peticiÛn
+            //Tipo de petici√≥n
             type: "POST",
             //Datos que se enviaran a la llamada
             data: data,
@@ -200,7 +200,7 @@ function cargarSelectCarreras() {
         ajax: {
             url: `${window.urlproyecto}/Carrera/Select`,
             delay: 1000,
-            //Tipo de peticiÛn http
+            //Tipo de petici√≥n http
             type: "GET",
             data: function (params) {
                 var query = {
@@ -228,7 +228,7 @@ function cargarSelectCarreras() {
     });
 
     $('.select_Carrera').one('select2:open', function (e) {
-        $('input.select2-search__field').prop('placeholder', 'Buscar Campus / Unidad Academica / Carrera');
+        $('input.select2-search__field').prop('placeholder', 'Buscar Campus / Unidad Acad√©mica / Carrera');
     });
 
     function formatRepo(repo) {

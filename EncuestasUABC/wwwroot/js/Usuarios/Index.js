@@ -1,4 +1,4 @@
-
+Ôªø
 $(document).ready(function () {
     CargarUsuarios();
 });
@@ -7,21 +7,21 @@ function CargarUsuarios() {
     $('#table_Usuarios').DataTable({
         // ServerSide Setups
         serverSide: true,
-        //Habilita la paginaciÛn
+        //Habilita la paginaci√≥n
         paging: true,
-        // PeticiÛn AJAX
+        // Petici√≥n AJAX
         ajax: {
-            //URL de donde se obtendr·n los datos paginados.
+            //URL de donde se obtendr√°n los datos paginados.
             url: `${window.urlproyecto}/Usuarios/Paginado`,
-            //Tipo de peticiÛn http
+            //Tipo de petici√≥n http
             type: "POST",
             //Tipo de formato que se enviara al servidor.
             contentType: "application/json",
-            //tipo de formato que regresar· el servidor.
+            //tipo de formato que regresar√° el servidor.
             dataType: "json",
             //data: Datos que se enviaran al controlador.
             data: function (filtros) {
-                //La variable "filtros" contiene los valores necesarios para la paginaciÛn.
+                //La variable "filtros" contiene los valores necesarios para la paginaci√≥n.
 
                 var datos = {
                     draw: filtros.draw,
@@ -32,18 +32,18 @@ function CargarUsuarios() {
                     search: filtros.search,
                     OtrosFiltros: []
                 };
-                //En caso de que se necesiten enviar m·s par·metros agregar alguna de las siguientes lÌneas.
+                //En caso de que se necesiten enviar m√°s par√°metros agregar alguna de las siguientes l√≠neas.
                 //datos.OtrosFiltros.push(OtroParametro); //Variable
                 //datos.OtrosFiltros.push("Valor1"); //string
                 //datos.OtrosFiltros.push(2); //Numero                
 
-                //La variable data se convierte a formato JSON y se retorna a "data" para enviarla a la peticiÛn.
+                //La variable data se convierte a formato JSON y se retorna a "data" para enviarla a la petici√≥n.
                 return JSON.stringify(datos);
             }
         },
         ordering: true,// Habilita el ordenamiento de la tabla.
         searching: true,
-        //Se especifica la informaciÛn de las columnas
+        //Se especifica la informaci√≥n de las columnas
         columns: [
             {
                 data: 'userName',
@@ -109,10 +109,10 @@ function CargarUsuarios() {
         language: {
             processing: 'Cargando',
             search: "Buscar _INPUT_",
-            lengthMenu: "Elementos por p&#225;gina:  _MENU_",
+            lengthMenu: "Elementos por p√°gina:  _MENU_",
             info: "Mostrando _START_ - _END_ de _TOTAL_ elementos",
             infoEmpty: "Mostrando _START_ - _END_ de _TOTAL_ elementos",
-            emptyTable: "No hay informaci&#243;n",
+            emptyTable: "No hay informaci√≥n",
             paginate: {
                 previous: "Anterior",
                 next: "Siguiente"

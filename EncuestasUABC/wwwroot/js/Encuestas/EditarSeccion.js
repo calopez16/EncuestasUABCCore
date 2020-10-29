@@ -1,4 +1,4 @@
-const dateFormat = 'DD/MM/YYYY HH:mm:ss';
+ï»¿const dateFormat = 'DD/MM/YYYY HH:mm:ss';
 
 var seccionId = 0;
 var encuestaId = 0;
@@ -92,7 +92,7 @@ $(document).ready(function () {
         $("#div_tiposPregunta").hide();
         $("#div_PreguntaDescripcion").fadeIn();
         $("#div_PreguntaRadioCheck").fadeIn();
-        $("#h5_ModalTituloCrearPregunta").html("Crear pregunta respuesta única");
+        $("#h5_ModalTituloCrearPregunta").html("Crear pregunta respuesta Ãºnica");
         $("#btn_RegresarPreguntaAgregar").show();
         $("#btn_GuardarPreguntaAgregar").show();
         $("#txt_DescripcionPregunta").focus();
@@ -102,7 +102,7 @@ $(document).ready(function () {
         $("#div_tiposPregunta").hide();
         $("#div_PreguntaDescripcion").fadeIn();
         $("#div_PreguntaRadioCheck").fadeIn();
-        $("#h5_ModalTituloCrearPregunta").html("Crear pregunta respuesta múltiple");
+        $("#h5_ModalTituloCrearPregunta").html("Crear pregunta respuesta mÃºltiple");
         $("#btn_RegresarPreguntaAgregar").show();
         $("#btn_GuardarPreguntaAgregar").show();
         $("#txt_DescripcionPregunta").focus();
@@ -112,7 +112,7 @@ $(document).ready(function () {
         var descripcionOpcion = $("#txt_DescripcionOpcion");
         $("#span_DescripcionMsg").text("");
         if (descripcionOpcion.val() == "") {
-            $("#span_DescripcionMsg").text("El campo Descripción es requerido");
+            $("#span_DescripcionMsg").text("El campo DescripciÃ³n es requerido");
             return;
         }
         var item = `<tr class="tr_Opcion">
@@ -122,12 +122,12 @@ $(document).ready(function () {
                             </i>
                         </td>
                         <td>
-                            <input type="text" class="txt_DescripcionOpcion form-control" placeholder="Descripción" value="${descripcionOpcion.val()}"/>
+                            <input type="text" class="txt_DescripcionOpcion form-control" placeholder="DescripciÃ³n" value="${descripcionOpcion.val()}"/>
                             <input hidden class="txt_OpcionId" value="0"/>                                   
                         </td>
                         <td>
                             <span class="btn-group-sm">
-                                <button type="button" class="btn btn-danger bmd-btn-fab btn_EliminarOpcion" data-toggle="tooltip" data-placement="bottom" title="Eliminar opción">
+                                <button type="button" class="btn btn-danger bmd-btn-fab btn_EliminarOpcion" data-toggle="tooltip" data-placement="bottom" title="Eliminar opciÃ³n">
                                     <i class="material-icons">remove</i>
                                 </button>
                             </span>
@@ -173,7 +173,7 @@ $(document).ready(function () {
             return;
         if (tipoPreguntaId == enum_TipoPregunta.Multiple || tipoPreguntaId == enum_TipoPregunta.UnicaOpcion) {
             if (!$("#table_opciones").find(".tr_Opcion").length) {
-                GenerarAlerta(enum_MessageAlertType.Information, "Es necesario agregar por lo menos una opción")
+                GenerarAlerta(enum_MessageAlertType.Information, "Es necesario agregar por lo menos una opciÃ³n")
                 return;
             }
         } else if (tipoPreguntaId == enum_TipoPregunta.Condicional) {
@@ -211,11 +211,11 @@ function ocultarFormulariosPreguntas() {
 //#region POST
 
 function cambiarSeccionNombre(id, encuestaId, nombre) {
-    //Llamada generica de petición AJAX  
+    //Llamada generica de peticiÃ³n AJAX  
     $.ajax({
         //Url de la peticion
         url: `${window.urlproyecto}/Encuestas/CambiarSeccionNombre`,
-        //Tipo de petición
+        //Tipo de peticiÃ³n
         type: "POST",
         //Datos que se enviaran a la llamada
         data: { id, encuestaId, nombre },
@@ -232,7 +232,7 @@ function cambiarSeccionNombre(id, encuestaId, nombre) {
         $('[data-toggle="tooltip"]').tooltip("hide");
     }).fail(function () {
         //Se ejecuta cuando la peticion ha regresado algun error.
-        GenerarAlerta(enum_MessageAlertType.Danger, "Ocurrió un error al guarda el Nombre de la encuesta.");
+        GenerarAlerta(enum_MessageAlertType.Danger, "OcurriÃ³ un error al guarda el Nombre de la encuesta.");
         cargarEncuesta();
     }).always(function () {
         //Se ejecuta al final de la peticion sea exitosa o no.
@@ -253,11 +253,11 @@ function guardarPregunta() {
         data.append(`Opciones[${i}].Descripcion`, descripcionOpcion);
         data.append(`Opciones[${i}].orden`, i + 1);
     });
-    //Llamada generica de petición AJAX  
+    //Llamada generica de peticiÃ³n AJAX  
     $.ajax({
         //Url de la peticion
         url: `${window.urlproyecto}/Encuestas/CrearPregunta`,
-        //Tipo de petición
+        //Tipo de peticiÃ³n
         type: "POST",
         //Datos que se enviaran a la llamada
         data: data,
@@ -319,7 +319,7 @@ function guardarPregunta() {
 
     }).fail(function () {
         //Se ejecuta cuando la peticion ha regresado algun error.
-        GenerarAlerta(enum_MessageAlertType.Danger, "Ocurrió un error al crear la pregunta.");
+        GenerarAlerta(enum_MessageAlertType.Danger, "OcurriÃ³ un error al crear la pregunta.");
     }).always(function () {
         //Se ejecuta al final de la peticion sea exitosa o no.
     });
@@ -329,9 +329,9 @@ function getTipoPreguntaDescripcion(tipoPreguntaId) {
     if (tipoPreguntaId == enum_TipoPregunta.Abierta) {
         return "Abierta";
     } else if (tipoPreguntaId == enum_TipoPregunta.Multiple) {
-        return "Múltiple";
+        return "MÃºltiple";
     } else if (tipoPreguntaId == enum_TipoPregunta.UnicaOpcion) {
-        return "Única Opción";
+        return "Ãšnica OpciÃ³n";
     } else if (tipoPreguntaId == enum_TipoPregunta.Condicional) {
         return "Condicional";
     } else if (tipoPreguntaId == enum_TipoPregunta.Matriz) {
@@ -349,7 +349,7 @@ function eliminarPregunta(id, encuestaId, seccionId, boton) {
     $.ajax({
         //Url de la peticion
         url: `${window.urlproyecto}/Encuestas/DeletePregunta`,
-        //Tipo de petición
+        //Tipo de peticiÃ³n
         type: "PUT",
         //Datos que se enviaran a la llamada
         data: { id, encuestaId, seccionId },
@@ -373,7 +373,7 @@ function eliminarPregunta(id, encuestaId, seccionId, boton) {
 
     }).fail(function () {
         //Se ejecuta cuando la peticion ha regresado algun error.
-        GenerarAlerta(enum_MessageAlertType.Danger, "Ocurrió un error al tratar de eliminar la pregunta.");
+        GenerarAlerta(enum_MessageAlertType.Danger, "OcurriÃ³ un error al tratar de eliminar la pregunta.");
     }).always(function () {
         //Se ejecuta al final de la peticion sea exitosa o no.
     });

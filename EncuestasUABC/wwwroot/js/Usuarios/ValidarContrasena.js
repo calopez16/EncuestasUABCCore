@@ -1,4 +1,4 @@
-var contrasenaValida = false;
+Ôªøvar contrasenaValida = false;
 
 $(document).ready(function () {
     $("#txt_contrasena").keyup(function () {
@@ -16,25 +16,25 @@ function ContrasenaValida(validaContraAnterior = false) {
     $("#txt_confirmarContrasena").next().text("");
     if (validaContraAnterior) {
         if ($("#contrasenaActual").val() == "") {
-            $("#contrasenaActual").next().html("Ingresa la contrase&ntilde;a actual");
+            $("#contrasenaActual").next().html("Ingresa la contrase√±a actual");
             contrasenaValida = false;
         }
     }
     if ($("#txt_contrasena").val() == "") {
         $("#txt_contrasena").next().text("El campo es requerido");
         contrasenaValida = false;
-    } else if($("#txt_confirmarContrasena").val() == "") {
+    } else if ($("#txt_confirmarContrasena").val() == "") {
         $("#txt_confirmarContrasena").next().text("El campo es requerido");
         contrasenaValida = false;
     }
-   
+
     if (contrasenaValida)
         return true;
     else
         return false;
 }
 function ValidarContrasena() {
-   
+
     var pswd = $("#txt_contrasena").val();
     var pswdConfirm = $('#txt_confirmarContrasena').val();
     contrasenaValida = true;
@@ -63,7 +63,7 @@ function ValidarContrasena() {
     }
 
     //validate CaracterEspecial
-    if (!/^[ a-z0-9·ÈÌÛ˙¸Ò]*$/i.test(pswd)) {
+    if (!/^[ a-z0-9√°√©√≠√≥√∫√º√±]*$/i.test(pswd)) {
         $('#Caract').removeClass('d-none');
     } else {
         $('#Caract').addClass('d-none');
@@ -84,7 +84,7 @@ function ValidarContrasena() {
         $('#ContrasNoCoinciden').addClass('d-none');
         contrasenaValida = false;
     }
-   
+
     if (contrasenaValida) {
         $(".div_CaracteristicasContraAlert").removeClass("alert-warning");
         $(".div_CaracteristicasContraAlert").addClass("alert-success");

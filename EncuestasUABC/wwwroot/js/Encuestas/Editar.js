@@ -1,4 +1,4 @@
-const dateFormat = 'DD/MM/YYYY HH:mm:ss';
+ï»¿const dateFormat = 'DD/MM/YYYY HH:mm:ss';
 
 var encuestaId = 0;
 
@@ -66,7 +66,7 @@ $(document).ready(function () {
         $("#txt_CrearNombreSeccion").next().text("");
         if (isFormValid) {
             crearSeccion(encuestaId, nombre);
-        }      
+        }
     });
     //#endregion
 
@@ -84,29 +84,29 @@ $(document).ready(function () {
     $("#table_EncuestasSecciones tbody").on("click", ".btn_Editar", function () {
         encuestaId = parseInt($("#Id").val());
         var seccionId = $(this).data("id");
-        editarSeccion(seccionId,encuestaId);
+        editarSeccion(seccionId, encuestaId);
     });
 
-    //Editar nombre de sección
-    $("#table_EncuestasSecciones tbody").on("click",".span_SeccionNombre",function () {
+    //Editar nombre de secciÃ³n
+    $("#table_EncuestasSecciones tbody").on("click", ".span_SeccionNombre", function () {
         $(".span_SeccionNombre").show();
         $(".span_SeccionNombre").prev().hide();
         $(this).closest("tr").find(".span_SeccionNombre").first().hide();
         $(this).closest("tr").find(".span_SeccionNombre").first().prev().show();
         $(this).closest("tr").find(".span_SeccionNombre").first().prev().find(".txt_SeccionNombre").first().focus();
         $(this).closest("tr").find(".span_SeccionNombre").first().prev().find(".txt_SeccionNombre").first().select();
-        $('[data-toggle="tooltip"]').tooltip();       
+        $('[data-toggle="tooltip"]').tooltip();
     });
 
-    $("#table_EncuestasSecciones tbody").on("mouseover", ".span_SeccionNombre",function () {
+    $("#table_EncuestasSecciones tbody").on("mouseover", ".span_SeccionNombre", function () {
         $(this).find("i").first().show();
 
     });
-    $("#table_EncuestasSecciones tbody").on("mouseout", ".span_SeccionNombre",function () {
+    $("#table_EncuestasSecciones tbody").on("mouseout", ".span_SeccionNombre", function () {
         $(this).find("i").first().hide();
     });
 
-    $("#table_EncuestasSecciones tbody").on("click",".btn_CancelarEditarSeccionNombre",function () {
+    $("#table_EncuestasSecciones tbody").on("click", ".btn_CancelarEditarSeccionNombre", function () {
         $(this).closest(".div_EditarSeccionNombre").hide();
         $(this).closest(".div_EditarSeccionNombre").next().show();
         $(this).closest(".div_EditarSeccionNombre").find(".txt_SeccionNombre").first().val($(this).closest(".div_EditarSeccionNombre").next().find("span").first().text());
@@ -116,24 +116,24 @@ $(document).ready(function () {
         var id = parseInt($(this).data("id"));
         var encuestaId = parseInt($("#Id").val());
         var nombre = $(this).closest(".div_EditarSeccionNombre").find(".txt_SeccionNombre").first().val();
-        cambiarSeccionNombre(id, encuestaId, nombre,this);
+        cambiarSeccionNombre(id, encuestaId, nombre, this);
     });
     //#endregion
 });
 
 
-function editarSeccion(id,encuestaId) {
+function editarSeccion(id, encuestaId) {
     window.location = `${window.urlproyecto}/Encuestas/EditarSeccion?id=${id}&encuestaId=${encuestaId}`;
 }
 
 //#region POST
 function cambiarNombreEncuesta() {
     var data = `&id=${parseInt($("#Id").val())}&nombre=${$("#txt_NombreEncuesta").val()}`;
-    //Llamada generica de petición AJAX  
+    //Llamada generica de peticiÃ³n AJAX  
     $.ajax({
         //Url de la peticion
         url: `${window.urlproyecto}/Encuestas/CambiarNombre`,
-        //Tipo de petición
+        //Tipo de peticiÃ³n
         type: "POST",
         //Datos que se enviaran a la llamada
         data: data,
@@ -150,7 +150,7 @@ function cambiarNombreEncuesta() {
         $('[data-toggle="tooltip"]').tooltip("hide");
     }).fail(function () {
         //Se ejecuta cuando la peticion ha regresado algun error.
-        GenerarAlerta(enum_MessageAlertType.Danger, "Ocurrió un error al guarda el Nombre de la encuesta.");
+        GenerarAlerta(enum_MessageAlertType.Danger, "OcurriÃ³ un error al guarda el Nombre de la encuesta.");
         cargarEncuesta();
     }).always(function () {
         //Se ejecuta al final de la peticion sea exitosa o no.
@@ -161,7 +161,7 @@ function eliminarSeccion(id, encuestaId, boton) {
     $.ajax({
         //Url de la peticion
         url: `${window.urlproyecto}/Encuestas/DeleteSeccion`,
-        //Tipo de petición
+        //Tipo de peticiÃ³n
         type: "PUT",
         //Datos que se enviaran a la llamada
         data: { id, encuestaId },
@@ -185,7 +185,7 @@ function eliminarSeccion(id, encuestaId, boton) {
 
     }).fail(function () {
         //Se ejecuta cuando la peticion ha regresado algun error.
-        GenerarAlerta(enum_MessageAlertType.Danger, "Ocurrió un error al tratar de eliminar la Sección.");
+        GenerarAlerta(enum_MessageAlertType.Danger, "OcurriÃ³ un error al tratar de eliminar la SecciÃ³n.");
     }).always(function () {
         //Se ejecuta al final de la peticion sea exitosa o no.
     });
@@ -195,7 +195,7 @@ function crearSeccion(encuestaId, nombre) {
     $.ajax({
         //Url de la peticion
         url: `${window.urlproyecto}/Encuestas/CrearSeccion`,
-        //Tipo de petición
+        //Tipo de peticiÃ³n
         type: "POST",
         //Datos que se enviaran a la llamada
         data: { encuestaId, nombre },
@@ -226,12 +226,12 @@ function crearSeccion(encuestaId, nombre) {
                                     </div>
                                     <div class="col-2 form-inline text-center">
                                         <span class="btn-group-sm m-1">
-                                            <button type="button" class="btn btn-success bmd-btn-fab btn_GuardarSeccionNombre" data-id="${data}" data-toggle="tooltip" data-placement="bottom" title="Guardar nombre de sección">
+                                            <button type="button" class="btn btn-success bmd-btn-fab btn_GuardarSeccionNombre" data-id="${data}" data-toggle="tooltip" data-placement="bottom" title="Guardar nombre de secciÃ³n">
                                                 <i class="material-icons">check</i>
                                             </button>
                                         </span>
                                         <span class="btn-group-sm m-1">
-                                            <button type="button" class="btn btn-danger bmd-btn-fab btn_CancelarEditarSeccionNombre" data-toggle="tooltip" data-placement="bottom" title="Cancelar edición de nombre">
+                                            <button type="button" class="btn btn-danger bmd-btn-fab btn_CancelarEditarSeccionNombre" data-toggle="tooltip" data-placement="bottom" title="Cancelar ediciÃ³n de nombre">
                                                 <i class="material-icons">clear</i>
                                             </button>
                                         </span>
@@ -239,19 +239,19 @@ function crearSeccion(encuestaId, nombre) {
                                 </div>
                                 <span class="mt-1 span_SeccionNombre h6">
                                    <span class="ml-3">${nombre}</span>
-                                    <i class="material-icons text-primary md-18" style="display:none" title="Editar nombre de sección">edit</i>
+                                    <i class="material-icons text-primary md-18" style="display:none" title="Editar nombre de secciÃ³n">edit</i>
                                 </span>
                             </td>
                             <td style="width:40px">
                                 <span class="btn-group-sm">
-                                    <button class="btn btn-info bmd-btn-fab btn_Editar" data-id="${data}" data-toggle="tooltip" data-placement="bottom" title="Editar sección">
+                                    <button class="btn btn-info bmd-btn-fab btn_Editar" data-id="${data}" data-toggle="tooltip" data-placement="bottom" title="Editar secciÃ³n">
                                         <i class="material-icons">edit</i>
                                     </button>
                                 </span>
                             </td>
                             <td style="width:40px">
                                 <span class="btn-group-sm">
-                                    <button class="btn btn-danger bmd-btn-fab btn_Eliminar" data-id="${data}" data-toggle="tooltip" data-placement="bottom" title="Eliminar sección">
+                                    <button class="btn btn-danger bmd-btn-fab btn_Eliminar" data-id="${data}" data-toggle="tooltip" data-placement="bottom" title="Eliminar secciÃ³n">
                                         <i class="material-icons">delete</i>
                                     </button>
                                 </span>
@@ -267,18 +267,18 @@ function crearSeccion(encuestaId, nombre) {
 
     }).fail(function () {
         //Se ejecuta cuando la peticion ha regresado algun error.
-        GenerarAlerta(enum_MessageAlertType.Danger, "Ocurrió un error al tratar de eliminar la Sección.");
+        GenerarAlerta(enum_MessageAlertType.Danger, "OcurriÃ³ un error al tratar de eliminar la SecciÃ³n.");
     }).always(function () {
         //Se ejecuta al final de la peticion sea exitosa o no.
     });
 }
 
-function cambiarSeccionNombre(id, encuestaId, nombre,btn) {
-    //Llamada generica de petición AJAX  
+function cambiarSeccionNombre(id, encuestaId, nombre, btn) {
+    //Llamada generica de peticiÃ³n AJAX  
     $.ajax({
         //Url de la peticion
         url: `${window.urlproyecto}/Encuestas/CambiarSeccionNombre`,
-        //Tipo de petición
+        //Tipo de peticiÃ³n
         type: "POST",
         //Datos que se enviaran a la llamada
         data: { id, encuestaId, nombre },
@@ -295,7 +295,7 @@ function cambiarSeccionNombre(id, encuestaId, nombre,btn) {
         $('[data-toggle="tooltip"]').tooltip("hide");
     }).fail(function () {
         //Se ejecuta cuando la peticion ha regresado algun error.
-        GenerarAlerta(enum_MessageAlertType.Danger, "Ocurrió un error al guarda el Nombre de la encuesta.");
+        GenerarAlerta(enum_MessageAlertType.Danger, "OcurriÃ³ un error al guarda el Nombre de la encuesta.");
     }).always(function () {
         //Se ejecuta al final de la peticion sea exitosa o no.
     });

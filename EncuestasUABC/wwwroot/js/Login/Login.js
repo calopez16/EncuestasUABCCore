@@ -15,8 +15,6 @@
             $("#form_login").hide();
             $("#form_comentarios").show();
         }       
-
     });
-
 });
 
