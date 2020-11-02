@@ -360,6 +360,7 @@ namespace EncuestasUABC.Controllers
             try
             {
                 var encuesta = await _repository.FirstOrDefault<Encuesta>(x => x.Id == id, x => x.EncuestaSecciones);
+                encuesta.EncuestaSecciones = encuesta.EncuestaSecciones.OrderBy(x => x.Orden).ToList();
                 return Ok(encuesta);
             }
             catch (MessageAlertException ex)
@@ -488,6 +489,57 @@ namespace EncuestasUABC.Controllers
             #endregion
         }
 
+        [HttpPost]
+        public async Task<IActionResult> ActualizarPosicionSecciones(int encuestaId, List<int> seccionId)
+        {
+            #region ActualizarPosicionSecciones
+            try
+            {
+                var encuesta = await _repository.FirstOrDefault<Encuesta>(x => x.Id == encuestaId, x => x.EncuestaSecciones);
+                var secciones = encuesta.EncuestaSecciones.OrderBy(x => seccionId.IndexOf(x.Id)).ToList();
+                int orden = 1;
+                secciones.ForEach(x => { x.Orden = orden; orden++; });
+                encuesta.EncuestaSecciones = secciones;
+                await _repository.Update<Encuesta>(encuesta);
+                return Ok();
+            }
+            catch (MessageAlertException ex)
+            {
+                _logger.LogInformation(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return BadRequest();
+            #endregion
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ActualizarPosicionPreguntas(int seccionId,int encuestaId, List<int> preguntaId)
+        {
+            #region ActualizarPosicionPreguntas
+            try
+            {
+                var seccion = await _repository.FirstOrDefault<EncuestaSeccion>(x => x.Id == seccionId && x.EncuestaId==encuestaId, x => x.EncuestaPreguntas);
+                var preguntas = seccion.EncuestaPreguntas.OrderBy(x => preguntaId.IndexOf(x.Id)).ToList();
+                int orden = 1;
+                preguntas.ForEach(x => { x.Orden = orden; orden++; });
+                seccion.EncuestaPreguntas = preguntas;
+                await _repository.Update<EncuestaSeccion>(seccion);
+                return Ok();
+            }
+            catch (MessageAlertException ex)
+            {
+                _logger.LogInformation(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return BadRequest();
+            #endregion
+        }
 
         #endregion
 

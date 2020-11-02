@@ -72,7 +72,12 @@ $(document).ready(function () {
 
 
     //#region FUNCIONALIDAD TABLA SECCIONES
-    $("#table_EncuestasSecciones tbody").sortable({ handle: '.ordenador' });
+    $("#table_EncuestasSecciones tbody").sortable({
+        handle: '.ordenador',
+        update: function (event, ui) {
+            actualizarPosicionSecciones();
+        }
+    });
 
     $(".check_seleccionarTodos").click(function () {
         if ($(this).prop("checked")) {
@@ -121,6 +126,39 @@ $(document).ready(function () {
     //#endregion
 });
 
+function actualizarPosicionSecciones() {
+    var data = new FormData();
+    data.append("encuestaId", encuestaId);
+    $(".txt_SeccionId").each(function (i, item) {
+        var seccionId = $(this).val();
+        data.append(`seccionId[${i}]`, seccionId);
+    });
+
+    $.ajax({
+        //Url de la peticion
+        url: `${window.urlproyecto}/Encuestas/ActualizarPosicionSecciones`,
+        //Tipo de petición
+        type: "POST",
+        processData: false,
+        contentType: false,
+        //Datos que se enviaran a la llamada
+        data: data,
+        //Accion al comenzar la carga de la peticion AJAX.
+        beforeSend: function () {
+            //Aqui regularmente se implementa un loading.
+            showEstatusLoading();
+        }
+    }).done(function (data) {
+        //Se ejecuta cuando la peticion ha sido exitosa. 
+        //data es la respuesta que se recibe.
+        finishEstatusLoading("Encuesta actualizada");
+    }).fail(function () {
+        //Se ejecuta cuando la peticion ha regresado algun error.
+        finishEstatusLoading("Ocurrió un error al actualizar la encuesta");
+    }).always(function () {
+        //Se ejecuta al final de la peticion sea exitosa o no.
+    });
+}
 
 function editarSeccion(id, encuestaId) {
     window.location = `${window.urlproyecto}/Encuestas/EditarSeccion?id=${id}&encuestaId=${encuestaId}`;
@@ -140,6 +178,7 @@ function cambiarNombreEncuesta() {
         //Accion al comenzar la carga de la peticion AJAX.
         beforeSend: function () {
             //Aqui regularmente se implementa un loading.
+            showEstatusLoading();
         }
     }).done(function (data) {
         //Se ejecuta cuando la peticion ha sido exitosa. 
@@ -148,9 +187,10 @@ function cambiarNombreEncuesta() {
         $("#h1_NombreEncuesta").show();
         $("#h1_NombreEncuesta").find("span").first().text($("#txt_NombreEncuesta").val());
         $('[data-toggle="tooltip"]').tooltip("hide");
+        finishEstatusLoading("Encuesta actualizada");
     }).fail(function () {
         //Se ejecuta cuando la peticion ha regresado algun error.
-        GenerarAlerta(enum_MessageAlertType.Danger, "Ocurrió un error al guarda el Nombre de la encuesta.");
+        finishEstatusLoading("Ocurrió un error al guardar el Nombre de la encuesta");
         cargarEncuesta();
     }).always(function () {
         //Se ejecuta al final de la peticion sea exitosa o no.
@@ -168,6 +208,7 @@ function eliminarSeccion(id, encuestaId, boton) {
         //Accion al comenzar la carga de la peticion AJAX.
         beforeSend: function () {
             //Aqui regularmente se implementa un loading.
+            showEstatusLoading();
         }
     }).done(function (data) {
         //Se ejecuta cuando la peticion ha sido exitosa. 
@@ -182,10 +223,10 @@ function eliminarSeccion(id, encuestaId, boton) {
                     </tr>`;
             $("#table_EncuestasSecciones tbody").html(item);
         }
-
+        finishEstatusLoading("Sección eliminada");
     }).fail(function () {
         //Se ejecuta cuando la peticion ha regresado algun error.
-        GenerarAlerta(enum_MessageAlertType.Danger, "Ocurrió un error al tratar de eliminar la Sección.");
+        finishEstatusLoading("Ocurrió un error al tratar de eliminar la Sección",false);
     }).always(function () {
         //Se ejecuta al final de la peticion sea exitosa o no.
     });
@@ -202,6 +243,7 @@ function crearSeccion(encuestaId, nombre) {
         //Accion al comenzar la carga de la peticion AJAX.
         beforeSend: function () {
             //Aqui regularmente se implementa un loading.
+            showEstatusLoading();
         }
     }).done(function (data) {
         //Se ejecuta cuando la peticion ha sido exitosa. 
@@ -218,10 +260,12 @@ function crearSeccion(encuestaId, nombre) {
                                         <input type="checkbox" class="check_Seccion"><span class="checkbox-decorator"><span class="check"></span><div class="ripple-container"></div></span>
                                     </label>
                                 </div></span>
+                                <input hidden value="${data}" class="txt_SeccionId" />
                             </td>
                             <td style="cursor:pointer" class="td_Seccion">
                                 <div class="row div_EditarSeccionNombre" style="display:none;margin-top:-10px">
                                     <div class="col-8 ml-3">
+                                        
                                         <input type="text" class="form-control txt_SeccionNombre" value="${nombre}" autocomplete="off" />
                                     </div>
                                     <div class="col-2 form-inline text-center">
@@ -264,10 +308,10 @@ function crearSeccion(encuestaId, nombre) {
         }
         $("#modal_SeccionCrear").modal("hide");
         $('[data-toggle="tooltip"]').tooltip();
-
+        finishEstatusLoading("Sección creada");
     }).fail(function () {
         //Se ejecuta cuando la peticion ha regresado algun error.
-        GenerarAlerta(enum_MessageAlertType.Danger, "Ocurrió un error al tratar de eliminar la Sección.");
+        finishEstatusLoading("Ocurrió un error al tratar de eliminar la Sección",false);
     }).always(function () {
         //Se ejecuta al final de la peticion sea exitosa o no.
     });
@@ -285,6 +329,7 @@ function cambiarSeccionNombre(id, encuestaId, nombre, btn) {
         //Accion al comenzar la carga de la peticion AJAX.
         beforeSend: function () {
             //Aqui regularmente se implementa un loading.
+            showEstatusLoading();
         }
     }).done(function (data) {
         //Se ejecuta cuando la peticion ha sido exitosa. 
@@ -293,9 +338,10 @@ function cambiarSeccionNombre(id, encuestaId, nombre, btn) {
         $(btn).closest(".div_EditarSeccionNombre").next().show();
         $(btn).closest(".div_EditarSeccionNombre").next().find("span").first().text(nombre);
         $('[data-toggle="tooltip"]').tooltip("hide");
+        finishEstatusLoading("Sección actualizada");
     }).fail(function () {
         //Se ejecuta cuando la peticion ha regresado algun error.
-        GenerarAlerta(enum_MessageAlertType.Danger, "Ocurrió un error al guarda el Nombre de la encuesta.");
+        finishEstatusLoading("Ocurrió un error al guarda el Nombre de la encuesta");
     }).always(function () {
         //Se ejecuta al final de la peticion sea exitosa o no.
     });

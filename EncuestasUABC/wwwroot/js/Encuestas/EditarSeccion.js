@@ -48,7 +48,12 @@ $(document).ready(function () {
 
     //#region FUNCIONALIDAD TABLA PREGUNTAS
 
-    $("#table_SeccionPregunta tbody").sortable({ handle: '.ordenador' });
+    $("#table_SeccionPregunta tbody").sortable({
+        handle: '.ordenador',
+        update: function (event, ui) {
+            actualizarPosicionPreguntas();
+        }
+    });
 
     $(".check_seleccionarTodos").click(function () {
         if ($(this).prop("checked")) {
@@ -107,6 +112,16 @@ $(document).ready(function () {
         $("#btn_GuardarPreguntaAgregar").show();
         $("#txt_DescripcionPregunta").focus();
         tipoPreguntaId = enum_TipoPregunta.Multiple;
+    });
+    $(".btn_RespuestaSelectList").click(function () {
+        $("#div_tiposPregunta").hide();
+        $("#div_PreguntaDescripcion").fadeIn();
+        $("#div_PreguntaRadioCheck").fadeIn();
+        $("#h5_ModalTituloCrearPregunta").html("Crear pregunta Select List");
+        $("#btn_RegresarPreguntaAgregar").show();
+        $("#btn_GuardarPreguntaAgregar").show();
+        $("#txt_DescripcionPregunta").focus();
+        tipoPreguntaId = enum_TipoPregunta.SelectList;
     });
     $("#btn_AgregarOpcion").click(function () {
         var descripcionOpcion = $("#txt_DescripcionOpcion");
@@ -171,7 +186,7 @@ $(document).ready(function () {
     $("#btn_GuardarPreguntaAgregar").click(function () {
         if (!$("#form_Pregunta").valid())
             return;
-        if (tipoPreguntaId == enum_TipoPregunta.Multiple || tipoPreguntaId == enum_TipoPregunta.UnicaOpcion) {
+        if (tipoPreguntaId == enum_TipoPregunta.Multiple || tipoPreguntaId == enum_TipoPregunta.UnicaOpcion || tipoPreguntaId == enum_TipoPregunta.SelectList) {
             if (!$("#table_opciones").find(".tr_Opcion").length) {
                 GenerarAlerta(enum_MessageAlertType.Information, "Es necesario agregar por lo menos una opción")
                 return;
@@ -180,9 +195,7 @@ $(document).ready(function () {
             return;
         } else if (tipoPreguntaId == enum_TipoPregunta.Matriz) {
             return;
-        } else if (tipoPreguntaId == enum_TipoPregunta.SelectList) {
-            return;
-        }
+        } 
         guardarPregunta();
     });
 
@@ -222,6 +235,7 @@ function cambiarSeccionNombre(id, encuestaId, nombre) {
         //Accion al comenzar la carga de la peticion AJAX.
         beforeSend: function () {
             //Aqui regularmente se implementa un loading.
+            showEstatusLoading();
         }
     }).done(function (data) {
         //Se ejecuta cuando la peticion ha sido exitosa. 
@@ -230,10 +244,10 @@ function cambiarSeccionNombre(id, encuestaId, nombre) {
         $("#h1_SeccionNombre").show();
         $("#h1_SeccionNombre").find("span").first().text($("#txt_SeccionNombre").val());
         $('[data-toggle="tooltip"]').tooltip("hide");
+        finishEstatusLoading("Sección actualizada");
     }).fail(function () {
         //Se ejecuta cuando la peticion ha regresado algun error.
-        GenerarAlerta(enum_MessageAlertType.Danger, "Ocurrió un error al guarda el Nombre de la encuesta.");
-        cargarEncuesta();
+        finishEstatusLoading("Ocurrió un error al actualizar la sección", false);
     }).always(function () {
         //Se ejecuta al final de la peticion sea exitosa o no.
     });
@@ -266,6 +280,7 @@ function guardarPregunta() {
         //Accion al comenzar la carga de la peticion AJAX.
         beforeSend: function () {
             //Aqui regularmente se implementa un loading.
+            showEstatusLoading();
         }
     }).done(function (data) {
         //Se ejecuta cuando la peticion ha sido exitosa. 
@@ -316,10 +331,10 @@ function guardarPregunta() {
             $("#table_SeccionPregunta tbody").append(fila);
         }
         $('[data-toggle="tooltip"]').tooltip();
-
+        finishEstatusLoading("Pregunta creada");
     }).fail(function () {
         //Se ejecuta cuando la peticion ha regresado algun error.
-        GenerarAlerta(enum_MessageAlertType.Danger, "Ocurrió un error al crear la pregunta.");
+        finishEstatusLoading("Ocurrió un error al crear la pregunta", false);
     }).always(function () {
         //Se ejecuta al final de la peticion sea exitosa o no.
     });
@@ -356,6 +371,7 @@ function eliminarPregunta(id, encuestaId, seccionId, boton) {
         //Accion al comenzar la carga de la peticion AJAX.
         beforeSend: function () {
             //Aqui regularmente se implementa un loading.
+            showEstatusLoading();
         }
     }).done(function (data) {
         //Se ejecuta cuando la peticion ha sido exitosa. 
@@ -370,10 +386,46 @@ function eliminarPregunta(id, encuestaId, seccionId, boton) {
                     </tr>`;
             $("#table_SeccionPregunta tbody").html(item);
         }
-
+        finishEstatusLoading("Pregunta eliminada");
     }).fail(function () {
         //Se ejecuta cuando la peticion ha regresado algun error.
-        GenerarAlerta(enum_MessageAlertType.Danger, "Ocurrió un error al tratar de eliminar la pregunta.");
+        finishEstatusLoading("Ocurrió un error al tratar de eliminar la pregunta.");
+
+    }).always(function () {
+        //Se ejecuta al final de la peticion sea exitosa o no.
+    });
+}
+
+function actualizarPosicionPreguntas() {
+    var data = new FormData();
+    data.append("encuestaId", encuestaId);
+    data.append("seccionId", seccionId);
+    $(".txt_PreguntaId").each(function (i, item) {
+        var preguntaId = $(this).val();
+        data.append(`preguntaId[${i}]`, preguntaId);
+    });
+
+    $.ajax({
+        //Url de la peticion
+        url: `${window.urlproyecto}/Encuestas/ActualizarPosicionPreguntas`,
+        //Tipo de petición
+        type: "POST",
+        processData: false,
+        contentType: false,
+        //Datos que se enviaran a la llamada
+        data: data,
+        //Accion al comenzar la carga de la peticion AJAX.
+        beforeSend: function () {
+            //Aqui regularmente se implementa un loading.
+            showEstatusLoading();
+        }
+    }).done(function (data) {
+        //Se ejecuta cuando la peticion ha sido exitosa. 
+        //data es la respuesta que se recibe.
+        finishEstatusLoading("Sección actualizada");
+    }).fail(function () {
+        //Se ejecuta cuando la peticion ha regresado algun error.
+        finishEstatusLoading("Ocurrió un error al actualizar la sección");
     }).always(function () {
         //Se ejecuta al final de la peticion sea exitosa o no.
     });

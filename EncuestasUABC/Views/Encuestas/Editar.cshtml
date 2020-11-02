@@ -71,7 +71,7 @@
             <tbody>
                 @if (Model.EncuestaSecciones.Any())
                 {
-                    @foreach (var seccion in Model.EncuestaSecciones)
+                    @foreach (var seccion in Model.EncuestaSecciones.OrderBy(x=>x.Orden))
                     {
                         <tr class="fila_Seccion">
                             <td class="ordenador" style="cursor:pointer;width:40px">
@@ -85,6 +85,7 @@
                                         <input type="checkbox" class="check_Seccion">
                                     </label>
                                 </div>
+                                <input hidden value="@seccion.Id" class="txt_SeccionId" />
                             </td>
                             <td style="cursor:pointer" class="td_Seccion">
                                 <div class="row div_EditarSeccionNombre" style="display:none;margin-top:-10px">

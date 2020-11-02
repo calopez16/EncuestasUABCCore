@@ -1,5 +1,32 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿var estatusInProgress = 0;
+function showEstatusLoading() {
+    $("#estatusAlertLoading").slideDown();
+    estatusInProgress++;
+}
+
+function finishEstatusLoading(message, success = true) {
+
+    if (estatusInProgress != 0) estatusInProgress--;
+    if (estatusInProgress <= 0) {
+        $("#estatusAlertLoading").hide();
+    }
+    var timestamp = new Date().getUTCMilliseconds();
+    if (success) {
+        icon = "check";
+    } else {
+        icon = "clear";
+    }
+    var item = `<li class="p-2" id="estatusAlertMessage_${timestamp}">
+                    <i class="material-icons float-left mr-2">${icon}</i>
+                    ${message}
+                </li>`;
+    $("#estatusAlertList").append(item);
+
+    setTimeout(function () {
+        $(`#estatusAlertMessage_${timestamp}`).slideUp();
+    }, 1000);
+}
+
 
 // Write your JavaScript code.
 $(document).ready(() => {
@@ -13,7 +40,7 @@ $(document).ready(() => {
         }, 50);
     });
 
-   //#region SELECT DE CARRERAS
+    //#region SELECT DE CARRERAS
 
     //#endregion
 });
