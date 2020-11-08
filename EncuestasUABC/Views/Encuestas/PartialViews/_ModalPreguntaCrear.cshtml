@@ -20,8 +20,7 @@
                 <input class="position-absolute invisible" asp-for="EncuestaId" />
                 <input class="position-absolute invisible" asp-for="EncuestaSeccionId" />
                 <input class="position-absolute invisible" asp-for="TipoPreguntaId" />
-                <input class="position-absolute invisible" asp-for="Id" />
-
+                <input class="position-absolute invisible" asp-for="Id" id="PreguntaId"/>
             </div>
             <div class="modal-body">
                 <div id="div_tiposPregunta">
@@ -103,8 +102,7 @@
                                 <td colspan="3">
                                     <h6 class="text-center">No se han agregado opciones</h6>
                                 </td>
-                            </tr>
-                            
+                            </tr>                            
                         </tbody>
                         <tfoot>
                             <tr>
@@ -125,6 +123,7 @@
                 </div>
             </div>
             <div class="modal-footer">
+                <button class="btn btn-danger btn-raised mr-2" style="display:none" data-dismiss="modal" id="btn_CancelarModalPregunta">Cancelar</button>
                 <button type="button" class="btn btn-success btn-raised" style="display:none" id="btn_GuardarPreguntaAgregar">Confirmar</button>
             </div>
         </form>

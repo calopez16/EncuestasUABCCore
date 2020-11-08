@@ -71,7 +71,7 @@
                 {
                     @foreach (var pregunta in Model.EncuestaPreguntas)
                     {
-                        <tr class="fila_Pregunta">
+                        <tr class="fila_Pregunta pregunta_@pregunta.Id">
                             <td class="ordenador" style="cursor:pointer;width:40px">
                                 <i class="material-icons text-secondary">
                                     drag_indicator
@@ -85,11 +85,11 @@
                                 </div>
                                 <input hidden value="@pregunta.Id" class="txt_PreguntaId" />
                             </td>
-                            <td>
+                            <td class="pregunta_Descripcion">
                                 @pregunta.Descripcion
                             </td>
                             <td>@pregunta.TipoPreguntaIdNavigation.Descripcion</td>
-                            <td class="text-center">
+                            <td class="text-center pregunta_Obligatoria">
                                 @if (pregunta.Obligatoria)
                                 {
                                     <i class="material-icons text-primary">done</i>

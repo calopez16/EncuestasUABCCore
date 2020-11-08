@@ -16,6 +16,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using EncuestasUABC.Models.SelectViewModel;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 
 namespace EncuestasUABC.Controllers
 {
@@ -377,6 +378,37 @@ namespace EncuestasUABC.Controllers
             #endregion
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetPregunta(int preguntaId, int seccionId, int encuestaId)
+        {
+            #region EditarNombreDescripcion
+            try
+            {
+                var pregunta = await _repository
+                    .FirstOrDefault<EncuestaPregunta>(x => x.Id == preguntaId
+                                                    && x.EncuestaSeccionId == seccionId
+                                                    && x.EncuestaId == encuestaId, x => x.Opciones);
+                pregunta.Opciones = pregunta.Opciones.Where(x => !x.Eliminado).OrderBy(x=>x.Orden).ToList();
+                return Ok(JsonConvert.SerializeObject(pregunta, Formatting.None,
+                            new JsonSerializerSettings
+                            {
+                                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                            }));
+            }
+            catch (MessageAlertException ex)
+            {
+                _logger.LogInformation(ex.Message);
+                GenerarAlerta(ex);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                ShowMessageException(ex.Message);
+            }
+            return BadRequest();
+            #endregion
+        }
+
         #endregion
 
         #region AGREGAR
@@ -440,11 +472,54 @@ namespace EncuestasUABC.Controllers
             return BadRequest();
             #endregion
         }
+
+        [HttpPost]
+        public async Task<IActionResult> EditarPregunta(EncuestaPreguntaViewModel model)
+        {
+            #region EditarNombreDescripcion
+            try
+            {
+                var pregunta = await _repository.FirstOrDefault<EncuestaPregunta>(x => x.Id == model.Id, x => x.Opciones);
+
+                if (model.TipoPreguntaId == (int)TipoPreguntaId.Multiple || model.TipoPreguntaId == (int)TipoPreguntaId.SelectList || model.TipoPreguntaId == (int)TipoPreguntaId.UnicaOpcion)
+                {
+                    var idsOpcionesSinEliminar = model.Opciones.Select(x => x.Id);
+                    var preguntassss = pregunta.Opciones.Where(x => !idsOpcionesSinEliminar.Contains(x.Id)).ToList();//.ForEach(x => x.Eliminado = true);
+                    model.Opciones.ToList().ForEach(x => {
+                        if (x.Id != 0)
+                        {
+                            var opcionEditar = pregunta.Opciones.FirstOrDefault(y => y.Id == x.Id);
+                            opcionEditar.Descripcion = x.Descripcion;
+                            opcionEditar.Orden = x.Orden;
+                        }
+                        else
+                        {
+                            var nuevaOpcion = _mapper.Map<EncuestaPreguntaOpcion>(x);
+                            pregunta.Opciones.Add(nuevaOpcion);
+                        }                        
+                    });                   
+                }
+                pregunta.Descripcion = model.Descripcion;
+                pregunta.Obligatoria = model.Obligatoria;
+               await _repository.Update<EncuestaPregunta>(pregunta);
+                return Ok(model.Id);
+            }
+            catch (MessageAlertException ex)
+            {
+                _logger.LogInformation(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return BadRequest();
+            #endregion
+        }
         #endregion
 
         #region MODIFICAR
         [HttpPost]
-        public async Task<IActionResult> CambiarNombre(int id, string nombre,int carreraId,string descripcion)
+        public async Task<IActionResult> CambiarNombre(int id, string nombre, int carreraId, string descripcion)
         {
             #region EditarNombreDescripcion
             try
@@ -518,12 +593,12 @@ namespace EncuestasUABC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ActualizarPosicionPreguntas(int seccionId,int encuestaId, List<int> preguntaId)
+        public async Task<IActionResult> ActualizarPosicionPreguntas(int seccionId, int encuestaId, List<int> preguntaId)
         {
             #region ActualizarPosicionPreguntas
             try
             {
-                var seccion = await _repository.FirstOrDefault<EncuestaSeccion>(x => x.Id == seccionId && x.EncuestaId==encuestaId, x => x.EncuestaPreguntas);
+                var seccion = await _repository.FirstOrDefault<EncuestaSeccion>(x => x.Id == seccionId && x.EncuestaId == encuestaId, x => x.EncuestaPreguntas);
                 var preguntas = seccion.EncuestaPreguntas.OrderBy(x => preguntaId.IndexOf(x.Id)).ToList();
                 int orden = 1;
                 preguntas.ForEach(x => { x.Orden = orden; orden++; });
