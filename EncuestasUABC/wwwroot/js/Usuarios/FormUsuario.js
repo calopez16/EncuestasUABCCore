@@ -57,7 +57,7 @@ function validarCorreoUABC(correo) {
 }
 
 function cargarSelectCarreras() {
-    $('#select_Carrera').select2({
+    $('#Carrera').select2({
         delay: 250,
         language: "es",
         ajax: {
@@ -111,9 +111,8 @@ function cargarSelectCarreras() {
 }
 
 function setCarreraSeleccionada() {
-    var carreraId = $("#Alumno_CarreraId").val() != "" ? parseInt($("#Alumno_CarreraId").val()) : 0;
     if (carreraId != 0) {
-        var carreraSelect = $('#select_Carrera');
+        var carreraSelect = $('#CarreraId');
         $.ajax({
             type: 'GET',
             url: `${window.urlproyecto}/Carrera/SelectById`,

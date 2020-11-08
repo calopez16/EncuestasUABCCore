@@ -1,38 +1,49 @@
 ﻿const dateFormat = 'DD/MM/YYYY HH:mm:ss';
-
 var encuestaId = 0;
-
+var carreraId = 0;
+var carreraDescripcion="";
 $(document).ready(function () {
 
     encuestaId = parseInt($("#Id").val());
+    carreraId =parseInt($("#CarreraId").val());
     $("#btn_EditarNombre").on("click", function () {
         $("#modal_EditarNombreDescripcion").modal("show");
     });
 
+    cargarSelectCarreras();
+    setCarreraSeleccionada();
     //#region EDITAR NOMBRE ENCUESTA
-    $("#h1_NombreEncuesta").click(function () {
-        $(this).hide();
-        $("#div_EditarNombreEncuesta").show();
+    $(".editarInformacion").click(function () {
+        $("#div_informacion_Encuesta").hide();
+        $("#div_EditarInformacionEncuesta").show();
         $("#txt_NombreEncuesta").focus();
         $("#txt_NombreEncuesta").select();
+        var asdas = $("#div_descripcion").find("div").html();
+        $('#textArea_Descripcion').summernote('code', $("#div_descripcion").find("div").html());
+        
+       
     });
 
-    $("#h1_NombreEncuesta").mouseover(function () {
-        $(this).find("i").first().show();
+    $("#Informacion_Encuesta").mouseover(function () {
+        $("#Informacion_Encuesta").find("i").first().show();
 
     });
-    $("#h1_NombreEncuesta").mouseout(function () {
-        $(this).find("i").first().hide();
+    $("#Informacion_Encuesta").mouseout(function () {
+        $("#Informacion_Encuesta").find("i").first().hide();
     });
 
-    $("#btn_CancelarEditarNombreEncuesta").click(function () {
-        $("#div_EditarNombreEncuesta").hide();
-        $("#h1_NombreEncuesta").show();
-        $("#txt_NombreEncuesta").val($("#h1_NombreEncuesta").find("span").first().text());
+    $("#btn_CancelarEditarInformacionEncuesta").click(function () {
+        $("#div_EditarInformacionEncuesta").hide();
+        $("#div_informacion_Encuesta").show();
+        $("#txt_NombreEncuesta").val($("#h1_NombreEncuesta").text());
+        carreraDescripcion = "";
+        setCarreraSeleccionada();
     });
-    $("#btn_GuardarNombreEncuesta").click(function () {
-        cambiarNombreEncuesta();
+    $("#btn_GuardarInformacionEncuesta").click(function () {
+        actualizarInformacionEncuesta();
     });
+   
+   
     //#endregion
 
     //#region ELIMINAR SECCION
@@ -69,7 +80,6 @@ $(document).ready(function () {
         }
     });
     //#endregion
-
 
     //#region FUNCIONALIDAD TABLA SECCIONES
     $("#table_EncuestasSecciones tbody").sortable({
@@ -164,15 +174,20 @@ function editarSeccion(id, encuestaId) {
     window.location = `${window.urlproyecto}/Encuestas/EditarSeccion?id=${id}&encuestaId=${encuestaId}`;
 }
 
-//#region POST
-function cambiarNombreEncuesta() {
-    var data = `&id=${parseInt($("#Id").val())}&nombre=${$("#txt_NombreEncuesta").val()}`;
+function actualizarInformacionEncuesta() {
+    var data = new FormData();
+    data.append("id", parseInt($("#Id").val()));
+    data.append("nombre", $("#txt_NombreEncuesta").val());
+    data.append("carreraId", $("#select_Carrera").val());
+    data.append("descripcion", $("#textArea_Descripcion").val());
     //Llamada generica de petición AJAX  
     $.ajax({
         //Url de la peticion
         url: `${window.urlproyecto}/Encuestas/CambiarNombre`,
         //Tipo de petición
         type: "POST",
+        processData: false,
+        contentType: false,
         //Datos que se enviaran a la llamada
         data: data,
         //Accion al comenzar la carga de la peticion AJAX.
@@ -183,10 +198,12 @@ function cambiarNombreEncuesta() {
     }).done(function (data) {
         //Se ejecuta cuando la peticion ha sido exitosa. 
         //data es la respuesta que se recibe.
-        $("#div_EditarNombreEncuesta").hide();
-        $("#h1_NombreEncuesta").show();
-        $("#h1_NombreEncuesta").find("span").first().text($("#txt_NombreEncuesta").val());
+        $("#div_EditarInformacionEncuesta").hide();
+        $("#div_informacion_Encuesta").show();
+        $("#h1_NombreEncuesta").text($("#txt_NombreEncuesta").val());
         $('[data-toggle="tooltip"]').tooltip("hide");
+        $("#span_CarreraDescripcion").text(carreraDescripcion);
+        $("#div_descripcion").find("div").html($("#textArea_Descripcion").val());
         finishEstatusLoading("Encuesta actualizada");
     }).fail(function () {
         //Se ejecuta cuando la peticion ha regresado algun error.
@@ -253,15 +270,8 @@ function crearSeccion(encuestaId, nombre) {
                                 <i class="material-icons text-secondary">
                                     drag_indicator
                                 </i>
-                            </td>
-                            <td style="width:40px">
-                               <span class="bmd-form-group is-filled"><div class="checkbox" style="margin-top:-5px">
-                                    <label>
-                                        <input type="checkbox" class="check_Seccion"><span class="checkbox-decorator"><span class="check"></span><div class="ripple-container"></div></span>
-                                    </label>
-                                </div></span>
                                 <input hidden value="${data}" class="txt_SeccionId" />
-                            </td>
+                            </td>                           
                             <td style="cursor:pointer" class="td_Seccion">
                                 <div class="row div_EditarSeccionNombre" style="display:none;margin-top:-10px">
                                     <div class="col-8 ml-3">
@@ -347,4 +357,88 @@ function cambiarSeccionNombre(id, encuestaId, nombre, btn) {
     });
 }
 
-//#endregion
+//CARGAS DE COMPONENTES
+
+function cargarSelectCarreras() {
+    $('#select_Carrera').select2({
+        delay: 250,
+        language: "es",
+        ajax: {
+            url: `${window.urlproyecto}/Carrera/Select`,
+            delay: 1000,
+            //Tipo de petición http
+            type: "GET",
+            data: function (params) {
+                var query = {
+                    search: params.term,
+                    page: params.page || 1,
+                    perPage: 10,
+                    id: $(this).data("id")
+                }
+                // Query parameters will be ?search=[term]&page=[page]
+                return query;
+            },
+            processResults: function (data, params) {
+                params.page = params.page || 1;
+                return {
+                    results: data.results,
+                    pagination: {
+                        more: (params.page * 10) < data.totalRegistros
+                    }
+                };
+            }
+        },
+        placeholder: 'Seleccione',
+        templateResult: formatRepo,
+        templateSelection: formatRepoSelection
+    });
+
+    $('#select_Carrera').one('select2:open', function (e) {
+        $('input.select2-search__field').prop('placeholder', 'Buscar Campus / Unidad Académica / Carrera');
+    });
+
+    function formatRepo(repo) {
+        if (repo.loading) {
+            return repo.text;
+        }
+        var $container = $(`<div>
+                            <h5>${repo.text}</h5>
+                            <h6><strong>Unidad acad&eacute;mica: </strong>${repo.unidadacademica}</h6>
+                            <h6><strong>Campus: </strong>${repo.campus}</h6>
+                        </div>`);
+        return $container;
+    }
+
+    function formatRepoSelection(repo) {
+        if (repo.carrera) {
+            carreraDescripcion = ` ${repo.unidadacademica ? `${repo.unidadacademica}` : ""}, ${repo.carrera}, ${repo.campus ? `${repo.campus}` : ""}`;
+            return `${repo.unidadacademica ? `${repo.unidadacademica}` : ""} / ${repo.text} / ${repo.campus ? `${repo.campus}` : ""}`;
+        }
+        carreraDescripcion = `${repo.text}`;
+        return `${repo.text}`;
+    }
+}
+
+function setCarreraSeleccionada() {
+    if (carreraId != 0) {
+        var carreraSelect = $('#select_Carrera');
+        $.ajax({
+            type: 'GET',
+            url: `${window.urlproyecto}/Carrera/SelectById`,
+            data: { id: carreraId }
+        }).then(function (data) {
+            // create the option and append to Select2
+            var option = new Option(`${data.unidadAcademica} / ${data.carrera} / ${data.campus}`, data.id, true, true);
+            carreraSelect.append(option).trigger('change');
+
+            // manually trigger the `select2:select` event
+            carreraSelect.trigger({
+                type: 'select2:select',
+                params: {
+                    data: data
+                }
+            });
+        });
+    }
+
+}

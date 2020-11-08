@@ -1,9 +1,11 @@
 ﻿using EncuestasUABC.AccesoDatos.Data;
 using EncuestasUABC.AccesoDatos.Repository.Interfaces;
 using EncuestasUABC.Models;
+using EncuestasUABC.Models.Catalogos;
 using EncuestasUABC.Models.Catalogos.Tipos;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace EncuestasUABC.AccesoDatos.Repository
@@ -35,7 +37,9 @@ namespace EncuestasUABC.AccesoDatos.Repository
 
             return await _context.Encuestas
                 .Include(x => x.EncuestaSecciones)
-
+                .Include(x => x.CarreraIdNavigation)
+                .ThenInclude(x => x.UnidadAcademicaIdNavigation)
+                .ThenInclude(x => x.CampusIdNavigation)
                 .Select(x => new Encuesta
                 {
                     Id = x.Id,
@@ -45,7 +49,19 @@ namespace EncuestasUABC.AccesoDatos.Repository
                     Descripcion = x.Descripcion,
                     EstatusEncuestaId = x.EstatusEncuestaId,
                     CarreraId = x.CarreraId,
-                    EncuestaSecciones = x.EncuestaSecciones.Where(x => !x.Eliminado).ToList()
+                    EncuestaSecciones = x.EncuestaSecciones.Where(x => !x.Eliminado).ToList(),
+                    CarreraIdNavigation = new Carrera
+                    {
+                        Nombre = x.CarreraIdNavigation.Nombre,
+                        UnidadAcademicaIdNavigation = new UnidadAcademica
+                        {
+                            Nombre = x.CarreraIdNavigation.UnidadAcademicaIdNavigation.Nombre,
+                            CampusIdNavigation = new Campus
+                            {
+                                Nombre = x.CarreraIdNavigation.UnidadAcademicaIdNavigation.CampusIdNavigation.Nombre,
+                            }
+                        }
+                    }
                 }).FirstOrDefaultAsync(x => x.Id == id);
 
             #endregion

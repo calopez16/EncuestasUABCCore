@@ -220,9 +220,6 @@ function ocultarFormulariosPreguntas() {
     $("#div_PreguntaRadioCheck").hide();
 }
 
-
-//#region POST
-
 function cambiarSeccionNombre(id, encuestaId, nombre) {
     //Llamada generica de petición AJAX  
     $.ajax({
@@ -356,10 +353,6 @@ function getTipoPreguntaDescripcion(tipoPreguntaId) {
     }
 }
 
-//#endregion
-
-//#region PUT
-
 function eliminarPregunta(id, encuestaId, seccionId, boton) {
     $.ajax({
         //Url de la peticion
@@ -432,4 +425,3 @@ function actualizarPosicionPreguntas() {
 }
 
 
-//#endregion

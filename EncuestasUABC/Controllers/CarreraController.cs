@@ -60,6 +60,7 @@ namespace EncuestasUABC.Controllers
                     {
                         x.Id,
                         text = x.Nombre,
+                        carrera=x.Nombre,
                         unidadacademica = x.UnidadAcademicaIdNavigation.Nombre,
                         campus = x.UnidadAcademicaIdNavigation.CampusIdNavigation.Nombre
                     }),

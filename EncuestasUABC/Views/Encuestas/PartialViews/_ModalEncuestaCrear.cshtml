@@ -31,11 +31,8 @@
                         </div>
                     </div>
                     <div class="col-md-12">
-                        <div class="form-group">
-                            <label asp-for="Descripcion" class="bmd-label-floating"></label>
-                            <textarea asp-for="Descripcion" class="form-control" rows="10"></textarea>
-                            <span asp-validation-for="Descripcion"></span>
-                        </div>
+                        <label asp-for="Descripcion" class="bmd-label-static text-primary"></label>
+                        <textarea asp-for="Descripcion" class="form-control editor" rows="10"></textarea>
                     </div>
                 </div>
             </div>

@@ -39,10 +39,20 @@ $(document).ready(() => {
             $('input.select2-search__field').focus();
         }, 50);
     });
-
-    //#region SELECT DE CARRERAS
-
-    //#endregion
+    $('.editor').summernote({
+        lang: 'es-ES',
+        height:300,
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline','clear']],
+            ['fontname', ['fontname']],
+            ['color', ['']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link']],
+            ['view', ['fullscreen', 'help']],
+        ],
+    });
 });
 
 $(window).on("load", function () {

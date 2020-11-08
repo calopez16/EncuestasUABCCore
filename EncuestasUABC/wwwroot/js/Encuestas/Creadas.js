@@ -178,13 +178,15 @@ $(document).ready(function () {
             //Accion al comenzar la carga de la peticion AJAX.
             beforeSend: function () {
                 //Aqui regularmente se implementa un loading.
+                showEstatusLoading();
             }
         }).done(function (data) {
             //Se ejecuta cuando la peticion ha sido exitosa. 
             //data es la respuesta que se recibe.
+            finishEstatusLoading("Encuesta actualizada");
         }).fail(function () {
             //Se ejecuta cuando la peticion ha regresado algun error.
-            GenerarAlerta(enum_MessageAlertType.Danger, "No se pudo actualizar el estatus de la encuesta.");
+            finishEstatusLoading("No se pudo actualizar el estatus de la encuesta.", false);
         }).always(function () {
             //Se ejecuta al final de la peticion sea exitosa o no.
         });

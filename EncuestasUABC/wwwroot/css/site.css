@@ -75,7 +75,7 @@ a.bmd-btn-fab {
     height: 120px;
     animation: spin 2s linear infinite;
     margin: auto;
-    margin-top:20%;
+    margin-top: 20%;
 }
 
 @keyframes spin {
@@ -97,8 +97,8 @@ a.bmd-btn-fab {
     left: 0;
 }
 
-.field-validation-error{
-    color:red;
+.field-validation-error {
+    color: red;
 }
 
 .select2-container {
@@ -112,6 +112,7 @@ a.bmd-btn-fab {
 .select2-container {
     width: 100% !important;
 }
+
 .select2-dropdown {
     box-shadow: 0px 2px 11px -5px !important;
 }
@@ -121,8 +122,10 @@ a.bmd-btn-fab {
 }
 
 .estatusAlert {
-    
     right: 5px;
     bottom: 5px;
     border-radius: 5px;
 }
+
+
+

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EncuestasUABC.Models.ViewModels.Catalogos;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -18,7 +19,7 @@ namespace EncuestasUABC.Models.ViewModels
         public int CarreraId { get; set; }
 
         //public EstatusEncuesta EstatusEncuestaIdNavigation { get; set; }
-        //public Carrera CarreraIdNavigation { get; set; }
+        public CarreraViewModel CarreraIdNavigation { get; set; }
         public ApplicationUserViewModel UsuarioIdNavigation { get; set; }
         public virtual ICollection<EncuestaSeccionViewModel> EncuestaSecciones { get; set; }
     }

@@ -444,13 +444,15 @@ namespace EncuestasUABC.Controllers
 
         #region MODIFICAR
         [HttpPost]
-        public async Task<IActionResult> CambiarNombre(int id, string nombre)
+        public async Task<IActionResult> CambiarNombre(int id, string nombre,int carreraId,string descripcion)
         {
             #region EditarNombreDescripcion
             try
             {
                 var encuesta = await _repository.GetById<Encuesta>(id);
                 encuesta.Nombre = nombre;
+                encuesta.CarreraId = carreraId;
+                encuesta.Descripcion = descripcion;
                 await _repository.Update<Encuesta>(encuesta);
                 return Ok();
             }

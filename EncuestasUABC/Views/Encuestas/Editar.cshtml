@@ -7,62 +7,84 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <input hidden asp-for="Id" />
+<input hidden asp-for="CarreraId" />
 <style>
     .ui-sortable-helper {
         display: table;
-        background:white;
+        background: white;
     }
 </style>
 <div class="card">
     <div class="card-header">
-        <a asp-action="Creadas" class="btn btn-primary bmd-btn-fab float-left mr-4" data-toggle="tooltip" data-placement="bottom" title="Regresar">
-            <i class="material-icons md-36">navigate_before</i>
-        </a>
-        <a asp-action="Creadas" class="btn btn-info bmd-btn-fab float-right" data-toggle="tooltip" data-placement="bottom" title="Vista previa">
-            <i class="material-icons">visibility</i>
-        </a>
-        <button class="btn btn-outline-primary bmd-btn-fab float-right mr-2 " data-toggle="tooltip" data-placement="bottom" title="Asignar alumnos">
-            <i class="material-icons md-36">group</i>
-        </button>
-        <button class="btn btn-primary bmd-btn-fab btn_AgregarSeccion float-right mr-2" data-toggle="tooltip" data-placement="bottom" title="Agregar sección">
-            <i class="material-icons md-36">library_add</i>
-        </button>
-        <div class="row" style="display:none;margin-top:-10px" id="div_EditarNombreEncuesta">
-            <div class="col-8">
+        <div class="row">
+            <div class="col-xl-8">
+                <a asp-action="Creadas" class="btn text-primary bmd-btn-fab float-left mr-xl-4" data-toggle="tooltip" data-placement="bottom" title="Regresar">
+                    <i class="material-icons md-36">navigate_before</i>
+                </a>
+                <h1 class="mt-1 h1-responsive">@ViewData["Title"]</h1>
+            </div>
+            <div class="col-xl-4 text-center text-xl-right">
+                <button class="btn btn-outline-primary bmd-btn-fab mr-2 " data-toggle="tooltip" data-placement="bottom" title="Asignar alumnos">
+                    <i class="material-icons md-36">group</i>
+                </button>
+                <button class="btn btn-primary bmd-btn-fab btn_AgregarSeccion mr-2" data-toggle="tooltip" data-placement="bottom" title="Agregar sección">
+                    <i class="material-icons md-36">library_add</i>
+                </button>
+                <button class="btn btn-info bmd-btn-fab" data-toggle="tooltip" data-placement="bottom" title="Vista previa">
+                    <i class="material-icons">visibility</i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row" style="display:none;" id="div_EditarInformacionEncuesta">
+            <div class="col-12">
+                <label class="bmd-label-static text-primary">Nombre de la encuesta</label>
                 <input type="text" id="txt_NombreEncuesta" class="form-control form-lg" style="font-size:2.5rem" value="@Model.Nombre" autocomplete="off" />
             </div>
-            <div class="col-2 form-inline text-center">
+            <div class="col-12">
+                <div class="form-group">
+                    <label class="bmd-label-static text-primary">Carrera</label>
+                    <select class="form-control" id="select_Carrera">
+                        <option value="">Seleccionar</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-12">
+                <label class="bmd-label-static text-primary">Descripción</label>
+                <textarea class="form-control editor" id="textArea_Descripcion">@Model.Descripcion</textarea>
+            </div>
+            <div class="col-12 form-inline d-flex justify-content-center">
                 <span class="btn-group-sm m-1">
-                    <button type="button" class="btn btn-success bmd-btn-fab" data-toggle="tooltip" data-placement="bottom" title="Guardar nombre de encuesta" id="btn_GuardarNombreEncuesta">
+                    <button type="button" class="btn btn-success bmd-btn-fab" data-toggle="tooltip" data-placement="bottom" title="Guardar información" id="btn_GuardarInformacionEncuesta">
                         <i class="material-icons">check</i>
                     </button>
                 </span>
                 <span class="btn-group-sm m-1">
-                    <button type="button" class="btn btn-danger bmd-btn-fab" data-toggle="tooltip" data-placement="bottom" title="Cancelar edición de nombre" id="btn_CancelarEditarNombreEncuesta">
+                    <button type="button" class="btn btn-danger bmd-btn-fab" data-toggle="tooltip" data-placement="bottom" title="Cancelar edición" id="btn_CancelarEditarInformacionEncuesta">
                         <i class="material-icons">clear</i>
                     </button>
                 </span>
             </div>
         </div>
-        <h1 class="mt-1" style="cursor:pointer;width:70%" id="h1_NombreEncuesta">
-            @ViewData["Title"]:<span class="ml-3">@Model.Nombre</span>
-            <i class="material-icons text-primary" style="display:none" title="Editar nombre de encuesta">edit</i>
-        </h1>
-    </div>
-    <div class="card-body">
-        
+        <div id="div_informacion_Encuesta" class="text-center" style="cursor:pointer">
+            <h1 class="mt-1 text-center editarInformacion" id="h1_NombreEncuesta">@Model.Nombre</h1>
+            <h4 class="text-center editarInformacion">
+                <span id="span_CarreraDescripcion">@Model.CarreraIdNavigation.UnidadAcademicaIdNavigation.Nombre, @Model.CarreraIdNavigation.Nombre, @Model.CarreraIdNavigation.UnidadAcademicaIdNavigation.CampusIdNavigation.Nombre</span>
+            </h4>
+            <button class="btn btn-link" data-toggle="collapse" data-target="#div_descripcion">Mostrar descripción</button>
+            <div class="collapse" id="div_descripcion">
+                <div class="card card-body text-left">
+                    @Html.Raw(Model.Descripcion)
+                </div>
+            </div>
+        </div>
+        <hr />
         <h2 class="text-center">Secciones</h2>
         <table class="table table-hover" id="table_EncuestasSecciones">
             <thead>
                 <tr>
                     <th style="width:40px"></th>
-                    <th style="width:40px">
-                        <div class="checkbox" style="margin-top:-30px">
-                            <label>
-                                <input type="checkbox" class="check_seleccionarTodos">
-                            </label>
-                        </div>
-                    </th>
                     <th>Nombre de la sección</th>
                     <th></th>
                     <th></th>
@@ -71,20 +93,13 @@
             <tbody>
                 @if (Model.EncuestaSecciones.Any())
                 {
-                    @foreach (var seccion in Model.EncuestaSecciones.OrderBy(x=>x.Orden))
+                    @foreach (var seccion in Model.EncuestaSecciones.OrderBy(x => x.Orden))
                     {
                         <tr class="fila_Seccion">
                             <td class="ordenador" style="cursor:pointer;width:40px">
                                 <i class="material-icons text-secondary">
                                     drag_indicator
                                 </i>
-                            </td>
-                            <td style="width:40px">
-                                <div class="checkbox" style="margin-top:-5px">
-                                    <label>
-                                        <input type="checkbox" class="check_Seccion">
-                                    </label>
-                                </div>
                                 <input hidden value="@seccion.Id" class="txt_SeccionId" />
                             </td>
                             <td style="cursor:pointer" class="td_Seccion">
@@ -106,7 +121,7 @@
                                     </div>
                                 </div>
                                 <span class="mt-1 span_SeccionNombre h6">
-                                   <span class="ml-3">@seccion.Nombre</span>
+                                    <span class="ml-3">@seccion.Nombre</span>
                                     <i class="material-icons text-primary md-18" style="display:none" title="Editar nombre de sección">edit</i>
                                 </span>
                             </td>
