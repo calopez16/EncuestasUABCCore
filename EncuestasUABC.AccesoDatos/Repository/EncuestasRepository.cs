@@ -103,6 +103,50 @@ namespace EncuestasUABC.AccesoDatos.Repository
             #endregion
         }
 
+        public async Task<EncuestaSeccion> GetPrimeraSeccionById(int encuestaId, int orden = 0)
+        {
+            #region GetSeccionById
+
+            var seccion = await _context.EncuestaSecciones
+                .Include(x => x.EncuestaPreguntas)
+                .Include("EncuestaPreguntas.TipoPreguntaIdNavigation")
+                .Include(x => x.EncuestaIdNavigation)
+                .Select(x => new EncuestaSeccion
+                {
+                    Id = x.Id,
+                    EncuestaId = x.EncuestaId,
+                    Nombre = x.Nombre,
+                    Descripcion = x.Descripcion,
+                    Orden = x.Orden,
+                    EncuestaPreguntas = x.EncuestaPreguntas.Where(x => !x.Eliminado).OrderBy(x => x.Orden).Select(y => new EncuestaPregunta
+                    {
+                        Id = y.Id,
+                        Orden=y.Orden,
+                        Descripcion = y.Descripcion,
+                        TipoPreguntaId = y.TipoPreguntaId,
+                        TipoPreguntaIdNavigation = new TipoPregunta
+                        {
+                            Descripcion = y.TipoPreguntaIdNavigation.Descripcion
+                        },
+                        Opciones = y.Opciones.Where(x => !x.Eliminado).OrderBy(x => x.Orden).ToList(),
+                        Obligatoria = y.Obligatoria
+                    }).ToList(),
+                    EncuestaIdNavigation = new Encuesta
+                    {
+                        Nombre = x.EncuestaIdNavigation.Nombre
+                    }
+                }).ToListAsync();
+
+            if (orden != 0)
+                seccion = seccion.Where(x => x.Orden == orden).ToList();
+
+            return seccion
+               .OrderBy(x => x.Orden)
+               .FirstOrDefault(x => x.EncuestaId == encuestaId && !x.Eliminado);
+
+            #endregion
+        }
+
         public async Task<EncuestaPregunta> GetPreguntaById(int id, int encuestaId, int seccionId)
         {
             #region GetPreguntaById

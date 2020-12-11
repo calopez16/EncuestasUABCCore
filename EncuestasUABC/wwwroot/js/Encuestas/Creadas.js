@@ -1,5 +1,60 @@
 ﻿
 $(document).ready(function () {
+
+    $("#btn_CrearEncuesta").click(function () {
+        $("#modal_EncuestaCrear").modal("show");
+    });
+
+    $("#table_Creadas").on("click", ".btn_Eliminar", function () {
+        var id = $(this).data("id");
+        var nombreEncuesta = $(this).data("nombre");
+        $("#text_EncuestaEliminar").val(id);
+        $("#span_NombreEncuesta").text(nombreEncuesta);
+        $("#modal_EncuestaEliminar").modal("show");
+    });
+
+    $("#table_Creadas").on("click", ".btn_Restaurar", function () {
+        var id = $(this).data("id");
+        var nombreEncuesta = $(this).data("nombre");
+        $("#text_EncuestaRestaurar").val(id);
+        $("#span_NombreEncuestaRestaurar").text(nombreEncuesta);
+        $("#modal_EncuestaRestaurar").modal("show");
+    });
+
+    $("#table_Creadas").on("change", ".check_Activo", function () {
+        var id = parseInt($(this).data("id"));
+        var activo = $(this).prop("checked");
+        var data = `&id=${id}&activo=${activo}`;
+        //Llamada generica de petición AJAX  
+        $.ajax({
+            //Url de la peticion
+            url: `${window.urlproyecto}/Encuestas/CambiarActivo`,
+            //Tipo de petición
+            type: "POST",
+            //Datos que se enviaran a la llamada
+            data: data,
+            //Accion al comenzar la carga de la peticion AJAX.
+            beforeSend: function () {
+                //Aqui regularmente se implementa un loading.
+                showEstatusLoading();
+            }
+        }).done(function (data) {
+            //Se ejecuta cuando la peticion ha sido exitosa. 
+            //data es la respuesta que se recibe.
+            finishEstatusLoading("Encuesta actualizada");
+        }).fail(function () {
+            //Se ejecuta cuando la peticion ha regresado algun error.
+            finishEstatusLoading("No se pudo actualizar el estatus de la encuesta.", false);
+        }).always(function () {
+            //Se ejecuta al final de la peticion sea exitosa o no.
+        });
+    });
+
+    cargarSelectCarreras();
+    cargarPaginado();
+});
+
+function cargarPaginado() {
     $('#table_Creadas').DataTable({
         // ServerSide Setups
         serverSide: true,
@@ -143,58 +198,7 @@ $(document).ready(function () {
         }
     });
 
-    $("#btn_CrearEncuesta").click(function () {
-        $("#modal_EncuestaCrear").modal("show");
-    });
-
-    $("#table_Creadas").on("click", ".btn_Eliminar", function () {
-        var id = $(this).data("id");
-        var nombreEncuesta = $(this).data("nombre");
-        $("#text_EncuestaEliminar").val(id);
-        $("#span_NombreEncuesta").text(nombreEncuesta);
-        $("#modal_EncuestaEliminar").modal("show");
-    });
-
-    $("#table_Creadas").on("click", ".btn_Restaurar", function () {
-        var id = $(this).data("id");
-        var nombreEncuesta = $(this).data("nombre");
-        $("#text_EncuestaRestaurar").val(id);
-        $("#span_NombreEncuestaRestaurar").text(nombreEncuesta);
-        $("#modal_EncuestaRestaurar").modal("show");
-    });
-
-    $("#table_Creadas").on("change", ".check_Activo", function () {
-        var id = parseInt($(this).data("id"));
-        var activo = $(this).prop("checked");
-        var data = `&id=${id}&activo=${activo}`;
-        //Llamada generica de petición AJAX  
-        $.ajax({
-            //Url de la peticion
-            url: `${window.urlproyecto}/Encuestas/CambiarActivo`,
-            //Tipo de petición
-            type: "POST",
-            //Datos que se enviaran a la llamada
-            data: data,
-            //Accion al comenzar la carga de la peticion AJAX.
-            beforeSend: function () {
-                //Aqui regularmente se implementa un loading.
-                showEstatusLoading();
-            }
-        }).done(function (data) {
-            //Se ejecuta cuando la peticion ha sido exitosa. 
-            //data es la respuesta que se recibe.
-            finishEstatusLoading("Encuesta actualizada");
-        }).fail(function () {
-            //Se ejecuta cuando la peticion ha regresado algun error.
-            finishEstatusLoading("No se pudo actualizar el estatus de la encuesta.", false);
-        }).always(function () {
-            //Se ejecuta al final de la peticion sea exitosa o no.
-        });
-    });
-
-    cargarSelectCarreras();
-});
-
+}
 function cargarSelectCarreras() {
     $('.select_Carrera').select2({
         delay: 250,

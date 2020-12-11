@@ -1,0 +1,44 @@
+﻿@model EncuestasUABC.ViewModels.UsuarioSessionInfoViewModel
+@{
+    Layout = null;
+}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-primary border-bottom shadow-none">
+    <div class="form-row w-100 d-flex justify-content-between">
+        <div class="col-2">
+            <button type="button" class="btn bmd-btn-fab float-left text-light" id="menu-toggle">
+                <i class="material-icons">menu</i>
+            </button>
+        </div>
+        <div class="col-8 d-flex justify-content-end">
+            <ul class="nav nav-pills">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        <i class="material-icons md-48 text-light float-left mr-3" style="margin-top:-15px">account_circle</i>
+                        @Model.NombreCompleto
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a asp-action="Perfil" asp-controller="Account" class="dropdown-item">
+                            <i class="material-icons float-left mr-2">person</i>
+                            Perfil
+                        </a>
+                        <a asp-action="Ayuda" asp-controller="Home" class="dropdown-item">
+                            <i class="material-icons float-left mr-2">support</i>
+                            Ayuda
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="##" onclick="$('#form_Logout').submit();">
+                            <i class="material-icons float-left mr-2">exit_to_app</i>
+                            Cerrar Sesión
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        </ul>
+    </div>
+</nav>

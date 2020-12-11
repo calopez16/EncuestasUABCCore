@@ -141,14 +141,23 @@ namespace EncuestasUABC.Controllers
 
         #region VISTA PREVIA
 
-        public async Task<IActionResult> VistaPrevia(int id)
+        public async Task<IActionResult> VistaPrevia(int id, int orden = 0)
         {
             #region VistaPrevia
             try
             {
-                var encuesta = await _encuestasRepository.GetById(id);
-                var encuestaViewModel = _mapper.Map<EncuestaViewModel>(encuesta);
-                return View(encuestaViewModel);
+                var seccion = await _encuestasRepository.GetPrimeraSeccionById(id, orden);
+
+                if (seccion != null)
+                {
+                    ViewBag.OrdenAnterior = (seccion.Orden - 1) == 0 ? seccion.Orden - 1 : 0;
+                    ViewBag.OrdenSiguiente = seccion.Orden + 1;
+                    var seccionViewModel = _mapper.Map<EncuestaSeccionViewModel>(seccion);
+                    return View(seccionViewModel);
+                }
+
+                ShowMessageInfo(Constantes.Mensajes.Encuesta_msj11);
+                return RedirectToAction(nameof(Editar), new { id });
             }
             catch (MessageAlertException ex)
             {
@@ -388,7 +397,7 @@ namespace EncuestasUABC.Controllers
                     .FirstOrDefault<EncuestaPregunta>(x => x.Id == preguntaId
                                                     && x.EncuestaSeccionId == seccionId
                                                     && x.EncuestaId == encuestaId, x => x.Opciones);
-                pregunta.Opciones = pregunta.Opciones.Where(x => !x.Eliminado).OrderBy(x=>x.Orden).ToList();
+                pregunta.Opciones = pregunta.Opciones.Where(x => !x.Eliminado).OrderBy(x => x.Orden).ToList();
                 return Ok(JsonConvert.SerializeObject(pregunta, Formatting.None,
                             new JsonSerializerSettings
                             {
@@ -485,7 +494,8 @@ namespace EncuestasUABC.Controllers
                 {
                     var idsOpcionesSinEliminar = model.Opciones.Select(x => x.Id);
                     var preguntassss = pregunta.Opciones.Where(x => !idsOpcionesSinEliminar.Contains(x.Id)).ToList();//.ForEach(x => x.Eliminado = true);
-                    model.Opciones.ToList().ForEach(x => {
+                    model.Opciones.ToList().ForEach(x =>
+                    {
                         if (x.Id != 0)
                         {
                             var opcionEditar = pregunta.Opciones.FirstOrDefault(y => y.Id == x.Id);
@@ -496,12 +506,12 @@ namespace EncuestasUABC.Controllers
                         {
                             var nuevaOpcion = _mapper.Map<EncuestaPreguntaOpcion>(x);
                             pregunta.Opciones.Add(nuevaOpcion);
-                        }                        
-                    });                   
+                        }
+                    });
                 }
                 pregunta.Descripcion = model.Descripcion;
                 pregunta.Obligatoria = model.Obligatoria;
-               await _repository.Update<EncuestaPregunta>(pregunta);
+                await _repository.Update<EncuestaPregunta>(pregunta);
                 return Ok(model.Id);
             }
             catch (MessageAlertException ex)
@@ -575,7 +585,7 @@ namespace EncuestasUABC.Controllers
                 var encuesta = await _repository.FirstOrDefault<Encuesta>(x => x.Id == encuestaId, x => x.EncuestaSecciones);
                 var secciones = encuesta.EncuestaSecciones.OrderBy(x => seccionId.IndexOf(x.Id)).ToList();
                 int orden = 1;
-                secciones.ForEach(x => { x.Orden = orden; orden++; });
+                secciones.Where(x => !x.Eliminado).ToList().ForEach(x => { x.Orden = orden; orden++; });
                 encuesta.EncuestaSecciones = secciones;
                 await _repository.Update<Encuesta>(encuesta);
                 return Ok();
@@ -601,7 +611,7 @@ namespace EncuestasUABC.Controllers
                 var seccion = await _repository.FirstOrDefault<EncuestaSeccion>(x => x.Id == seccionId && x.EncuestaId == encuestaId, x => x.EncuestaPreguntas);
                 var preguntas = seccion.EncuestaPreguntas.OrderBy(x => preguntaId.IndexOf(x.Id)).ToList();
                 int orden = 1;
-                preguntas.ForEach(x => { x.Orden = orden; orden++; });
+                preguntas.Where(x => !x.Eliminado).ToList().ForEach(x => { x.Orden = orden; orden++; });
                 seccion.EncuestaPreguntas = preguntas;
                 await _repository.Update<EncuestaSeccion>(seccion);
                 return Ok();

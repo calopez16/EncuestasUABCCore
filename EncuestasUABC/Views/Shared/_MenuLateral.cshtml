@@ -1,0 +1,81 @@
+﻿@model EncuestasUABC.ViewModels.UsuarioSessionInfoViewModel
+@{
+    Layout = null;
+}
+
+<!-- Sidebar -->
+<div class="bg-light border-right" id="sidebar-wrapper">
+    <div class="list-group list-group-flush">
+        <div class="row">
+            <div class="col-12">
+                <h4 class="text-primary mt-2 text-center">
+                    <img src="~/img/EncuestasUABCLogo.svg" style="width:40px" />
+                    Encuestas UABC
+                </h4>
+                <hr />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 text-center">
+                <span class="text-primary">@Model.Rol</span>
+                <hr />
+            </div>
+            <div class="col-12">
+                <ul class="opciones">
+                    <li>
+                        <a asp-action="Perfil" asp-controller="Account" class="opciones-item btn btn-primary text-left p-3 pl-4 m-0">
+                            <i class="material-icons float-left clearfix">person</i>
+                            <span class="pl-3">Perfil</span>
+                        </a>
+                    </li>
+                    @foreach (var permiso in Model.PermisosMenu)
+                    {
+                        <li>
+                            @if (!permiso.PermisosHijos.Any())
+                            {
+
+                                <a class="opciones-item btn btn-primary text-left p-3 pl-4 m-0" href="@Url.Action(permiso.Action,permiso.Controller)">
+                                    <i class="material-icons float-left">@permiso.Icono</i>
+                                    <span class="pl-3" style="vertical-align:middle">@permiso.Descripcion</span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="opciones-item btn btn-primary text-left p-3 pl-4">
+                                    <i class="material-icons float-left">@permiso.Icono</i>
+                                    <span class="pl-3">@permiso.Descripcion</span>
+                                    <i class="material-icons float-right">keyboard_arrow_down</i>
+                                </a>
+                                <ul style="display:none">
+                                    @foreach (var permisoHijo in permiso.PermisosHijos)
+                                    {
+                                        <li>
+                                            <a class="sub-opciones-item btn btn-secondary text-left p-3 pl-4" href="@Url.Action(permisoHijo.Action,permisoHijo.Controller)">
+                                                <i class="material-icons float-left">@permisoHijo.Icono</i>
+                                                <span class="pl-3">@permisoHijo.Descripcion</span>
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        </li>
+                    }
+                </ul>
+                <form asp-action="Logout" asp-controller="Account" id="form_Logout">
+                </form>
+            </div>
+            <div class="col-12">
+                <hr />
+                <ul class="opciones">
+                    <li>
+                        <a class="opciones-item btn btn-primary text-left p-3 pl-4 m-0" href="##" onclick="$('#form_Logout').submit();">
+                            <i class="material-icons float-left clearfix">exit_to_app</i>
+                            <span class="pl-3">Cerrar Sesión</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /#sidebar-wrapper -->

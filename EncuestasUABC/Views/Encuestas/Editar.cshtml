@@ -30,9 +30,9 @@
                 <button class="btn btn-primary bmd-btn-fab btn_AgregarSeccion mr-2" data-toggle="tooltip" data-placement="bottom" title="Agregar sección">
                     <i class="material-icons md-36">library_add</i>
                 </button>
-                <button class="btn btn-info bmd-btn-fab" data-toggle="tooltip" data-placement="bottom" title="Vista previa">
+                <a href="@Url.Action("VistaPrevia","Encuestas",new { id=Model.Id })"target="_blank" class="btn btn-info bmd-btn-fab float-right" data-toggle="tooltip" data-placement="bottom" title="Vista previa">
                     <i class="material-icons">visibility</i>
-                </button>
+                </a>
             </div>
         </div>
     </div>
