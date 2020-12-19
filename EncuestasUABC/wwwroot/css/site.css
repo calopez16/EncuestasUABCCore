@@ -127,5 +127,8 @@ a.bmd-btn-fab {
     border-radius: 5px;
 }
 
+.radio label, .is-focused .radio label, .radio-inline, .is-focused .radio-inline, .checkbox label, .is-focused .checkbox label, .checkbox-inline, .is-focused .checkbox-inline, .switch label, .is-focused .switch label {
+    color: rgba(0, 0, 0, 1);
+}
 
 
