@@ -2,88 +2,134 @@
 @using EncuestasUABC.Enumerador
 @model EncuestaSeccionViewModel
 @{
-    ViewData["Title"] = Model.EncuestaIdNavigation.Nombre + " (Vista Previa)";
+    if (Model != null)
+    {
+        ViewData["Title"] = Model.EncuestaIdNavigation.Nombre + " (Vista Previa)";
+    }
+    else
+    {
+        ViewData["Title"] = ViewBag.NombreEncuesta + " (Vista Previa)";
+    }
     Layout = "~/Views/Shared/_LayoutEncuesta.cshtml";
 }
 
 <div class="card">
     <div class="card-header">
         <div class="text-center">
-            <h1 class="mt-1 text-center">@Model.Nombre</h1>
-            <h5>
-                Encuesta: @Model.EncuestaIdNavigation.Nombre
-            </h5>
+            @if (!ViewBag.TerminarSeccion)
+            {
+                <h1 class="mt-1 text-center">@Model.Nombre</h1>
+                <h5>
+                    Encuesta: @Model.EncuestaIdNavigation.Nombre
+                </h5>
+            }
+            else
+            {
+                <h1 class="mt-1 text-center">
+                    Encuesta: @ViewBag.NombreEncuesta
+                </h1>
+            }
         </div>
+
     </div>
     <div class="card-body">
         <div class="row">
-            @foreach (var pregunta in Model.EncuestaPreguntas)
+            @if (!ViewBag.TerminarSeccion)
             {
-                <div class="col-12 mt-4 mb-2 p-3 border border-light pregunta-container" data-TipoPregunta="@pregunta.TipoPreguntaId">
-                    <label class="h4 font-weight-bold">
-                        @pregunta.Descripcion <span class="pregunta-validation h6 text-danger" data-text="La pregunta es requerida"></span>
-                    </label>
-                    <div class="form-group">
-                        @if (pregunta.TipoPreguntaId == (int)TipoPreguntaId.Abierta)
-                        {
-                            <textarea class="form-control respuesta" rows="5" placeholder="Respuesta"></textarea>
-                        }
-                        else if (pregunta.TipoPreguntaId == (int)TipoPreguntaId.Multiple)
-                        {
-                            <div class="row d-flex justify-content-sm-between justify-content-lg-start">
-                                @foreach (var opcion in pregunta.Opciones)
-                                {
-                                    <div class="col-sm-6 col-lg-4">
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" class="respuesta"> @opcion.Descripcion
-                                        </label>
-                                    </div>
-                                }
-                            </div>
-                        }
-                        else if (pregunta.TipoPreguntaId == (int)TipoPreguntaId.UnicaOpcion)
-                        {
-                            <div class="row d-flex justify-content-sm-between justify-content-lg-start">
-                                @foreach (var opcion in pregunta.Opciones)
-                                {
-                                    <div class="col-sm-6  col-md-4 col-lg-2">
-                                        <label class="radio-inline">
-                                            <input type="radio" name="radio_@pregunta.Id" class="respuesta"> @opcion.Descripcion
-                                        </label>
-                                    </div>
-                                }
-                            </div>
-                        }
-                        else if (pregunta.TipoPreguntaId == (int)TipoPreguntaId.SelectList)
-                        {
-                            <select class="form-control respuesta">
-                                <option value="">Seleccionar</option>
-                                @foreach (var opcion in pregunta.Opciones)
-                                {
-                                    <option value="@opcion.Id">@opcion.Descripcion</option>
-                                }
-                            </select>
-                        }
+                foreach (var pregunta in Model.EncuestaPreguntas)
+                {
+                    <div class="col-12 mt-4 mb-2 p-3 border border-light pregunta-container" data-TipoPregunta="@pregunta.TipoPreguntaId">
+                        <label class="h4 font-weight-bold">
+                            @pregunta.Descripcion <span class="pregunta-validation h6 text-danger" data-text="La pregunta es requerida"></span>
+                        </label>
+                        <div class="form-group">
+                            @if (pregunta.TipoPreguntaId == (int)TipoPreguntaId.Abierta)
+                            {
+                                <textarea class="form-control respuesta" rows="2" placeholder="Respuesta"></textarea>
+                            }
+                            else if (pregunta.TipoPreguntaId == (int)TipoPreguntaId.Multiple)
+                            {
+                                <div class="row d-flex justify-content-sm-between justify-content-lg-start">
+                                    @foreach (var opcion in pregunta.Opciones)
+                                    {
+                                        <div class="col-sm-6 col-lg-4">
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" class="respuesta"> @opcion.Descripcion
+                                            </label>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            else if (pregunta.TipoPreguntaId == (int)TipoPreguntaId.UnicaOpcion)
+                            {
+                                <div class="row d-flex justify-content-sm-between justify-content-lg-start">
+                                    @foreach (var opcion in pregunta.Opciones)
+                                    {
+                                        <div class="col-sm-6  col-md-4 col-lg-2">
+                                            <label class="radio-inline">
+                                                <input type="radio" name="radio_@pregunta.Id" class="respuesta"> @opcion.Descripcion
+                                            </label>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            else if (pregunta.TipoPreguntaId == (int)TipoPreguntaId.SelectList)
+                            {
+                                <select class="form-control respuesta">
+                                    <option value="">Seleccionar</option>
+                                    @foreach (var opcion in pregunta.Opciones)
+                                    {
+                                        <option value="@opcion.Id">@opcion.Descripcion</option>
+                                    }
+                                </select>
+                            }
 
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-md-12">
+                    <div class="alert alert-success text-center p-5">
+                        <h4>Tus respuestas han sido registradas exitosamente</h4>
+                        <h5>Gracias por tu particiapación</h5>
+                        <i class="material-icons md-48">check_circle</i>
                     </div>
                 </div>
             }
+
         </div>
     </div>
     <div class="card-footer">
         <div class="row d-flex justify-content-between">
-            <div class="col-2">
-                @if (ViewBag.OrdenAnterior != 0)
-                {
-                    <button class="btn btn-primary btn-raised">Regresar</button>
-                }
-            </div>
-            <div class="col-2 text-right">
-                @if (ViewBag.OrdenSiguiente != 0)
-                {
-                    <a href="@Url.Action("VistaPrevia","Encuestas",new { id = Model.Id, orden = ViewBag.OrdenSiguiente})" class="btn btn-primary btn-raised">Siguiente</a>
-                }
-            </div>
+            @if (!ViewBag.TerminarSeccion)
+            {
+                <div class="col-2">
+                    @if (ViewBag.SeccionAnterior != 0)
+                    {
+                        <a href="@Url.Action("VistaPrevia","Encuestas",new { id = Model.EncuestaId, idSeccion = ViewBag.SeccionAnterior})" class="btn btn-primary btn-raised">
+                            Anterior
+                        </a>
+                    }
+                </div>
+                <div class="col-2 text-right">
+                    @if (ViewBag.SeccionSiguiente != 0)
+                    {
+                        <a href="@Url.Action("VistaPrevia","Encuestas",new { id = Model.EncuestaId, idSeccion = ViewBag.SeccionSiguiente})" class="btn btn-primary btn-raised">Siguiente</a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("VistaPrevia","Encuestas",new { termEnc = true })" class="btn btn-primary btn-raised">Terminar</a>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="col-12 text-center">
+                    <button class="btn btn-primary btn-raised" onclick="window.close()">Cerrar ventana</button>
+                </div>
+            }
         </div>
     </div>
 </div>

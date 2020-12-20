@@ -1,4 +1,4 @@
-﻿namespace EncuestasUABC.Models.Catalogos.Estatus
+﻿namespace EncuestasUABC.Models
 {
     public class EncuestaAsignadaEstatus
     {

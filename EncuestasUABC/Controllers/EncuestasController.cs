@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EncuestasUABC.AccesoDatos.Repository.Interfaces;
-using EncuestasUABC.Models.Catalogos;
 using EncuestasUABC.Models;
 using EncuestasUABC.Utilidades;
 using Microsoft.AspNetCore.Mvc;
@@ -14,8 +13,6 @@ using EncuestasUABC.Enumerador;
 using EncuestasUABC.Models.ViewModels;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
-using EncuestasUABC.Models.SelectViewModel;
-using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
 namespace EncuestasUABC.Controllers
@@ -141,20 +138,42 @@ namespace EncuestasUABC.Controllers
 
         #region VISTA PREVIA
 
-        public async Task<IActionResult> VistaPrevia(int id, int orden = 0)
+        /// <summary>
+        /// Obtiene la vista previa de una sección en especifico.
+        /// </summary>
+        /// <param name="id">Id de la encuesta</param>
+        /// <param name="idSeccion">Id de la sección</param>
+        /// <returns></returns>
+        public async Task<IActionResult> VistaPrevia(int id, int idSeccion, bool termEnc = false)
         {
             #region VistaPrevia
             try
             {
-                var seccion = await _encuestasRepository.GetPrimeraSeccionById(id, orden);
+                ViewBag.TerminarSeccion = termEnc;
 
-                if (seccion != null)
+                if (!termEnc)
                 {
-                    ViewBag.OrdenAnterior = (seccion.Orden - 1) == 0 ? seccion.Orden - 1 : 0;
-                    ViewBag.OrdenSiguiente = seccion.Orden + 1;
-                    var seccionViewModel = _mapper.Map<EncuestaSeccionViewModel>(seccion);
-                    return View(seccionViewModel);
+                    EncuestaSeccion encuestaSeccion = null;
+                    if (idSeccion == 0)
+                        encuestaSeccion = await _encuestasRepository.GetPrimeraSeccionById(id);
+                    else
+                        encuestaSeccion = await _encuestasRepository.GetSeccionById(idSeccion, id);
+
+                    if (encuestaSeccion != null)
+                    {
+                        var secciones = await _encuestasRepository.GetSecciones(id);
+                        ViewBag.SeccionAnterior = secciones.TakeWhile(x => x.Id != encuestaSeccion.Id).LastOrDefault()?.Id ?? 0;
+                        ViewBag.SeccionSiguiente = secciones.SkipWhile(x => x.Id != encuestaSeccion.Id).Skip(1).FirstOrDefault()?.Id ?? 0;
+                        var seccionViewModel = _mapper.Map<EncuestaSeccionViewModel>(encuestaSeccion);
+                        return View(seccionViewModel);
+                    }
                 }
+                else
+                {
+                    ViewBag.NombreEncuesta = (await _repository.GetById<Encuesta>(id)).Nombre;
+                    return View();
+                }
+
 
                 ShowMessageInfo(Constantes.Mensajes.Encuesta_msj11);
                 return RedirectToAction(nameof(Editar), new { id });
@@ -687,7 +706,6 @@ namespace EncuestasUABC.Controllers
         #endregion
 
         #endregion
-
 
         #region VIEWBAGS
         public async Task Campus()

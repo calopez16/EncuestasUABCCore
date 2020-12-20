@@ -1,4 +1,4 @@
-﻿using EncuestasUABC.Models.Catalogos.Tipos;
+﻿using EncuestasUABC.Models;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 

@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EncuestasUABC.AccesoDatos.Repository.Interfaces;
-using EncuestasUABC.Models.Catalogos;
+using EncuestasUABC.Models;
 using EncuestasUABC.Models.SelectViewModel;
 using EncuestasUABC.Utilidades;
 using Microsoft.AspNetCore.Mvc;

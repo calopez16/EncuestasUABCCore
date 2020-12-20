@@ -2,7 +2,6 @@
 using EncuestasUABC.AccesoDatos.Repository.Interfaces;
 using EncuestasUABC.Constantes;
 using EncuestasUABC.Models;
-using EncuestasUABC.Models.Catalogos;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;

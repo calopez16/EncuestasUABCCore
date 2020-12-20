@@ -1,4 +1,4 @@
-﻿namespace EncuestasUABC.Models.Catalogos.Tipos
+﻿namespace EncuestasUABC.Models
 {
     public class TipoUsuario
     {

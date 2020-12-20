@@ -1,5 +1,4 @@
 ﻿using EncuestasUABC.Models;
-using EncuestasUABC.Models.Catalogos;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;

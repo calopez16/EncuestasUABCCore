@@ -1,5 +1,4 @@
-﻿using EncuestasUABC.Models.Catalogos;
-using EncuestasUABC.Models.Catalogos.Estatus;
+﻿using EncuestasUABC.Models;
 using System;
 using System.Collections.Generic;
 

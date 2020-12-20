@@ -1,4 +1,4 @@
-﻿using EncuestasUABC.Models.Catalogos;
+﻿using EncuestasUABC.Models;
 using System;
 
 namespace EncuestasUABC.Models

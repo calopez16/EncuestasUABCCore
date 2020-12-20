@@ -1,7 +1,4 @@
 ﻿using EncuestasUABC.Models;
-using EncuestasUABC.Models.Catalogos;
-using EncuestasUABC.Models.Catalogos.Estatus;
-using EncuestasUABC.Models.Catalogos.Tipos;
 using EncuestasUABC.Models.Relaciones;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

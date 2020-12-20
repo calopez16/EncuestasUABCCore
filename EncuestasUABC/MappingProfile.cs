@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using EncuestasUABC.Models;
-using EncuestasUABC.Models.Catalogos;
-using EncuestasUABC.Models.Catalogos.Tipos;
 using EncuestasUABC.Models.ViewModels;
 using EncuestasUABC.Models.ViewModels.Catalogos;
 

@@ -1,5 +1,4 @@
-﻿using EncuestasUABC.Models.Catalogos;
-
+﻿
 namespace EncuestasUABC.Models.Relaciones
 {
     public class UsuarioPermiso

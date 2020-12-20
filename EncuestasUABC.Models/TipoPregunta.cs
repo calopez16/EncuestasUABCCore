@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 
-namespace EncuestasUABC.Models.Catalogos.Estatus
+namespace EncuestasUABC.Models
 {
-    public class EstatusEncuesta
+    public class TipoPregunta
     {
         public int Id { get; set; }
         public string Descripcion { get; set; }
         public bool Estatus { get; set; }
 
-        public virtual ICollection<Encuesta> Encuestas { get; set; }
+        public virtual ICollection<EncuestaPregunta> EncuestaPreguntas { get; set; }
+
     }
 }

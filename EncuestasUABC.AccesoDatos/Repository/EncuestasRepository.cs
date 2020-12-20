@@ -1,9 +1,8 @@
 ﻿using EncuestasUABC.AccesoDatos.Data;
 using EncuestasUABC.AccesoDatos.Repository.Interfaces;
 using EncuestasUABC.Models;
-using EncuestasUABC.Models.Catalogos;
-using EncuestasUABC.Models.Catalogos.Tipos;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
@@ -72,8 +71,7 @@ namespace EncuestasUABC.AccesoDatos.Repository
             #region GetSeccionById
 
             return await _context.EncuestaSecciones
-                .Include(x => x.EncuestaPreguntas)
-                .Include("EncuestaPreguntas.TipoPreguntaIdNavigation")
+                .Include(x => x.EncuestaPreguntas).ThenInclude(x => x.TipoPreguntaIdNavigation)
                 .Include(x => x.EncuestaIdNavigation)
                 .Select(x => new EncuestaSeccion
                 {
@@ -85,43 +83,7 @@ namespace EncuestasUABC.AccesoDatos.Repository
                     EncuestaPreguntas = x.EncuestaPreguntas.Where(x => !x.Eliminado).OrderBy(x => x.Orden).Select(y => new EncuestaPregunta
                     {
                         Id = y.Id,
-                        Descripcion = y.Descripcion,
-                        TipoPreguntaId = y.TipoPreguntaId,
-                        TipoPreguntaIdNavigation = new TipoPregunta
-                        {
-                            Descripcion = y.TipoPreguntaIdNavigation.Descripcion
-                        },
-                        Opciones = y.Opciones.ToList(),
-                        Obligatoria = y.Obligatoria
-                    }).ToList(),
-                    EncuestaIdNavigation = new Encuesta
-                    {
-                        Nombre = x.EncuestaIdNavigation.Nombre
-                    }
-                }).FirstOrDefaultAsync(x => x.Id == id && x.EncuestaId == encuestaId);
-
-            #endregion
-        }
-
-        public async Task<EncuestaSeccion> GetPrimeraSeccionById(int encuestaId, int orden = 0)
-        {
-            #region GetSeccionById
-
-            var seccion = await _context.EncuestaSecciones
-                .Include(x => x.EncuestaPreguntas)
-                .Include("EncuestaPreguntas.TipoPreguntaIdNavigation")
-                .Include(x => x.EncuestaIdNavigation)
-                .Select(x => new EncuestaSeccion
-                {
-                    Id = x.Id,
-                    EncuestaId = x.EncuestaId,
-                    Nombre = x.Nombre,
-                    Descripcion = x.Descripcion,
-                    Orden = x.Orden,
-                    EncuestaPreguntas = x.EncuestaPreguntas.Where(x => !x.Eliminado).OrderBy(x => x.Orden).Select(y => new EncuestaPregunta
-                    {
-                        Id = y.Id,
-                        Orden=y.Orden,
+                        Orden = y.Orden,
                         Descripcion = y.Descripcion,
                         TipoPreguntaId = y.TipoPreguntaId,
                         TipoPreguntaIdNavigation = new TipoPregunta
@@ -135,18 +97,65 @@ namespace EncuestasUABC.AccesoDatos.Repository
                     {
                         Nombre = x.EncuestaIdNavigation.Nombre
                     }
-                }).ToListAsync();
-
-            if (orden != 0)
-                seccion = seccion.Where(x => x.Orden == orden).ToList();
-
-            return seccion
-               .OrderBy(x => x.Orden)
-               .FirstOrDefault(x => x.EncuestaId == encuestaId && !x.Eliminado);
+                }).FirstOrDefaultAsync(x => x.Id == id && x.EncuestaId == encuestaId);
 
             #endregion
         }
 
+        public async Task<EncuestaSeccion> GetPrimeraSeccionById(int encuestaId)
+        {
+            #region GetPrimeraSeccionById
+
+            return await _context.EncuestaSecciones
+                .Include(x => x.EncuestaPreguntas)
+                .ThenInclude(x => x.TipoPreguntaIdNavigation)
+                .Include(x => x.EncuestaIdNavigation)
+                .Select(x => new EncuestaSeccion
+                {
+                    Id = x.Id,
+                    EncuestaId = x.EncuestaId,
+                    Nombre = x.Nombre,
+                    Descripcion = x.Descripcion,
+                    Orden = x.Orden,
+                    EncuestaPreguntas = x.EncuestaPreguntas.Where(x => !x.Eliminado).OrderBy(x => x.Orden).Select(y => new EncuestaPregunta
+                    {
+                        Id = y.Id,
+                        Orden = y.Orden,
+                        Descripcion = y.Descripcion,
+                        TipoPreguntaId = y.TipoPreguntaId,
+                        TipoPreguntaIdNavigation = new TipoPregunta
+                        {
+                            Descripcion = y.TipoPreguntaIdNavigation.Descripcion
+                        },
+                        Opciones = y.Opciones.Where(x => !x.Eliminado).OrderBy(x => x.Orden).ToList(),
+                        Obligatoria = y.Obligatoria
+                    }).ToList(),
+                    EncuestaIdNavigation = new Encuesta
+                    {
+                        Nombre = x.EncuestaIdNavigation.Nombre
+                    }
+                })
+                .OrderBy(x => x.Orden)
+                .FirstOrDefaultAsync(x => x.EncuestaId == encuestaId);
+
+            #endregion
+        }
+
+        public async Task<List<EncuestaSeccion>> GetSecciones(int encuestaId)
+        {
+            #region GetSecciones
+            return await _context.EncuestaSecciones
+              .Where(x => x.EncuestaId == encuestaId && !x.Eliminado)
+              .Select(x => new EncuestaSeccion
+              {
+                  Id = x.Id,
+                  EncuestaId = x.EncuestaId,
+                  Orden = x.Orden
+              })
+              .OrderBy(x => x.Orden)
+              .ToListAsync();
+            #endregion
+        }
         public async Task<EncuestaPregunta> GetPreguntaById(int id, int encuestaId, int seccionId)
         {
             #region GetPreguntaById

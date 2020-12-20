@@ -7,7 +7,6 @@ using EncuestasUABC.AccesoDatos.Repository.Interfaces;
 using EncuestasUABC.Constantes;
 using EncuestasUABC.Enumerador;
 using EncuestasUABC.Models;
-using EncuestasUABC.Models.Catalogos;
 using EncuestasUABC.Utilidades;
 using EncuestasUABC.ViewModels;
 using Microsoft.AspNetCore.Authorization;

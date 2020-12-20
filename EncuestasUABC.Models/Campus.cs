@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace EncuestasUABC.Models.Catalogos
+namespace EncuestasUABC.Models
 {
     public class Campus
     {
