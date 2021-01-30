@@ -18,8 +18,16 @@
                 <partial name="~/Views/Usuarios/PartialViews/_FormCambiarContrasena.cshtml" model="new CambiarContrasenaViewModel()" />
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger btn-raised" data-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-success btn-raised ml-2">Cambiar Contraseña</button>
+                <span class="btn-group-sm">
+                    <button type="button" class="btn btn-danger bmd-btn-fab btn-raised mr-2" data-dismiss="modal" data-toggle="tooltip" data-placement="bottom" title="Cancelar">
+                        <i class="material-icons">close</i>
+                    </button>
+                </span>
+                <span class="btn-group-sm ml-1">
+                    <button type="submit" class="btn btn-success bmd-btn-fab btn-raised" data-toggle="tooltip" data-placement="bottom" title="Aceptar">
+                        <i class="material-icons">check</i>
+                    </button>
+                </span>
             </div>
         </form>
     </div>

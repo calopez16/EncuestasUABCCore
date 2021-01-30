@@ -8,16 +8,24 @@
 
 <div class="card">
     <div class="card-header">
-        <a asp-action="Index" class="btn btn-primary bmd-btn-fab float-left mr-4" data-toggle="tooltip" data-placement="bottom" title="Regresar">
-            <i class="material-icons md-36">navigate_before</i>
-        </a>
-        <a asp-action="Permisos" asp-route-email="@Model.Email" class="btn btn-primary bmd-btn-fab float-right mr-4" data-toggle="tooltip" data-placement="bottom" title="Permisos">
-            <i class="material-icons">verified_user</i>
-        </a>
-        <button id="btn_CambiarContrasena" data-email="@Model.Email" class="btn btn-warning bmd-btn-fab float-right mr-4" data-toggle="tooltip" data-placement="bottom" title="Cambiar contraseña">
-            <i class="material-icons">vpn_key</i>
-        </button>
-        <h1 class="mt-2">@ViewData["Title"]</h1>
+        <div class="row d-flex justify-content-between">
+            <div class="col-12 col-md-8 d-flex justify-content-start">
+                <span class="btn-group-sm mt-1">
+                    <a asp-action="Index" class="btn bmd-btn-fab text-primary" data-toggle="tooltip" data-placement="bottom" title="Regresar">
+                        <i class="material-icons md-36">navigate_before</i>
+                    </a>
+                </span>
+                <h1 class="ml-1">@ViewData["Title"]</h1>
+            </div>
+            <div class="col-12 col-md-4 d-flex justify-content-center justify-content-lg-end">
+                <a asp-action="Permisos" asp-route-email="@Model.Email" class="btn btn-primary bmd-btn-fab m-1" data-toggle="tooltip" data-placement="bottom" title="Permisos">
+                    <i class="material-icons">verified_user</i>
+                </a>
+                <button id="btn_CambiarContrasena" data-email="@Model.Email" class="btn btn-warning bmd-btn-fab m-1" data-toggle="tooltip" data-placement="bottom" title="Cambiar contraseña">
+                    <i class="material-icons">vpn_key</i>
+                </button>
+            </div>
+        </div>
     </div>
     <div class="card-body">
         <form asp-action="Edit" id="form_Usuario">
@@ -28,8 +36,13 @@
             @await Html.PartialAsync("~/Views/Usuarios/PartialViews/_FormMaestro.cshtml", Model)
         </form>
     </div>
-    <div class="card-footer text-center">
-        <button type="button" class="btn btn-primary btn-raised" id="btn_Guardar">Guardar</button>
+    <div class="card-footer d-flex justify-content-center">
+        @*<button type="button" class="btn btn-outline-primary bmd-btn-fab btn-raised" id="btn_Guardar" data-toggle="tooltip" data-placement="bottom" title="Limpiar formulario">
+                <i class="material-icons md-36">backspace</i>
+            </button>*@
+        <button type="button" class="btn btn-primary bmd-btn-fab btn-raised ml-2" id="btn_Guardar" data-toggle="tooltip" data-placement="bottom" title="Guardar">
+            <i class="material-icons md-36">save</i>
+        </button>
     </div>
 </div>
 

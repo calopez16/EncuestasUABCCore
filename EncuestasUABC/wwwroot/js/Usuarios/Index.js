@@ -4,11 +4,46 @@ $(document).ready(function () {
 });
 
 function CargarUsuarios() {
-    $('#table_Usuarios').DataTable({
+    var table=$('#table_Usuarios').DataTable({
         // ServerSide Setups
         serverSide: true,
         //Habilita la paginación
         paging: true,
+        responsive: {
+            details: {
+                type: 'column',
+                target: -1,
+                renderer: function (api, rowIdx, columns) {
+                    var datos = '';
+                    var botones = '';
+                    for (var i = 0; i < columns.length; i++) {
+                        if (columns[i].hidden) {
+                            if (columns[i].title == "") {
+                                botones += columns[i].data;
+                            } else {
+                                datos += `<tr><td><label class="font-weight-bold">${columns[i].title}</label></td>
+                                        <td><span>${columns[i].data}</span></tr></td>`;
+                            }
+                        }
+
+                    }
+
+                    var data = `${datos}
+                                    <tr><td colspan="2"><div class="d-flex justify-content-end w-100">${botones}</div></td></tr>`;
+                    return data ?
+                        $('<table/>').append(data) :
+                        false;
+                }
+            },
+
+        },
+        columnDefs: [
+            {
+                className: 'control',
+                targets: -1,
+                orderable: false
+            }
+        ],
         // Petición AJAX
         ajax: {
             //URL de donde se obtendrán los datos paginados.
@@ -79,7 +114,7 @@ function CargarUsuarios() {
             {
                 data: 'userName',
                 sortable: false,
-                autoWidth: true,
+                autoWidth: false,
                 className: "text-center",
                 render: function (data, type, row) {
                     var item = `<span class="btn-group-sm">
@@ -93,12 +128,26 @@ function CargarUsuarios() {
             {
                 data: 'userName',
                 sortable: false,
-                autoWidth: true,
+                autoWidth: false,
                 className: "text-center",
                 render: function (data, type, row) {
                     var item = `<span class="btn-group-sm">
-                                  <button class="btn btn-danger bmd-btn-fab btn_Eliminar" data-id="${data}" data-toggle="tooltip" data-placement="bottom" title="Eliminar usuario">
+                                  <button class="btn btn-danger bmd-btn-fab btn_Eliminar ml-2 ml-mb-0" data-id="${data}" data-toggle="tooltip" data-placement="bottom" title="Eliminar usuario">
                                     <i class="material-icons">delete</i>
+                                  </button>
+                                </span>`;
+                    return item;
+                }
+            },
+            {
+                data: null,
+                sortable: false,
+                autoWidth: false,
+                visible: true,
+                render: function (data, type, row) {
+                    var item = `<span class="btn-group-sm">
+                                  <button class="btn bmd-btn-fab control" data-toggle="tooltip" data-placement="bottom" title="Más información">
+                                    <i class="material-icons">expand_more</i>
                                   </button>
                                 </span>`;
                     return item;
@@ -123,7 +172,7 @@ function CargarUsuarios() {
             $('[data-toggle="tooltip"]').tooltip();
         }
     });
-
+  
     $("#table_Usuarios").on("click", ".btn_Eliminar", function () {
         var email = $(this).data("id");
         $("#span_EliminarUsuario").text(email);

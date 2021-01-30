@@ -1,4 +1,5 @@
-﻿var estatusInProgress = 0;
+﻿
+var estatusInProgress = 0;
 function showEstatusLoading() {
     $("#estatusAlertLoading").slideDown();
     estatusInProgress++;
@@ -53,9 +54,20 @@ $(document).ready(() => {
             ['view', ['fullscreen', 'help']],
         ],
     });
+
+    
 });
 
 $(window).on("load", function () {
     $(".loader-container").fadeOut();
+});
+
+$(document).on("click", ".control",function () {
+    var buttonText = $(this).children("i").html();
+    if (buttonText == "expand_more") {
+        $(this).children("i").html("expand_less");
+    } else {
+        $(this).children("i").html("expand_more");
+    }
 });
 

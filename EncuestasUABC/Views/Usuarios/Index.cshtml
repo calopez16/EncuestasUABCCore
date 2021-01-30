@@ -4,30 +4,29 @@
 }
 
 <div class="card">
-    <div class="card-header">
-        <a asp-action="Create" class="btn btn-primary bmd-btn-fab float-right" data-toggle="tooltip" data-placement="bottom" title="Agregar usuario">
-            <i class="material-icons">add</i>
+    <div class="card-header d-flex justify-content-between">
+        <h1 class="mt-1">@ViewData["Title"]</h1>
+        <a asp-action="Create" class="btn btn-primary bmd-btn-fab" data-toggle="tooltip" data-placement="bottom" title="Agregar usuario">
+            <i class="material-icons md-36">add</i>
         </a>
-        <h1 class="mt-md-2">@ViewData["Title"]</h1>
     </div>
     <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover" id="table_Usuarios">
-                <thead>
-                    <tr>
-                        <th>Correo</th>
-                        <th>Nombre</th>
-                        <th>Apellido Paterno</th>
-                        <th>Apellido Materno</th>
-                        <th>Rol</th>
-                        <th style="width:40px"></th>
-                        <th style="width:40px"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
+        <table class="table table-hover" id="table_Usuarios">
+            <thead>
+                <tr>
+                    <th>Correo</th>
+                    <th>Nombre</th>
+                    <th>Apellido Paterno</th>
+                    <th>Apellido Materno</th>
+                    <th>Rol</th>
+                    <th style="max-width:40px !important"></th>
+                    <th style="max-width:40px !important"></th>
+                    <th style="max-width:40px !important"></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
 </div>
 <partial name="~/Views/Usuarios/PartialViews/_ModalEliminarUsuario.cshtml" />

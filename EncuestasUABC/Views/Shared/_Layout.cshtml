@@ -38,30 +38,29 @@
     </div>
 
     <div class="d-flex" id="wrapper">
-
-        <partial name="~/Views/Shared/_MenuLateral.cshtml" model="usuarioInfo"/>
+        <partial name="~/Views/Shared/_MenuLateral.cshtml" model="usuarioInfo" />
         <!-- Page Content -->
         <div id="page-content-wrapper">
             <partial name="~/Views/Shared/_MenuSuperior.cshtml" model="usuarioInfo" />
-            <div class="container-fluid p-4">
+            <div class="p-md-4">
                 @RenderBody()
-                <footer class="page-footer text-center text-md-left pt-4">
-                    <!--Copyright-->
-                    <div class="footer-copyright py-3 text-center">
-                        <div class="container-fluid">
-                            © @DateTime.Now.Year Copyright: Encuestas UABC
-                        </div>
+            </div>
+            <footer class="page-footer text-center text-md-left pt-4">
+                <!--Copyright-->
+                <div class="footer-copyright py-3 text-center">
+                    <div class="container-fluid">
+                        © @DateTime.Now.Year Copyright: Encuestas UABC
                     </div>
-                    <!--/.Copyright-->
-                </footer>
-                <div class="estatusAlert position-absolute bg-primary">
-                    <ul class="list-unstyled text-light p-0 m-0" id="estatusAlertList">
-                        <li class="p-2" id="estatusAlertLoading" style="display:none">
-                            <span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>
-                            Cargando...
-                        </li>
-                    </ul>
                 </div>
+                <!--/.Copyright-->
+            </footer>
+            <div class="estatusAlert position-absolute bg-primary">
+                <ul class="list-unstyled text-light p-0 m-0" id="estatusAlertList">
+                    <li class="p-2" id="estatusAlertLoading" style="display:none">
+                        <span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>
+                        Cargando...
+                    </li>
+                </ul>
             </div>
         </div>
         <!-- /#page-content-wrapper -->
@@ -69,6 +68,7 @@
     <script type="text/javascript" src="~/lib/jquery-ui/jquery-ui.min.js"></script>
     <script type="text/javascript" src="~/lib/DataTables/datatables.js"></script>
     <script type="text/javascript" src="~/lib/DataTables/datatables.bootstrap4.js"></script>
+    <script type="text/javascript" src="~/lib/DataTables/datatables.responsive.min.js"></script>
     <script type="text/javascript" src="~/lib/popper/umd/popper.js"></script>
     <script type="text/javascript" src="~/lib/material-design/js/material-design.js"></script>
     <script type="text/javascript" src="~/lib/bootstrap-notify/bootstrap-notify.js"></script>

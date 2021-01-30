@@ -55,6 +55,10 @@
     overflow-y: scroll;
     overflow-x: hidden;
 }
+.opciones ul {
+    background: #024731;
+
+}
 
 .opciones, .opciones ul {
     width: 100%;
@@ -63,14 +67,17 @@
     padding: 0;
 }
 
+
 .opciones-item, .sub-opciones-item {
+    color:white !important;
     display: block;
     width: 100%;
     vertical-align: middle !important;
 }
 
 .opciones-item {
-    color: #135934 !important;
+    color: white !important;
+    margin-bottom:0;
 }
 
     .opciones-item.active {
@@ -81,8 +88,8 @@
         margin-top: -2px;
     }
 
-    .opciones-item:hover {
-        background: #135934 !important;
+    .opciones-item:hover, .sub-opciones-item:hover {
+        background: #DD971A !important;
         color: white !important;
     }
 
