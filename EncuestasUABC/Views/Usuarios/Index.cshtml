@@ -4,13 +4,71 @@
 }
 
 <div class="card">
-    <div class="card-header d-flex justify-content-between">
-        <h1 class="mt-1">@ViewData["Title"]</h1>
-        <a asp-action="Create" class="btn btn-primary bmd-btn-fab" data-toggle="tooltip" data-placement="bottom" title="Agregar usuario">
-            <i class="material-icons md-36">add</i>
-        </a>
+    <div class="card-header">
+        <div class="row d-flex justify-content-between">
+            <div class="col-12 col-md-8 d-flex justify-content-start">
+                <h1 class="ml-1">@ViewData["Title"]</h1>
+            </div>
+            <div class="col-12 col-md-4 d-flex justify-content-center justify-content-lg-end">
+                <button class="btn btn-light text-primary bmd-btn-fab" type="button" data-toggle="collapse" data-target="#filtros" aria-expanded="false">
+                    <i class="material-icons" data-toggle="tooltip" data-placement="bottom" title="Filtros">filter_alt</i>
+                </button>
+                <a asp-action="Create" class="btn btn-primary bmd-btn-fab page-loader ml-2" data-toggle="tooltip" data-placement="bottom" title="Agregar usuario">
+                    <i class="material-icons md-36">add</i>
+                </a>
+            </div>
+        </div>
     </div>
+
     <div class="card-body">
+        <div class="collapse" id="filtros">
+            <h4>Filtros</h4>
+            <div class="form-row">
+                <div class="col-md-4 col-lg-3">
+                    <div class="form-group">
+                        <label class="bmd-label-floating">Correo(usuario@uabc.edu.mx)</label>
+                        <input type="text" class="form-control" id="txt-filtro-correo">
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-3">
+                    <div class="form-group">
+                        <label class="bmd-label-floating">Nombre / Apellido Paterno / Apellido Materno</label>
+                        <input type="text" class="form-control" id="txt-filtro-nombre">
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-3">
+                    <div class="form-group">
+                        <label class="bmd-label-floating">Rol</label>
+                        <select class="form-control" asp-items="ViewBag.Roles" id="select-filtro-roles">
+                            <option value="">Seleccionar</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-3">
+                    <div class="form-group">
+                        <label class="bmd-label-floating"></label>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" id="check-filtro-estatus"> Estatus Eliminado
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 d-flex justify-content-center">
+                    <span class="btn-group-sm">
+                        <button class="btn btn-light text-primary bmd-btn-fab" type="button" data-toggle="tooltip" data-placement="bottom" title="Limpiar filtros" id="btn-limpiarFiltro">
+                            <i class="material-icons">clear</i>
+                        </button>
+                    </span>
+                    <span class="btn-group-sm ml-2">
+                        <button class="btn btn-success text-light bmd-btn-fab" type="button" data-toggle="tooltip" data-placement="bottom" title="Aplicar filtros" id="btn-AplicarFiltros">
+                            <i class="material-icons">check</i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <hr />
+        </div>
         <table class="table table-hover" id="table_Usuarios">
             <thead>
                 <tr>
@@ -30,5 +88,7 @@
     </div>
 </div>
 <partial name="~/Views/Usuarios/PartialViews/_ModalEliminarUsuario.cshtml" />
+<partial name="~/Views/Usuarios/PartialViews/_ModalRestaurarUsuario.cshtml" />
+
 <script type="text/javascript" src="~/js/Usuarios/Index.js"></script>
 

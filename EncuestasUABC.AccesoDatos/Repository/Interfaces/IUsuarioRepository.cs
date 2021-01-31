@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace EncuestasUABC.AccesoDatos.Repository.Interfaces
 {
-    public interface IUsuarioRepository:IDisposable
+    public interface IUsuarioRepository : IDisposable
     {
-        Task<List<ApplicationUser>> GetAll(string rol = null, bool activo = true);
+        Task<List<ApplicationUser>> GetAll(string rol = null, bool activo = true, string nombre = null, string correo = null);
         Task<List<Permiso>> PermisosByUser(string userId);
         Task<List<Permiso>> Permisos();
         Task<IdentityResult> Create(ApplicationUser user);

@@ -7,10 +7,19 @@
 <div class="card">
     <form asp-action="Permisos" id="form_Usuario">
         <div class="card-header">
-            <a asp-action="Edit" asp-route-email="@ViewBag.Email" class="btn btn-primary bmd-btn-fab float-left mr-4" data-toggle="tooltip" data-placement="bottom" title="Regresar">
-                <i class="material-icons md-36">navigate_before</i>
-            </a>
-            <h1 class="mt-2">@ViewData["Title"]</h1>
+            <div class="row d-flex justify-content-between">
+                <div class="col-12 col-md-8 d-flex justify-content-start">
+                    <span class="btn-group-sm mt-1">
+                        <a asp-action="Edit" asp-route-email="@ViewBag.Email" class="btn bmd-btn-fab text-primary page-loader" data-toggle="tooltip" data-placement="bottom" title="Regresar">
+                            <i class="material-icons md-36">navigate_before</i>
+                        </a>
+                    </span>
+                    <h1 class="ml-1">@ViewData["Title"]</h1>
+                </div>
+                <div class="col-12 col-md-4 d-flex justify-content-center justify-content-lg-end">
+
+                </div>
+            </div>
         </div>
         <div class="card-body">
             <input hidden name="email" value="@ViewBag.Email" />

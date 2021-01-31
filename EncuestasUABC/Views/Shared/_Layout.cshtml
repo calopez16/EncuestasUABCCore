@@ -33,16 +33,18 @@
     <script type="text/javascript">
             window.urlproyecto='@url';
     </script>
-    <div class="loader-container">
+
+    <div class="loader-container">        
         <div class="loader"></div>
     </div>
+
 
     <div class="d-flex" id="wrapper">
         <partial name="~/Views/Shared/_MenuLateral.cshtml" model="usuarioInfo" />
         <!-- Page Content -->
         <div id="page-content-wrapper">
             <partial name="~/Views/Shared/_MenuSuperior.cshtml" model="usuarioInfo" />
-            <div class="p-md-4">
+            <div class="p-md-4 contenido">
                 @RenderBody()
             </div>
             <footer class="page-footer text-center text-md-left pt-4">

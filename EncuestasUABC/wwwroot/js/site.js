@@ -42,10 +42,10 @@ $(document).ready(() => {
     });
     $('.editor').summernote({
         lang: 'es-ES',
-        height:300,
+        height: 300,
         toolbar: [
             ['style', ['style']],
-            ['font', ['bold', 'underline','clear']],
+            ['font', ['bold', 'underline', 'clear']],
             ['fontname', ['fontname']],
             ['color', ['']],
             ['para', ['ul', 'ol', 'paragraph']],
@@ -55,14 +55,31 @@ $(document).ready(() => {
         ],
     });
 
-    
+    $(document).on("click", "a.page-loader",function (e) {
+        // Get the original link location and stop it from occuring
+        var link = this;
+        e.preventDefault();
+        var contenido = $(".contenido");
+        $(".loader-container").fadeIn();
+        // First fade body content away, fade the background color to the defined custom color. Once it has fade in, fade it away and then follow the link href
+        $(contenido).animate({
+            "opacity": 1
+        },300, function () {
+            // Fade background color back to orginal and once finished follow link
+            $(contenido).animate({ "background-color": "#fff" }, 300, function () {
+                //   $(".loader-container").fadeOut();
+                var href = $(link).attr("href");
+                location.href = href;
+            })
+        });
+    });
 });
 
 $(window).on("load", function () {
     $(".loader-container").fadeOut();
 });
 
-$(document).on("click", ".control",function () {
+$(document).on("click", ".control", function () {
     var buttonText = $(this).children("i").html();
     if (buttonText == "expand_more") {
         $(this).children("i").html("expand_less");
@@ -70,4 +87,3 @@ $(document).on("click", ".control",function () {
         $(this).children("i").html("expand_more");
     }
 });
-

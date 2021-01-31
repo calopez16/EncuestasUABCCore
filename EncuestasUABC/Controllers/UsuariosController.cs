@@ -50,6 +50,7 @@ namespace EncuestasUABC.Controllers
         {
             #region Index
 
+            await Roles();
             return View();
 
             #endregion
@@ -416,16 +417,22 @@ namespace EncuestasUABC.Controllers
         }
         #endregion
 
-        #region AJAX
+        #region PAGINADO
         [HttpPost]
         public async Task<IActionResult> Paginado([FromBody] Paginacion paginacion)
         {
             #region Paginado
             try
             {
-                var usuarios = await _usuarioRepository.GetAll();
+                var correo = !string.IsNullOrEmpty(paginacion.OtrosFiltros[0].ToString()) ? paginacion.OtrosFiltros[0].ToString() : "";
+                var nombre = !string.IsNullOrEmpty(paginacion.OtrosFiltros[1].ToString()) ? paginacion.OtrosFiltros[1].ToString() : "";
+                var rolName = !string.IsNullOrEmpty(paginacion.OtrosFiltros[2].ToString()) ? paginacion.OtrosFiltros[2].ToString() : "";
+                var eliminado = paginacion.OtrosFiltros[3] != null ? bool.Parse(paginacion.OtrosFiltros[3].ToString()) : false;
+
+                var usuarios = await _usuarioRepository.GetAll(rolName,!eliminado,nombre,correo);
                 int totalRegistros = usuarios.Count();
-                var usuariosResult = _mapper.Map<List<ApplicationUserViewModel>>(usuarios);
+                var usuariosResult = _mapper.Map<List<ApplicationUserViewModel>>(usuarios);               
+
                 usuariosResult = await PaginacionApplicationUser(paginacion, usuariosResult);
                 var result = new PaginacionResult<ApplicationUserViewModel>()
                 {
@@ -462,6 +469,7 @@ namespace EncuestasUABC.Controllers
 
             #endregion
         }
+
 
         #endregion
 

@@ -28,27 +28,36 @@ namespace EncuestasUABC.AccesoDatos.Repositories
             if (_userManager != null)
                 _userManager.Dispose();
         }
-        public async Task<List<ApplicationUser>> GetAll(string rol = null, bool activo = true)
+        public async Task<List<ApplicationUser>> GetAll(string rol = null, bool activo = true, string nombre = null, string correo = null)
         {
             #region GetAll
-            var usuarios = await (from user in _context.ApplicationUser
-                                  join userRoles in _context.UserRoles on user.Id equals userRoles.UserId
-                                  join role in _context.Roles on userRoles.RoleId equals role.Id
-                                  where user.Activo == activo && !user.Email.Equals(Defaults.AdminEmail)
-                                  select new ApplicationUser
-                                  {
-                                      Id = user.Id,
-                                      Email = user.Email,
-                                      Nombre = user.Nombre,
-                                      ApellidoPaterno = user.ApellidoPaterno,
-                                      ApellidoMaterno = user.ApellidoMaterno,
-                                      UserName = user.UserName,
-                                      Rol = role.Name
-                                  })
-                                    .ToListAsync();
+            var usuarios = (from user in _context.ApplicationUser
+                            join userRoles in _context.UserRoles on user.Id equals userRoles.UserId
+                            join role in _context.Roles on userRoles.RoleId equals role.Id
+                            where user.Activo == activo && !user.Email.Equals(Defaults.AdminEmail)
+                            select new ApplicationUser
+                            {
+                                Id = user.Id,
+                                Email = user.Email,
+                                Nombre = user.Nombre,
+                                ApellidoPaterno = user.ApellidoPaterno,
+                                ApellidoMaterno = user.ApellidoMaterno,
+                                UserName = user.UserName,
+                                Rol = role.Name,
+                                Activo=user.Activo
+                            }).AsQueryable();
+
+            if (!string.IsNullOrEmpty(correo))
+                usuarios = usuarios.Where(x => x.Email.Equals(correo));
+
+            if (!string.IsNullOrEmpty(nombre))
+                usuarios = usuarios.Where(x => x.Nombre.Equals(nombre)
+                || x.ApellidoPaterno.Equals(nombre)
+                || x.ApellidoMaterno.Equals(nombre));
+
             if (!string.IsNullOrEmpty(rol))
-                usuarios = usuarios.Where(x => x.Rol.Equals(rol)).ToList();
-            return usuarios;
+                usuarios = usuarios.Where(x => x.Rol.Equals(rol));
+            return await usuarios.ToListAsync();
 
             #endregion
         }
