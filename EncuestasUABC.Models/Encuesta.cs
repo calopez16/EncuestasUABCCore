@@ -12,15 +12,15 @@ namespace EncuestasUABC.Models
         }
         public int Id { get; set; }
         public DateTime Fecha { get; set; } = DateTime.Now;
-        public string UsuarioId { get; set; }
+        public string IdUsuarioRegistro { get; set; }
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
-        public int EstatusEncuestaId { get; set; }
-        public int CarreraId { get; set; }
+        public int IdEstatusEncuesta { get; set; }
+        public int IdCarrera { get; set; }
 
-        public EstatusEncuesta EstatusEncuestaIdNavigation { get; set; }
-        public Carrera CarreraIdNavigation { get; set; }
-        public ApplicationUser UsuarioIdNavigation { get; set; }
+        public EstatusEncuesta IdEstatusEncuestaNavigation { get; set; }
+        public Carrera IdCarreraNavigation { get; set; }
+        public ApplicationUser IdUsuarioRegistroNavigation { get; set; }
         public virtual ICollection<EncuestaSeccion> EncuestaSecciones { get; set; }
 
     }

@@ -34,7 +34,7 @@ namespace EncuestasUABC.AccesoDatos.Repositories
             var usuarios = (from user in _context.ApplicationUser
                             join userRoles in _context.UserRoles on user.Id equals userRoles.UserId
                             join role in _context.Roles on userRoles.RoleId equals role.Id
-                            where user.Activo == activo && !user.Email.Equals(Defaults.AdminEmail)
+                            where user.Estatus == activo && !user.Email.Equals(Defaults.AdminEmail)
                             select new ApplicationUser
                             {
                                 Id = user.Id,
@@ -44,7 +44,7 @@ namespace EncuestasUABC.AccesoDatos.Repositories
                                 ApellidoMaterno = user.ApellidoMaterno,
                                 UserName = user.UserName,
                                 Rol = role.Name,
-                                Activo=user.Activo
+                                Estatus=user.Estatus
                             }).AsQueryable();
 
             if (!string.IsNullOrEmpty(correo))

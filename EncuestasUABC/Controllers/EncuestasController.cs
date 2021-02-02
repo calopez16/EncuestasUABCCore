@@ -214,11 +214,11 @@ namespace EncuestasUABC.Controllers
                 List<Encuesta> encuestas;
                 if (user.Rol.Equals(Constantes.RolesSistema.Administrador))
                 {
-                    encuestas = (await _repository.FindBy<Encuesta>(null, x => x.OrderByDescending(x => x.Fecha), x => x.CarreraIdNavigation, x => x.EstatusEncuestaIdNavigation)).ToList();
+                    encuestas = (await _repository.FindBy<Encuesta>(null, x => x.OrderByDescending(x => x.Fecha), x => x.IdCarreraNavigation, x => x.IdEstatusEncuestaNavigation)).ToList();
                 }
                 else
                 {
-                    encuestas = (await _repository.FindBy<Encuesta>(x => x.UsuarioId == user.Id, x => x.OrderByDescending(x => x.Fecha), x => x.CarreraIdNavigation, x => x.EstatusEncuestaIdNavigation)).ToList();
+                    encuestas = (await _repository.FindBy<Encuesta>(x => x.IdUsuarioRegistro == user.Id, x => x.OrderByDescending(x => x.Fecha), x => x.IdCarreraNavigation, x => x.IdEstatusEncuestaNavigation)).ToList();
                 }
 
                 int totalRegistros = encuestas.Count();
@@ -234,9 +234,9 @@ namespace EncuestasUABC.Controllers
                 {
                     case 0:
                         if (order.Equals("asc"))
-                            encuestas = encuestas.OrderBy(x => x.EstatusEncuestaIdNavigation.Descripcion).ToList();
+                            encuestas = encuestas.OrderBy(x => x.IdEstatusEncuestaNavigation.Descripcion).ToList();
                         else
-                            encuestas = encuestas.OrderByDescending(x => x.EstatusEncuestaIdNavigation.Descripcion).ToList();
+                            encuestas = encuestas.OrderByDescending(x => x.IdEstatusEncuestaNavigation.Descripcion).ToList();
                         break;
                     case 1:
                         if (order.Equals("asc"))
@@ -252,9 +252,9 @@ namespace EncuestasUABC.Controllers
                         break;
                     case 3:
                         if (order.Equals("asc"))
-                            encuestas = encuestas.OrderBy(x => x.CarreraIdNavigation.Nombre).ToList();
+                            encuestas = encuestas.OrderBy(x => x.IdCarreraNavigation.Nombre).ToList();
                         else
-                            encuestas = encuestas.OrderByDescending(x => x.CarreraIdNavigation.Nombre).ToList();
+                            encuestas = encuestas.OrderByDescending(x => x.IdCarreraNavigation.Nombre).ToList();
                         break;
                     default:
                         break;
@@ -269,12 +269,12 @@ namespace EncuestasUABC.Controllers
                                 x.Nombre,
                                 CarreraIdNavigation = new
                                 {
-                                    x.CarreraIdNavigation.Nombre
+                                    x.IdCarreraNavigation.Nombre
                                 },
-                                x.EstatusEncuestaId,
+                                x.IdEstatusEncuesta,
                                 EstatusEncuestaIdNavigation = new
                                 {
-                                    x.EstatusEncuestaIdNavigation.Descripcion
+                                    x.IdEstatusEncuestaNavigation.Descripcion
                                 }
                             })
                             .ToList();
@@ -302,7 +302,7 @@ namespace EncuestasUABC.Controllers
             try
             {
                 var encuesta = await _repository.GetById<Encuesta>(id);
-                encuesta.EstatusEncuestaId = (int)EstatusEncuestaId.Eliminada;
+                encuesta.IdEstatusEncuesta = (int)EstatusEncuestaId.Eliminada;
                 await _repository.Update<Encuesta>(encuesta);
                 ShowMessageSuccess(Constantes.Mensajes.Encuesta_msj07);
 
@@ -328,7 +328,7 @@ namespace EncuestasUABC.Controllers
             try
             {
                 var encuesta = await _repository.GetById<Encuesta>(id);
-                encuesta.EstatusEncuestaId = (int)EstatusEncuestaId.Inactiva;
+                encuesta.IdEstatusEncuesta = (int)EstatusEncuestaId.Inactiva;
                 await _repository.Update<Encuesta>(encuesta);
                 ShowMessageSuccess(Constantes.Mensajes.Encuesta_msj09);
             }
@@ -357,11 +357,11 @@ namespace EncuestasUABC.Controllers
                 var encuesta = await _repository.GetById<Encuesta>(id);
                 if (activo)
                 {
-                    encuesta.EstatusEncuestaId = (int)EstatusEncuestaId.Activa;
+                    encuesta.IdEstatusEncuesta = (int)EstatusEncuestaId.Activa;
                 }
                 else
                 {
-                    encuesta.EstatusEncuestaId = (int)EstatusEncuestaId.Inactiva;
+                    encuesta.IdEstatusEncuesta = (int)EstatusEncuestaId.Inactiva;
                 }
                 await _repository.Update<Encuesta>(encuesta);
             }
@@ -555,7 +555,7 @@ namespace EncuestasUABC.Controllers
             {
                 var encuesta = await _repository.GetById<Encuesta>(id);
                 encuesta.Nombre = nombre;
-                encuesta.CarreraId = carreraId;
+                encuesta.IdCarrera = carreraId;
                 encuesta.Descripcion = descripcion;
                 await _repository.Update<Encuesta>(encuesta);
                 return Ok();
@@ -604,7 +604,7 @@ namespace EncuestasUABC.Controllers
                 var encuesta = await _repository.FirstOrDefault<Encuesta>(x => x.Id == encuestaId, x => x.EncuestaSecciones);
                 var secciones = encuesta.EncuestaSecciones.OrderBy(x => seccionId.IndexOf(x.Id)).ToList();
                 int orden = 1;
-                secciones.Where(x => !x.Eliminado).ToList().ForEach(x => { x.Orden = orden; orden++; });
+                secciones.Where(x => !(bool)x.Eliminado).ToList().ForEach(x => { x.Orden = orden; orden++; });
                 encuesta.EncuestaSecciones = secciones;
                 await _repository.Update<Encuesta>(encuesta);
                 return Ok();

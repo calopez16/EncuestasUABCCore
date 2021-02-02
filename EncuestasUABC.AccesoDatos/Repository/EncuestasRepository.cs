@@ -36,28 +36,28 @@ namespace EncuestasUABC.AccesoDatos.Repository
 
             return await _context.Encuestas
                 .Include(x => x.EncuestaSecciones)
-                .Include(x => x.CarreraIdNavigation)
-                .ThenInclude(x => x.UnidadAcademicaIdNavigation)
+                .Include(x => x.IdCarreraNavigation)
+                .ThenInclude(x => x.IdUnidadAcademicaNavigation)
                 .ThenInclude(x => x.CampusIdNavigation)
                 .Select(x => new Encuesta
                 {
                     Id = x.Id,
                     Fecha = x.Fecha,
-                    UsuarioId = x.UsuarioId,
+                    IdUsuarioRegistro = x.IdUsuarioRegistro,
                     Nombre = x.Nombre,
                     Descripcion = x.Descripcion,
-                    EstatusEncuestaId = x.EstatusEncuestaId,
-                    CarreraId = x.CarreraId,
-                    EncuestaSecciones = x.EncuestaSecciones.Where(x => !x.Eliminado).ToList(),
-                    CarreraIdNavigation = new Carrera
+                    IdEstatusEncuesta = x.IdEstatusEncuesta,
+                    IdCarrera = x.IdCarrera,
+                    EncuestaSecciones = x.EncuestaSecciones.Where(x => !(bool)x.Eliminado).ToList(),
+                    IdCarreraNavigation = new Carrera
                     {
-                        Nombre = x.CarreraIdNavigation.Nombre,
-                        UnidadAcademicaIdNavigation = new UnidadAcademica
+                        Nombre = x.IdCarreraNavigation.Nombre,
+                        IdUnidadAcademicaNavigation = new UnidadAcademica
                         {
-                            Nombre = x.CarreraIdNavigation.UnidadAcademicaIdNavigation.Nombre,
+                            Nombre = x.IdCarreraNavigation.IdUnidadAcademicaNavigation.Nombre,
                             CampusIdNavigation = new Campus
                             {
-                                Nombre = x.CarreraIdNavigation.UnidadAcademicaIdNavigation.CampusIdNavigation.Nombre,
+                                Nombre = x.IdCarreraNavigation.IdUnidadAcademicaNavigation.CampusIdNavigation.Nombre,
                             }
                         }
                     }
@@ -145,7 +145,7 @@ namespace EncuestasUABC.AccesoDatos.Repository
         {
             #region GetSecciones
             return await _context.EncuestaSecciones
-              .Where(x => x.EncuestaId == encuestaId && !x.Eliminado)
+              .Where(x => x.EncuestaId == encuestaId && !(bool)x.Eliminado)
               .Select(x => new EncuestaSeccion
               {
                   Id = x.Id,

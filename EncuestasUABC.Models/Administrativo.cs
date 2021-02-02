@@ -1,13 +1,21 @@
-﻿namespace EncuestasUABC.Models
+﻿using System;
+
+namespace EncuestasUABC.Models
 {
     public class Administrativo
     {
+        public Administrativo()
+        {
+            FechaRegistro = DateTime.Now;
+        }
         public int Id { get; set; }
-        public string UsuarioId { get; set; }
+        public DateTime FechaRegistro{ get; set; }
         public string NumeroEmpleado { get; set; }
         public string Correo { get; set; }
-        public string CorreoAlterno { get; set; }
-        public string Telefono { get; set; }
-        public ApplicationUser UsuarioIdNavigation { get; set; }
+        public int IdTipoAdministrativo { get; set; }
+        public bool? Estatus { get; set; }
+        public TipoAdministrativo IdTipoAdministrativoNavigation { get; set; }
+        public virtual Academico AcademicoNavigation { get; set; }
+        public virtual ApplicationUser ApplicationUser { get; set; }
     }
 }

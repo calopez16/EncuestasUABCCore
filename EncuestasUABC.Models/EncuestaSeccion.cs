@@ -8,6 +8,7 @@ namespace EncuestasUABC.Models
         public EncuestaSeccion()
         {
             EncuestaPreguntas= new HashSet<EncuestaPregunta>();
+            Eliminado = false;
         }
         
         public int Id { get; set; }
@@ -15,7 +16,7 @@ namespace EncuestasUABC.Models
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
         public int Orden { get; set; }
-        public bool Eliminado { get; set; } = false;
+        public bool? Eliminado { get; set; }
 
         public Encuesta EncuestaIdNavigation { get; set; }
         public ICollection<EncuestaPregunta> EncuestaPreguntas { get; set; }

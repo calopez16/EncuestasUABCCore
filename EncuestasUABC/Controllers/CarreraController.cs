@@ -33,15 +33,15 @@ namespace EncuestasUABC.Controllers
             try
             {
                 var carreras = await _repository
-                    .FindBy<Carrera>(null, x => x.OrderBy(x => x.Nombre), x => x.UnidadAcademicaIdNavigation, x => x.UnidadAcademicaIdNavigation.CampusIdNavigation);
+                    .FindBy<Carrera>(null, x => x.OrderBy(x => x.Nombre), x => x.IdUnidadAcademicaNavigation, x => x.IdUnidadAcademicaNavigation.CampusIdNavigation);
                 int totalRegistros = carreras.Count();
                 if (!string.IsNullOrEmpty(selectViewModel.search))
                 {
                     selectViewModel.search = selectViewModel.search.ToLower();
                     carreras = carreras.Where(x =>
                                               x.Nombre.ToLower().Contains(selectViewModel.search)
-                                              || x.UnidadAcademicaIdNavigation.Nombre.ToLower().Contains(selectViewModel.search)
-                                              || x.UnidadAcademicaIdNavigation.CampusIdNavigation.Nombre.ToLower().Contains(selectViewModel.search)).ToList();
+                                              || x.IdUnidadAcademicaNavigation.Nombre.ToLower().Contains(selectViewModel.search)
+                                              || x.IdUnidadAcademicaNavigation.CampusIdNavigation.Nombre.ToLower().Contains(selectViewModel.search)).ToList();
                     totalRegistros = carreras.Count();
                 }
                 var skip = (selectViewModel.page * selectViewModel.perPage) - selectViewModel.perPage;
@@ -59,9 +59,9 @@ namespace EncuestasUABC.Controllers
                     {
                         x.Id,
                         text = x.Nombre,
-                        carrera=x.Nombre,
-                        unidadacademica = x.UnidadAcademicaIdNavigation.Nombre,
-                        campus = x.UnidadAcademicaIdNavigation.CampusIdNavigation.Nombre
+                        carrera = x.Nombre,
+                        unidadacademica = x.IdUnidadAcademicaNavigation.Nombre,
+                        campus = x.IdUnidadAcademicaNavigation.CampusIdNavigation.Nombre
                     }),
                     totalRegistros
                 });
@@ -85,13 +85,13 @@ namespace EncuestasUABC.Controllers
             #region Select
             try
             {
-                var carrera = (await _repository.FindBy<Carrera>(null, null, x => x.UnidadAcademicaIdNavigation, x => x.UnidadAcademicaIdNavigation.CampusIdNavigation)).Select(x => new
+                var carrera = (await _repository.FindBy<Carrera>(null, null, x => x.IdUnidadAcademicaNavigation, x => x.IdUnidadAcademicaNavigation.CampusIdNavigation)).Select(x => new
                 {
                     x.Id,
                     Carrera = x.Nombre,
-                    UnidadAcademica = x.UnidadAcademicaIdNavigation.Nombre,
-                    Campus = x.UnidadAcademicaIdNavigation.CampusIdNavigation.Nombre
-                }).FirstOrDefault(x=>x.Id==id);
+                    UnidadAcademica = x.IdUnidadAcademicaNavigation.Nombre,
+                    Campus = x.IdUnidadAcademicaNavigation.CampusIdNavigation.Nombre
+                }).FirstOrDefault(x => x.Id == id);
                 return Ok(carrera);
             }
             catch (MessageAlertException ex)

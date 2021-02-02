@@ -14,18 +14,20 @@ namespace EncuestasUABC.AccesoDatos.Data
         {
 
         }
+        public DbSet<Academico> Academicos { get; set; }
+        public DbSet<Administrativo> Administrativos { get; set; }
         public DbSet<Alumno> Alumnos { get; set; }
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
         public DbSet<Campus> Campus { get; set; }
         public DbSet<Carrera> Carreras { get; set; }
-        public DbSet<Egresado> Egresados { get; set; }
         public DbSet<Encuesta> Encuestas { get; set; }
         public DbSet<EncuestaPregunta> EncuestaPreguntas { get; set; }
         public DbSet<EncuestaPreguntaOpcion> EncuestaPreguntaOpciones { get; set; }
         public DbSet<EncuestaSeccion> EncuestaSecciones { get; set; }
         public DbSet<EstatusEncuesta> EstatusEncuesta { get; set; }
-        public DbSet<Administrativo> Administrativos { get; set; }
         public DbSet<Permiso> Permisos { get; set; }
+        public DbSet<TipoAcademico> TiposAcademico { get; set; }
+        public DbSet<TipoAdministrativo> TiposAdministrativo { get; set; }
         public DbSet<TipoPregunta> TiposPregunta { get; set; }
         public DbSet<UnidadAcademica> UnidadesAcademicas { get; set; }
         public DbSet<UsuarioPermiso> UsuariosPermisos { get; set; }
@@ -40,9 +42,7 @@ namespace EncuestasUABC.AccesoDatos.Data
             base.OnModelCreating(modelBuilder);
 
             #region ApplicationUser
-            modelBuilder.Entity<ApplicationUser>().HasOne(x => x.Alumno).WithOne(x => x.UsuarioIdNavigation).HasForeignKey<Alumno>(e => e.UsuarioId);
-            modelBuilder.Entity<ApplicationUser>().HasOne(x => x.Egresado).WithOne(x => x.UsuarioIdNavigation).HasForeignKey<Egresado>(e => e.UsuarioId);
-            modelBuilder.Entity<ApplicationUser>().HasOne(x => x.Administrativo).WithOne(x => x.UsuarioIdNavigation).HasForeignKey<Administrativo>(e => e.UsuarioId);
+            modelBuilder.Entity<ApplicationUser>().HasOne(x => x.IdAdministrativoNavigation).WithOne(x => x.ApplicationUser).HasForeignKey<ApplicationUser>(e => e.IdAdministrativo);
 
             modelBuilder.Entity<ApplicationUser>(p =>
             {
@@ -64,13 +64,18 @@ namespace EncuestasUABC.AccesoDatos.Data
             });
             #endregion
 
-            modelBuilder.Entity<Carrera>().HasMany(x => x.Alumnos).WithOne(x => x.CarreraIdNavigation).HasForeignKey(x => x.CarreraId);
-            modelBuilder.Entity<UnidadAcademica>().HasMany(x => x.Carreras).WithOne(x => x.UnidadAcademicaIdNavigation).HasForeignKey(x => x.UnidadAcademicaId);
+            modelBuilder.Entity<Academico>().HasOne(x => x.IdAlumnoNavigation).WithOne(x => x.AcademicoNavigation).HasForeignKey<Alumno>(e => e.Id);
+            modelBuilder.Entity<Academico>().HasOne(x => x.IdAdministrativoNavigation).WithOne(x => x.AcademicoNavigation).HasForeignKey<Administrativo>(e => e.Id);
+            
+            modelBuilder.Entity<Carrera>().HasMany(x => x.Alumnos).WithOne(x => x.IdCarreraNavigation).HasForeignKey(x => x.IdCarrera);
+            modelBuilder.Entity<UnidadAcademica>().HasMany(x => x.Carreras).WithOne(x => x.IdUnidadAcademicaNavigation).HasForeignKey(x => x.IdUnidadAcademica);
             modelBuilder.Entity<Campus>().HasMany(x => x.UnidadesAcademicas).WithOne(x => x.CampusIdNavigation).HasForeignKey(x => x.CampusId);
+            modelBuilder.Entity<TipoAcademico>().HasMany(x => x.Academicos).WithOne(x => x.IdTipoAcademicoNavigation).HasForeignKey(x => x.IdTipoAcademico);
+            modelBuilder.Entity<TipoAdministrativo>().HasMany(x => x.Adminstrativos).WithOne(x => x.IdTipoAdministrativoNavigation).HasForeignKey(x => x.IdTipoAdministrativo);
 
-            modelBuilder.Entity<Encuesta>().HasOne(x => x.EstatusEncuestaIdNavigation).WithMany(x => x.Encuestas).HasForeignKey(x => x.EstatusEncuestaId);
-            modelBuilder.Entity<Encuesta>().HasOne(x => x.CarreraIdNavigation).WithMany(x => x.Encuestas).HasForeignKey(x => x.CarreraId);
-            modelBuilder.Entity<Encuesta>().HasOne(x => x.UsuarioIdNavigation).WithMany(x => x.EncuestasCreadas).HasForeignKey(x => x.UsuarioId);
+            modelBuilder.Entity<Encuesta>().HasOne(x => x.IdEstatusEncuestaNavigation).WithMany(x => x.Encuestas).HasForeignKey(x => x.IdEstatusEncuesta);
+            modelBuilder.Entity<Encuesta>().HasOne(x => x.IdCarreraNavigation).WithMany(x => x.Encuestas).HasForeignKey(x => x.IdCarrera);
+            modelBuilder.Entity<Encuesta>().HasOne(x => x.IdUsuarioRegistroNavigation).WithMany(x => x.EncuestasCreadas).HasForeignKey(x => x.IdUsuarioRegistro);
 
             modelBuilder.Entity<EncuestaSeccion>(b =>
             {

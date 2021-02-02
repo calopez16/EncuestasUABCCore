@@ -12,7 +12,7 @@ namespace EncuestasUABC.Models
         public string Controller { get; set; }
         public bool Menu { get; set; }
         public int? PermisoIdPadre { get; set; }
-        public bool Estatus { get; set; }
+        public bool? Estatus { get; set; }
 
         public Permiso PermisoIdPadreNavigation { get; set; }
         public virtual ICollection<Permiso> PermisosHijos { get; set; }

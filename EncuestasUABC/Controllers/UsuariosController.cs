@@ -42,8 +42,6 @@ namespace EncuestasUABC.Controllers
             _mapper = mapper;
         }
 
-
-
         #region Index
 
         public async Task<IActionResult> Index()
@@ -81,27 +79,7 @@ namespace EncuestasUABC.Controllers
 
                 if ((await _repository.FindBy<ApplicationUser>(x => x.Email.Equals(model.Email))).Any())
                     throw new MessageAlertException(MessageAlertType.Information, string.Format(Mensajes.USUARIOS_MSJ03, model.Email));
-                if (model.Rol == RolesSistema.Administrador)
-                {
-                    model.Alumno = null;
-                    model.Administrativo = null;
-                    model.Egresado = null;
-                }
-                else if (model.Rol.Equals(RolesSistema.Alumno))
-                {
-                    model.Administrativo = null;
-                    model.Egresado = null;
-                }
-                else if (model.Rol.Equals(RolesSistema.Egresado))
-                {
-                    model.Alumno = null;
-                    model.Administrativo = null;
-                }
-                else
-                {
-                    model.Alumno = null;
-                    model.Egresado = null;
-                }
+                
                 var newApplicationUser = _mapper.Map<ApplicationUser>(model);
                 var result = await _usuarioRepository.Create(newApplicationUser);
                 if (!result.Succeeded)
@@ -139,7 +117,7 @@ namespace EncuestasUABC.Controllers
 
             try
             {
-                var user = await _repository.FirstOrDefault<ApplicationUser>(x => x.Email.Equals(email), x => x.Administrativo, x => x.Alumno, x => x.Egresado);
+                var user = await _repository.FirstOrDefault<ApplicationUser>(x => x.Email.Equals(email), x => x.IdAdministrativoNavigation);
                 if (user == null)
                     throw new MessageAlertException(MessageAlertType.Warning, Mensajes.USUARIOS_MSJ07);
                 var userResult = _mapper.Map<ApplicationUserViewModel>(user);
@@ -183,30 +161,6 @@ namespace EncuestasUABC.Controllers
                         throw new MessageAlertException(MessageAlertType.Information, string.Format(Mensajes.USUARIOS_MSJ03, model.Email));
                 }
 
-                if (model.Rol == RolesSistema.Administrador)
-                {
-                    model.Alumno = null;
-                    model.Administrativo = null;
-                    model.Egresado = null;
-                }
-                else if (model.Rol.Equals(RolesSistema.Alumno))
-                {
-                    model.Administrativo = null;
-                    model.Egresado = null;
-                    user.Alumno = _mapper.Map<Alumno>(model.Alumno);
-                }
-                else if (model.Rol.Equals(RolesSistema.Egresado))
-                {
-                    model.Alumno = null;
-                    model.Administrativo = null;
-                    user.Egresado = _mapper.Map<Egresado>(model.Egresado);
-                }
-                else
-                {
-                    model.Alumno = null;
-                    model.Egresado = null;
-                    user.Administrativo = _mapper.Map<Administrativo>(model.Administrativo);
-                }
                 user.Nombre = model.Nombre;
                 user.ApellidoPaterno = model.ApellidoPaterno;
                 user.ApellidoMaterno = model.ApellidoMaterno;
@@ -330,7 +284,7 @@ namespace EncuestasUABC.Controllers
             try
             {
                 var user = await _repository.FirstOrDefault<ApplicationUser>(x => x.Email.Equals(email));
-                user.Activo = false;
+                user.Estatus = false;
                 var resultUpdate = await _usuarioRepository.Update(user);
                 if (!resultUpdate.Succeeded)
                     throw new MessageAlertException(MessageAlertType.Warning, string.Format(Mensajes.USUARIOS_MSJ11, user.Email));
@@ -358,7 +312,7 @@ namespace EncuestasUABC.Controllers
             try
             {
                 var user = await _repository.FirstOrDefault<ApplicationUser>(x => x.Email.Equals(email));
-                user.Activo = true;
+                user.Estatus = true;
                 var resultUpdate = await _usuarioRepository.Update(user);
                 if (!resultUpdate.Succeeded)
                     throw new MessageAlertException(MessageAlertType.Warning, string.Format(Mensajes.USUARIOS_MSJ12, user.Email));

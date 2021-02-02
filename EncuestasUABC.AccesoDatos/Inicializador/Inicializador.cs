@@ -51,7 +51,7 @@ namespace EncuestasUABC.AccesoDatos.Inicializador
                     Nombre = "Admin",
                     ApellidoPaterno = "Admin",
                     ApellidoMaterno = "Admin",
-                    Activo = true
+                    Estatus = true
                 }, Defaults.AdminPass).GetAwaiter().GetResult();
 
                 ApplicationUser usuario = _context.ApplicationUser

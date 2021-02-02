@@ -5,17 +5,22 @@ namespace EncuestasUABC.Models
 {
     public class Alumno
     {
+        public Alumno()
+        {
+            FechaRegistro = DateTime.Now;
+        }
         public int Id { get; set; }
-        public string UsuarioId { get; set; }
+        public DateTime FechaRegistro{ get; set; }
         public string Matricula { get; set; }
-        public int Semestre { get; set; }
+        public string Correo { get; set; }
+        public int? Semestre { get; set; }
         public string PeriodoIngreso { get; set; }
-        public string CorreoAlterno { get; set; }
-        public string Celular { get; set; }
-        public DateTime FechaNacimiento { get; set; } 
-        public int? CarreraId { get; set; }
-        public Carrera CarreraIdNavigation { get; set; }
-        public ApplicationUser UsuarioIdNavigation { get; set; }
+        public string PeriodoEgreso { get; set; }
+        public int? IdCarrera { get; set; }
+        public bool? Egresado { get; set; }
+        public bool? Estatus { get; set; }
+        public Carrera IdCarreraNavigation { get; set; }
+        public virtual Academico AcademicoNavigation { get; set; }
 
     }
 }
