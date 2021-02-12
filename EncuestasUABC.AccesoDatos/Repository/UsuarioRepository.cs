@@ -129,10 +129,10 @@ namespace EncuestasUABC.AccesoDatos.Repositories
         {
             #region PermisosAll
             var permisos = await _context.UsuariosPermisos
-                .Include(x => x.PermisoIdNavigation)
-                .Where(x => x.UsuarioId.Equals(userId))
-                .OrderBy(x => x.PermisoIdNavigation.Descripcion)
-                .Select(x => x.PermisoIdNavigation)
+                .Include(x => x.IdPermisoNavigation)
+                .Where(x => x.IdUsuario.Equals(userId))
+                .OrderBy(x => x.IdPermisoNavigation.Descripcion)
+                .Select(x => x.IdPermisoNavigation)
                 .ToListAsync();
             return permisos;
             #endregion
@@ -145,7 +145,7 @@ namespace EncuestasUABC.AccesoDatos.Repositories
                 .Include(x => x.PermisosHijos)
                 .ThenInclude(x => x.PermisosHijos)
                 .ThenInclude(x => x.PermisosHijos)
-                .Where(x => x.Menu && !x.PermisoIdPadre.HasValue).ToListAsync();
+                .Where(x => x.Menu && !x.IdPermisoPadre.HasValue).ToListAsync();
             #endregion
         }
 

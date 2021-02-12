@@ -7,7 +7,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <input hidden asp-for="Id" />
-<input hidden asp-for="EncuestaId" />
+<input hidden asp-for="IdEncuesta" />
 <style>
     .ui-sortable-helper {
         display: table;
@@ -15,7 +15,7 @@
 </style>
 <div class="card">
     <div class="card-header">
-        <a asp-action="Editar" asp-route-id="@Model.EncuestaId" class="btn btn-primary bmd-btn-fab float-left mr-4" data-toggle="tooltip" data-placement="bottom" title="Regresar a edición de encuesta">
+        <a asp-action="Editar" asp-route-id="@Model.IdEncuesta" class="btn btn-primary bmd-btn-fab float-left mr-4" data-toggle="tooltip" data-placement="bottom" title="Regresar a edición de encuesta">
             <i class="material-icons md-36">navigate_before</i>
         </a>
         <button class="btn btn-primary bmd-btn-fab btn_PreguntaAgregar float-right mr-2" data-toggle="tooltip" data-placement="bottom" title="Agregar pregunta">
@@ -42,7 +42,7 @@
             @ViewData["Title"]:<span class="ml-3">@Model.Nombre</span>
             <i class="material-icons text-primary" style="display:none" title="Editar nombre de sección">edit</i>
         </h1>
-        <span class="h5">Encuesta: @Model.EncuestaIdNavigation.Nombre</span>
+        <span class="h5">Encuesta: @Model.IdEncuestaNavigation.Nombre</span>
 
     </div>
     <div class="card-body">
@@ -88,7 +88,7 @@
                             <td class="pregunta_Descripcion">
                                 @pregunta.Descripcion
                             </td>
-                            <td>@pregunta.TipoPreguntaIdNavigation.Descripcion</td>
+                            <td>@pregunta.IdTipoPreguntaNavigation.Descripcion</td>
                             <td class="text-center pregunta_Obligatoria">
                                 @if (pregunta.Obligatoria)
                                 {
@@ -125,7 +125,7 @@
         </table>
     </div>
 </div>
-<partial name="~/Views/Encuestas/PartialViews/_ModalPreguntaCrear.cshtml" model="new EncuestaPreguntaViewModel {EncuestaId=Model.EncuestaId,EncuestaSeccionId=Model.Id }" />
+<partial name="~/Views/Encuestas/PartialViews/_ModalPreguntaCrear.cshtml" model="new EncuestaPreguntaViewModel {IdEncuesta=Model.IdEncuesta,IdEncuestaSeccion=Model.Id }" />
 <partial name="~/Views/Encuestas/PartialViews/_ModalPreguntaEliminar.cshtml" />
 
 <script type="text/javascript" src="~/js/Encuestas/EditarSeccion.js"></script>

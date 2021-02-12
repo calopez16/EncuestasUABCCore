@@ -119,7 +119,7 @@ namespace EncuestasUABC.Controllers
             try
             {
                 model.UsuarioId = _httpContextAccessor.GetUsuarioId();
-                model.EstatusEncuestaId = (int)EstatusEncuestaId.Inactiva;
+                model.IdEstatusEncuesta = (int)EstatusEncuestaId.Inactiva;
                 var encuesta = _mapper.Map<Encuesta>(model);
                 var result = await _repository.Add<Encuesta>(encuesta);
                 ShowMessageSuccess(Constantes.Mensajes.ENCUESTAS_MSJ01);
@@ -414,8 +414,8 @@ namespace EncuestasUABC.Controllers
             {
                 var pregunta = await _repository
                     .FirstOrDefault<EncuestaPregunta>(x => x.Id == preguntaId
-                                                    && x.EncuestaSeccionId == seccionId
-                                                    && x.EncuestaId == encuestaId, x => x.Opciones);
+                                                    && x.IdEncuestaSeccion == seccionId
+                                                    && x.IdEncuesta == encuestaId, x => x.Opciones);
                 pregunta.Opciones = pregunta.Opciones.Where(x => !x.Eliminado).OrderBy(x => x.Orden).ToList();
                 return Ok(JsonConvert.SerializeObject(pregunta, Formatting.None,
                             new JsonSerializerSettings
@@ -447,13 +447,13 @@ namespace EncuestasUABC.Controllers
             #region CrearSeccion
             try
             {
-                var secciones = await _repository.FindBy<EncuestaSeccion>(x => x.EncuestaId == encuestaId);
+                var secciones = await _repository.FindBy<EncuestaSeccion>(x => x.IdEncuesta == encuestaId);
                 int orden = 1;
                 if (secciones.Any())
                     orden = secciones.OrderBy(x => x.Orden).Last().Orden + 1;
                 var newSeccion = new EncuestaSeccion
                 {
-                    EncuestaId = encuestaId,
+                    IdEncuesta = encuestaId,
                     Nombre = nombre,
                     Orden = orden,
                 };
@@ -482,7 +482,7 @@ namespace EncuestasUABC.Controllers
             {
                 var newPregunta = _mapper.Map<EncuestaPregunta>(model);
                 var orden = 1;
-                var preguntas = await _repository.FindBy<EncuestaPregunta>(x => x.EncuestaId == model.EncuestaId && x.EncuestaSeccionId == model.EncuestaSeccionId && !x.Eliminado, x => x.OrderByDescending(x => x.Orden));
+                var preguntas = await _repository.FindBy<EncuestaPregunta>(x => x.IdEncuesta == model.IdEncuesta && x.IdEncuestaSeccion == model.IdEncuestaSeccion && !x.Eliminado, x => x.OrderByDescending(x => x.Orden));
                 if (preguntas.Any())
                     orden = preguntas.First().Orden + 1;
                 newPregunta.Orden = orden;
@@ -509,7 +509,7 @@ namespace EncuestasUABC.Controllers
             {
                 var pregunta = await _repository.FirstOrDefault<EncuestaPregunta>(x => x.Id == model.Id, x => x.Opciones);
 
-                if (model.TipoPreguntaId == (int)TipoPreguntaId.Multiple || model.TipoPreguntaId == (int)TipoPreguntaId.SelectList || model.TipoPreguntaId == (int)TipoPreguntaId.UnicaOpcion)
+                if (model.IdTipoPregunta == (int)TipoPreguntaId.Multiple || model.IdTipoPregunta == (int)TipoPreguntaId.SelectList || model.IdTipoPregunta == (int)TipoPreguntaId.UnicaOpcion)
                 {
                     var idsOpcionesSinEliminar = model.Opciones.Select(x => x.Id);
                     var preguntassss = pregunta.Opciones.Where(x => !idsOpcionesSinEliminar.Contains(x.Id)).ToList();//.ForEach(x => x.Eliminado = true);
@@ -627,7 +627,7 @@ namespace EncuestasUABC.Controllers
             #region ActualizarPosicionPreguntas
             try
             {
-                var seccion = await _repository.FirstOrDefault<EncuestaSeccion>(x => x.Id == seccionId && x.EncuestaId == encuestaId, x => x.EncuestaPreguntas);
+                var seccion = await _repository.FirstOrDefault<EncuestaSeccion>(x => x.Id == seccionId && x.IdEncuesta == encuestaId, x => x.EncuestaPreguntas);
                 var preguntas = seccion.EncuestaPreguntas.OrderBy(x => preguntaId.IndexOf(x.Id)).ToList();
                 int orden = 1;
                 preguntas.Where(x => !x.Eliminado).ToList().ForEach(x => { x.Orden = orden; orden++; });

@@ -30,59 +30,9 @@ namespace EncuestasUABC.Models
         public string Email { get; set; }
         public bool Estatus { get; set; } = true;
 
-        public AdministrativoViewModel Administrativo { get; set; }
         [Required(ErrorMessage = "El {0} es requerido")]
         public string Rol { get; set; }
 
-
-    }
-
-    public class AlumnoViewModel
-    {
-        public int Id { get; set; }
-        public string UsuarioId { get; set; }
-        public string Matricula { get; set; }
-        public int? Semestre { get; set; }
-        public string PeriodoIngreso { get; set; }
-        [EmailAddress(ErrorMessage = "El correo no es válido")]
-        public string CorreoAlterno { get; set; }
-        public string Celular { get; set; }
-        public DateTime? FechaNacimiento { get; set; }
-        public int? CarreraId { get; set; }
-
-        public CarreraViewModel CarreraIdNavigation { get; set; }
-        public ApplicationUserViewModel UsuarioIdNavigation { get; set; }
-
-    }
-
-    public class AdministrativoViewModel
-    {
-        public int Id { get; set; }
-        public string UsuarioId { get; set; }
-        public string NumeroEmpleado { get; set; }
-        [EmailAddress(ErrorMessage = "El correo no es válido")]
-        public string Correo { get; set; }
-        [EmailAddress(ErrorMessage = "El correo no es válido")]
-        public string CorreoAlterno { get; set; }
-        public string Telefono { get; set; }
-        public ApplicationUserViewModel UsuarioIdNavigation { get; set; }
-    }
-
-    public class EgresadoViewModel
-    {
-        public int Id { get; set; }
-        public string UsuarioId { get; set; }
-        public string PeriodoIngreso { get; set; }
-        public string PeriodoEgreso { get; set; }
-        [EmailAddress(ErrorMessage = "El correo no es válido")]
-        public string Correo { get; set; }
-        [EmailAddress(ErrorMessage = "El correo no es válido")]
-        public string CorreoAlterno { get; set; }
-        public string Facebook { get; set; }
-        public string Otro { get; set; }
-        public string Telefono { get; set; }
-        public string Celular { get; set; }
-        public ApplicationUserViewModel UsuarioIdNavigation { get; set; }
 
     }
 
@@ -94,11 +44,11 @@ namespace EncuestasUABC.Models
         public string Action { get; set; }
         public string Controller { get; set; }
         public bool Menu { get; set; }
-        public int? PermisoIdPadre { get; set; }
+        public int? IdPermisoPadre { get; set; }
         public bool Estatus { get; set; }
         public int Orden { get; set; }
 
-        public PermisoViewModel PermisoIdPadreNavigation { get; set; }
+        public PermisoViewModel IdPermisoPadreNavigation { get; set; }
         public ICollection<PermisoViewModel> PermisosHijos { get; set; }
     }
 }

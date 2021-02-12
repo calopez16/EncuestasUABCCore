@@ -5,7 +5,7 @@ var carreraDescripcion="";
 $(document).ready(function () {
 
     encuestaId = parseInt($("#Id").val());
-    carreraId =parseInt($("#CarreraId").val());
+    carreraId =parseInt($("#IdCarrera").val());
     $("#btn_EditarNombre").on("click", function () {
         $("#modal_EditarNombreDescripcion").modal("show");
     });
@@ -19,8 +19,7 @@ $(document).ready(function () {
         $("#txt_NombreEncuesta").focus();
         $("#txt_NombreEncuesta").select();
         var asdas = $("#div_descripcion").find("div").html();
-        $('#textArea_Descripcion').summernote('code', $("#div_descripcion").find("div").html());
-        
+        $('#textArea_Descripcion').summernote('code', $("#div_descripcion").find("div").html());        
        
     });
 

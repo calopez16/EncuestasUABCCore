@@ -60,15 +60,15 @@ namespace EncuestasUABC.AccesoDatos.Migrations
                     Action = table.Column<string>(nullable: true),
                     Controller = table.Column<string>(nullable: true),
                     Menu = table.Column<bool>(nullable: false),
-                    PermisoIdPadre = table.Column<int>(nullable: true),
+                    IdPermisoPadre = table.Column<int>(nullable: true),
                     Estatus = table.Column<bool>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Permisos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Permisos_Permisos_PermisoIdPadre",
-                        column: x => x.PermisoIdPadre,
+                        name: "FK_Permisos_Permisos_IdPermisoPadre",
+                        column: x => x.IdPermisoPadre,
                         principalTable: "Permisos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -144,15 +144,15 @@ namespace EncuestasUABC.AccesoDatos.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nombre = table.Column<string>(nullable: true),
-                    CampusId = table.Column<int>(nullable: false),
+                    IdCampus = table.Column<int>(nullable: false),
                     Estatus = table.Column<bool>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UnidadesAcademicas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UnidadesAcademicas_Campus_CampusId",
-                        column: x => x.CampusId,
+                        name: "FK_UnidadesAcademicas_Campus_IdCampus",
+                        column: x => x.IdCampus,
                         principalTable: "Campus",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -435,21 +435,21 @@ namespace EncuestasUABC.AccesoDatos.Migrations
                 name: "UsuariosPermisos",
                 columns: table => new
                 {
-                    UsuarioId = table.Column<string>(nullable: false),
-                    PermisoId = table.Column<int>(nullable: false)
+                    IdUsuario = table.Column<string>(nullable: false),
+                    IdPermiso = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UsuariosPermisos", x => new { x.PermisoId, x.UsuarioId });
+                    table.PrimaryKey("PK_UsuariosPermisos", x => new { x.IdPermiso, x.IdUsuario });
                     table.ForeignKey(
-                        name: "FK_UsuariosPermisos_Permisos_PermisoId",
-                        column: x => x.PermisoId,
+                        name: "FK_UsuariosPermisos_Permisos_IdPermiso",
+                        column: x => x.IdPermiso,
                         principalTable: "Permisos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_UsuariosPermisos_AspNetUsers_UsuarioId",
-                        column: x => x.UsuarioId,
+                        name: "FK_UsuariosPermisos_AspNetUsers_IdUsuario",
+                        column: x => x.IdUsuario,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -461,7 +461,7 @@ namespace EncuestasUABC.AccesoDatos.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EncuestaId = table.Column<int>(nullable: false),
+                    IdEncuesta = table.Column<int>(nullable: false),
                     Nombre = table.Column<string>(nullable: true),
                     Descripcion = table.Column<string>(nullable: true),
                     Orden = table.Column<int>(nullable: false),
@@ -469,10 +469,10 @@ namespace EncuestasUABC.AccesoDatos.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EncuestaSecciones", x => new { x.Id, x.EncuestaId });
+                    table.PrimaryKey("PK_EncuestaSecciones", x => new { x.Id, x.IdEncuesta });
                     table.ForeignKey(
-                        name: "FK_EncuestaSecciones_Encuestas_EncuestaId",
-                        column: x => x.EncuestaId,
+                        name: "FK_EncuestaSecciones_Encuestas_IdEncuesta",
+                        column: x => x.IdEncuesta,
                         principalTable: "Encuestas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -484,37 +484,37 @@ namespace EncuestasUABC.AccesoDatos.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EncuestaId = table.Column<int>(nullable: false),
-                    EncuestaSeccionId = table.Column<int>(nullable: false),
+                    IdEncuesta = table.Column<int>(nullable: false),
+                    IdEncuestaSeccion = table.Column<int>(nullable: false),
                     Descripcion = table.Column<string>(nullable: true),
-                    TipoPreguntaId = table.Column<int>(nullable: false),
+                    IdTipoPregunta = table.Column<int>(nullable: false),
                     Obligatoria = table.Column<bool>(nullable: false),
                     Orden = table.Column<int>(nullable: false),
-                    EncuestaIdPadre = table.Column<int>(nullable: true),
-                    EncuestaSeccionIdPadre = table.Column<int>(nullable: true),
-                    EncuestaPreguntaIdPadre = table.Column<int>(nullable: true),
+                    IdEncuestaPadre = table.Column<int>(nullable: true),
+                    IdEncuestaSeccionPadre = table.Column<int>(nullable: true),
+                    IdEncuestaPreguntaPadre = table.Column<int>(nullable: true),
                     Eliminado = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EncuestaPreguntas", x => new { x.Id, x.EncuestaId, x.EncuestaSeccionId });
+                    table.PrimaryKey("PK_EncuestaPreguntas", x => new { x.Id, x.IdEncuesta, x.IdEncuestaSeccion });
                     table.ForeignKey(
-                        name: "FK_EncuestaPreguntas_TiposPregunta_TipoPreguntaId",
-                        column: x => x.TipoPreguntaId,
+                        name: "FK_EncuestaPreguntas_TiposPregunta_IdTipoPregunta",
+                        column: x => x.IdTipoPregunta,
                         principalTable: "TiposPregunta",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_EncuestaPreguntas_EncuestaSecciones_EncuestaSeccionId_EncuestaId",
-                        columns: x => new { x.EncuestaSeccionId, x.EncuestaId },
+                        name: "FK_EncuestaPreguntas_EncuestaSecciones_IdEncuestaSeccion_IdEncuesta",
+                        columns: x => new { x.IdEncuestaSeccion, x.IdEncuesta },
                         principalTable: "EncuestaSecciones",
-                        principalColumns: new[] { "Id", "EncuestaId" },
+                        principalColumns: new[] { "Id", "IdEncuesta" },
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_EncuestaPreguntas_EncuestaPreguntas_EncuestaSeccionIdPadre_EncuestaIdPadre_EncuestaPreguntaIdPadre",
-                        columns: x => new { x.EncuestaSeccionIdPadre, x.EncuestaIdPadre, x.EncuestaPreguntaIdPadre },
+                        name: "FK_EncuestaPreguntas_EncuestaPreguntas_IdEncuestaSeccionPadre_IdEncuestaPadre_IdEncuestaPreguntaPadre",
+                        columns: x => new { x.IdEncuestaSeccionPadre, x.IdEncuestaPadre, x.IdEncuestaPreguntaPadre },
                         principalTable: "EncuestaPreguntas",
-                        principalColumns: new[] { "Id", "EncuestaId", "EncuestaSeccionId" },
+                        principalColumns: new[] { "Id", "IdEncuesta", "IdEncuestaSeccion" },
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -524,21 +524,21 @@ namespace EncuestasUABC.AccesoDatos.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EncuestaId = table.Column<int>(nullable: false),
-                    EncuestaSeccionId = table.Column<int>(nullable: false),
-                    EncuestaPreguntaId = table.Column<int>(nullable: false),
+                    IdEncuesta = table.Column<int>(nullable: false),
+                    IdEncuestaSeccion = table.Column<int>(nullable: false),
+                    IdEncuestaPregunta = table.Column<int>(nullable: false),
                     Descripcion = table.Column<string>(nullable: true),
                     Orden = table.Column<int>(nullable: false),
                     Eliminado = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EncuestaPreguntaOpciones", x => new { x.Id, x.EncuestaId, x.EncuestaSeccionId, x.EncuestaPreguntaId });
+                    table.PrimaryKey("PK_EncuestaPreguntaOpciones", x => new { x.Id, x.IdEncuesta, x.IdEncuestaSeccion, x.IdEncuestaPregunta });
                     table.ForeignKey(
-                        name: "FK_EncuestaPreguntaOpciones_EncuestaPreguntas_EncuestaPreguntaId_EncuestaId_EncuestaSeccionId",
-                        columns: x => new { x.EncuestaPreguntaId, x.EncuestaId, x.EncuestaSeccionId },
+                        name: "FK_EncuestaPreguntaOpciones_EncuestaPreguntas_IdEncuestaPregunta_IdEncuesta_IdEncuestaSeccion",
+                        columns: x => new { x.IdEncuestaPregunta, x.IdEncuesta, x.IdEncuestaSeccion },
                         principalTable: "EncuestaPreguntas",
-                        principalColumns: new[] { "Id", "EncuestaId", "EncuestaSeccionId" },
+                        principalColumns: new[] { "Id", "IdEncuesta", "IdEncuestaSeccion" },
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -609,24 +609,24 @@ namespace EncuestasUABC.AccesoDatos.Migrations
                 column: "IdUnidadAcademica");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EncuestaPreguntaOpciones_EncuestaPreguntaId_EncuestaId_EncuestaSeccionId",
+                name: "IX_EncuestaPreguntaOpciones_IdEncuestaPregunta_IdEncuesta_IdEncuestaSeccion",
                 table: "EncuestaPreguntaOpciones",
-                columns: new[] { "EncuestaPreguntaId", "EncuestaId", "EncuestaSeccionId" });
+                columns: new[] { "IdEncuestaPregunta", "IdEncuesta", "IdEncuestaSeccion" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_EncuestaPreguntas_TipoPreguntaId",
+                name: "IX_EncuestaPreguntas_IdTipoPregunta",
                 table: "EncuestaPreguntas",
-                column: "TipoPreguntaId");
+                column: "IdTipoPregunta");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EncuestaPreguntas_EncuestaSeccionId_EncuestaId",
+                name: "IX_EncuestaPreguntas_IdEncuestaSeccion_IdEncuesta",
                 table: "EncuestaPreguntas",
-                columns: new[] { "EncuestaSeccionId", "EncuestaId" });
+                columns: new[] { "IdEncuestaSeccion", "IdEncuesta" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_EncuestaPreguntas_EncuestaSeccionIdPadre_EncuestaIdPadre_EncuestaPreguntaIdPadre",
+                name: "IX_EncuestaPreguntas_IdEncuestaSeccionPadre_IdEncuestaPadre_IdEncuestaPreguntaPadre",
                 table: "EncuestaPreguntas",
-                columns: new[] { "EncuestaSeccionIdPadre", "EncuestaIdPadre", "EncuestaPreguntaIdPadre" });
+                columns: new[] { "IdEncuestaSeccionPadre", "IdEncuestaPadre", "IdEncuestaPreguntaPadre" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Encuestas_IdCarrera",
@@ -644,24 +644,24 @@ namespace EncuestasUABC.AccesoDatos.Migrations
                 column: "IdUsuarioRegistro");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EncuestaSecciones_EncuestaId",
+                name: "IX_EncuestaSecciones_IdEncuesta",
                 table: "EncuestaSecciones",
-                column: "EncuestaId");
+                column: "IdEncuesta");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Permisos_PermisoIdPadre",
+                name: "IX_Permisos_IdPermisoPadre",
                 table: "Permisos",
-                column: "PermisoIdPadre");
+                column: "IdPermisoPadre");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UnidadesAcademicas_CampusId",
+                name: "IX_UnidadesAcademicas_IdCampus",
                 table: "UnidadesAcademicas",
-                column: "CampusId");
+                column: "IdCampus");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UsuariosPermisos_UsuarioId",
+                name: "IX_UsuariosPermisos_IdUsuario",
                 table: "UsuariosPermisos",
-                column: "UsuarioId");
+                column: "IdUsuario");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

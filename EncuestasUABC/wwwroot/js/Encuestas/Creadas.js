@@ -199,6 +199,7 @@ function cargarPaginado() {
     });
 
 }
+
 function cargarSelectCarreras() {
     $('.select_Carrera').select2({
         delay: 250,

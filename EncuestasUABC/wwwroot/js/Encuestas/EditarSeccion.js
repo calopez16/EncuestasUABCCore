@@ -7,7 +7,7 @@ var isEditaPregunta = false;
 
 $(document).ready(function () {
     seccionId = parseInt($("#Id").val());
-    encuestaId = parseInt($("#EncuestaId").val());
+    encuestaId = parseInt($("#IdEncuesta").val());
 
     //#region EDITAR NOMBRE SECCION
     $("#h1_SeccionNombre").click(function () {
@@ -32,7 +32,7 @@ $(document).ready(function () {
     });
     $("#btn_GuardarSeccionNombre").click(function () {
         var id = parseInt($("#Id").val());
-        var encuestaId = parseInt($("#EncuestaId").val());
+        var encuestaId = parseInt($("#IdEncuesta").val());
         var nombre = $("#txt_SeccionNombre").val();
         cambiarSeccionNombre(id, encuestaId, nombre);
     });
@@ -48,7 +48,7 @@ $(document).ready(function () {
         isEditaPregunta = false;
         $("#h5_ModalTituloCrearPregunta").html("Elige el tipo de pregunta");
         $("#btn_CancelarModalPregunta").hide();
-        $("#PreguntaId").val(0);
+        $("#IdPregunta").val(0);
     });
 
     //#region FUNCIONALIDAD TABLA PREGUNTAS
@@ -271,10 +271,10 @@ function guardarPregunta() {
     var descripcion = $("#txt_DescripcionPregunta").val();
     var obligatoria = $("#check_Obligatoria").prop("checked");
     var data = new FormData();
-    data.append("EncuestaId", encuestaId);
-    data.append("EncuestaSeccionId", seccionId);
+    data.append("IdEncuesta", encuestaId);
+    data.append("IdEncuestaSeccion", seccionId);
     data.append("Descripcion", descripcion);
-    data.append("TipoPreguntaId", tipoPreguntaId);
+    data.append("IdTipoPregunta", tipoPreguntaId);
     data.append("Obligatoria", obligatoria);
     $(".tr_Opcion").each(function (i, item) {
         var descripcionOpcion = $(".txt_DescripcionOpcion").eq(i).val();
@@ -357,13 +357,13 @@ function guardarPregunta() {
 function editarPregunta() {
     var descripcion = $("#txt_DescripcionPregunta").val();
     var obligatoria = $("#check_Obligatoria").prop("checked");
-    var preguntaId = $("#PreguntaId").val();
+    var preguntaId = $("#IdPregunta").val();
     var data = new FormData();
     data.append("Id", preguntaId);
-    data.append("EncuestaId", encuestaId);
-    data.append("EncuestaSeccionId", seccionId);
+    data.append("IdEncuesta", encuestaId);
+    data.append("IdEncuestaSeccion", seccionId);
     data.append("Descripcion", descripcion);
-    data.append("TipoPreguntaId", tipoPreguntaId);
+    data.append("IdTipoPregunta", tipoPreguntaId);
     data.append("Obligatoria", obligatoria);
     $(".tr_Opcion").each(function (i, item) {
         var descripcionOpcion = $(".txt_DescripcionOpcion").eq(i).val();
@@ -512,31 +512,31 @@ function cargarPregunta(preguntaId, seccionId, encuestaId) {
         //Se ejecuta cuando la peticion ha sido exitosa. 
         //data es la respuesta que se recibe.
         ocultarFormulariosPreguntas();
-        $("#EncuestaId").val(encuestaId);
-        $("#EncuestaSeccionId").val(seccionId);
-        $("#PreguntaId").val(preguntaId);
+        $("#IdEncuesta").val(encuestaId);
+        $("#IdEncuestaSeccion").val(seccionId);
+        $("#IdPregunta").val(preguntaId);
         $("#txt_DescripcionPregunta").val(data.Descripcion);
         $("#txt_DescripcionPregunta").focus();
         $("#check_Obligatoria").prop("checked", data.Obligatoria);
         isEditaPregunta = true;
-        if (data.TipoPreguntaId == enum_TipoPregunta.Abierta) {
+        if (data.IdTipoPregunta == enum_TipoPregunta.Abierta) {
             $(".btn_PreguntaAbierta").click();
             $("#h5_ModalTituloCrearPregunta").text("Editar pregunta abierta");
-        } else if (data.TipoPreguntaId == enum_TipoPregunta.UnicaOpcion) {
+        } else if (data.IdTipoPregunta == enum_TipoPregunta.UnicaOpcion) {
             $(".btn_RespuestaUnica").click();
             $("#h5_ModalTituloCrearPregunta").text("Editar pregunta respuesta única");
             cargarPreguntaFormularioOpciones(data);
-        } else if (data.TipoPreguntaId == enum_TipoPregunta.Multiple) {
+        } else if (data.IdTipoPregunta == enum_TipoPregunta.Multiple) {
             $(".btn_RespuestaMultiple").click();
             $("#h5_ModalTituloCrearPregunta").text("Editar pregunta respuesta múltiple");
             cargarPreguntaFormularioOpciones(data);
-        } else if (data.TipoPreguntaId == enum_TipoPregunta.SelectList) {
+        } else if (data.IdTipoPregunta == enum_TipoPregunta.SelectList) {
             $(".btn_RespuestaSelectList").click();
             $("#h5_ModalTituloCrearPregunta").text("Editar pregunta select list");
             cargarPreguntaFormularioOpciones(data);
-        } else if (data.TipoPreguntaId == enum_TipoPregunta.Condicional) {
+        } else if (data.IdTipoPregunta == enum_TipoPregunta.Condicional) {
 
-        } else if (data.TipoPreguntaId == enum_TipoPregunta.Matriz) {
+        } else if (data.IdTipoPregunta == enum_TipoPregunta.Matriz) {
 
         }
         $("#btn_RegresarPreguntaAgregar").hide();

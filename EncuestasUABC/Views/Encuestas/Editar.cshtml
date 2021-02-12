@@ -7,7 +7,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <input hidden asp-for="Id" />
-<input hidden asp-for="CarreraId" />
+<input hidden asp-for="IdCarrera" />
 <style>
     .ui-sortable-helper {
         display: table;
@@ -70,7 +70,7 @@
         <div id="div_informacion_Encuesta" class="text-center" style="cursor:pointer">
             <h1 class="mt-1 text-center editarInformacion" id="h1_NombreEncuesta">@Model.Nombre</h1>
             <h4 class="text-center editarInformacion">
-                <span id="span_CarreraDescripcion">@Model.CarreraIdNavigation.UnidadAcademicaIdNavigation.Nombre, @Model.CarreraIdNavigation.Nombre, @Model.CarreraIdNavigation.UnidadAcademicaIdNavigation.CampusIdNavigation.Nombre</span>
+                <span id="span_CarreraDescripcion">@Model.IdCarreraNavigation.IdUnidadAcademicaNavigation.Nombre, @Model.IdCarreraNavigation.Nombre, @Model.IdCarreraNavigation.IdUnidadAcademicaNavigation.IdCampusNavigation.Nombre</span>
             </h4>
             <button class="btn btn-link" data-toggle="collapse" data-target="#div_descripcion">Mostrar descripción</button>
             <div class="collapse" id="div_descripcion">

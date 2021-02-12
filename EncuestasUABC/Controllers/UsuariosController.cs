@@ -215,8 +215,8 @@ namespace EncuestasUABC.Controllers
                 {
                     usuarioPermisos.Add(new UsuarioPermiso
                     {
-                        PermisoId = permisoid,
-                        UsuarioId = user.Id
+                        IdPermiso = permisoid,
+                        IdUsuario = user.Id
                     });
                 }
 

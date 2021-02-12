@@ -33,7 +33,7 @@ namespace EncuestasUABC.Controllers
             try
             {
                 var carreras = await _repository
-                    .FindBy<Carrera>(null, x => x.OrderBy(x => x.Nombre), x => x.IdUnidadAcademicaNavigation, x => x.IdUnidadAcademicaNavigation.CampusIdNavigation);
+                    .FindBy<Carrera>(null, x => x.OrderBy(x => x.Nombre), x => x.IdUnidadAcademicaNavigation, x => x.IdUnidadAcademicaNavigation.IdCampusNavigation);
                 int totalRegistros = carreras.Count();
                 if (!string.IsNullOrEmpty(selectViewModel.search))
                 {
@@ -41,7 +41,7 @@ namespace EncuestasUABC.Controllers
                     carreras = carreras.Where(x =>
                                               x.Nombre.ToLower().Contains(selectViewModel.search)
                                               || x.IdUnidadAcademicaNavigation.Nombre.ToLower().Contains(selectViewModel.search)
-                                              || x.IdUnidadAcademicaNavigation.CampusIdNavigation.Nombre.ToLower().Contains(selectViewModel.search)).ToList();
+                                              || x.IdUnidadAcademicaNavigation.IdCampusNavigation.Nombre.ToLower().Contains(selectViewModel.search)).ToList();
                     totalRegistros = carreras.Count();
                 }
                 var skip = (selectViewModel.page * selectViewModel.perPage) - selectViewModel.perPage;
@@ -61,7 +61,7 @@ namespace EncuestasUABC.Controllers
                         text = x.Nombre,
                         carrera = x.Nombre,
                         unidadacademica = x.IdUnidadAcademicaNavigation.Nombre,
-                        campus = x.IdUnidadAcademicaNavigation.CampusIdNavigation.Nombre
+                        campus = x.IdUnidadAcademicaNavigation.IdCampusNavigation.Nombre
                     }),
                     totalRegistros
                 });
@@ -85,12 +85,12 @@ namespace EncuestasUABC.Controllers
             #region Select
             try
             {
-                var carrera = (await _repository.FindBy<Carrera>(null, null, x => x.IdUnidadAcademicaNavigation, x => x.IdUnidadAcademicaNavigation.CampusIdNavigation)).Select(x => new
+                var carrera = (await _repository.FindBy<Carrera>(null, null, x => x.IdUnidadAcademicaNavigation, x => x.IdUnidadAcademicaNavigation.IdCampusNavigation)).Select(x => new
                 {
                     x.Id,
                     Carrera = x.Nombre,
                     UnidadAcademica = x.IdUnidadAcademicaNavigation.Nombre,
-                    Campus = x.IdUnidadAcademicaNavigation.CampusIdNavigation.Nombre
+                    Campus = x.IdUnidadAcademicaNavigation.IdCampusNavigation.Nombre
                 }).FirstOrDefault(x => x.Id == id);
                 return Ok(carrera);
             }

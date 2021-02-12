@@ -4,7 +4,7 @@
 @{
     if (Model != null)
     {
-        ViewData["Title"] = Model.EncuestaIdNavigation.Nombre + " (Vista Previa)";
+        ViewData["Title"] = Model.IdEncuestaNavigation.Nombre + " (Vista Previa)";
     }
     else
     {
@@ -20,7 +20,7 @@
             {
                 <h1 class="mt-1 text-center">@Model.Nombre</h1>
                 <h5>
-                    Encuesta: @Model.EncuestaIdNavigation.Nombre
+                    Encuesta: @Model.IdEncuestaNavigation.Nombre
                 </h5>
             }
             else
@@ -38,16 +38,16 @@
             {
                 foreach (var pregunta in Model.EncuestaPreguntas)
                 {
-                    <div class="col-12 mt-4 mb-2 p-3 border border-light pregunta-container" data-TipoPregunta="@pregunta.TipoPreguntaId">
+                    <div class="col-12 mt-4 mb-2 p-3 border border-light pregunta-container" data-TipoPregunta="@pregunta.IdTipoPregunta">
                         <label class="h4 font-weight-bold">
                             @pregunta.Descripcion <span class="pregunta-validation h6 text-danger" data-text="La pregunta es requerida"></span>
                         </label>
                         <div class="form-group">
-                            @if (pregunta.TipoPreguntaId == (int)TipoPreguntaId.Abierta)
+                            @if (pregunta.IdTipoPregunta == (int)TipoPreguntaId.Abierta)
                             {
                                 <textarea class="form-control respuesta" rows="2" placeholder="Respuesta"></textarea>
                             }
-                            else if (pregunta.TipoPreguntaId == (int)TipoPreguntaId.Multiple)
+                            else if (pregunta.IdTipoPregunta == (int)TipoPreguntaId.Multiple)
                             {
                                 <div class="row d-flex justify-content-sm-between justify-content-lg-start">
                                     @foreach (var opcion in pregunta.Opciones)
@@ -60,7 +60,7 @@
                                     }
                                 </div>
                             }
-                            else if (pregunta.TipoPreguntaId == (int)TipoPreguntaId.UnicaOpcion)
+                            else if (pregunta.IdTipoPregunta == (int)TipoPreguntaId.UnicaOpcion)
                             {
                                 <div class="row d-flex justify-content-sm-between justify-content-lg-start">
                                     @foreach (var opcion in pregunta.Opciones)
@@ -73,7 +73,7 @@
                                     }
                                 </div>
                             }
-                            else if (pregunta.TipoPreguntaId == (int)TipoPreguntaId.SelectList)
+                            else if (pregunta.IdTipoPregunta == (int)TipoPreguntaId.SelectList)
                             {
                                 <select class="form-control respuesta">
                                     <option value="">Seleccionar</option>
@@ -108,7 +108,7 @@
                 <div class="col-2">
                     @if (ViewBag.SeccionAnterior != 0)
                     {
-                        <a href="@Url.Action("VistaPrevia","Encuestas",new { id = Model.EncuestaId, idSeccion = ViewBag.SeccionAnterior})" class="btn btn-primary btn-raised">
+                        <a href="@Url.Action("VistaPrevia","Encuestas",new { id = Model.IdEncuesta, idSeccion = ViewBag.SeccionAnterior})" class="btn btn-primary btn-raised">
                             Anterior
                         </a>
                     }
@@ -116,7 +116,7 @@
                 <div class="col-2 text-right">
                     @if (ViewBag.SeccionSiguiente != 0)
                     {
-                        <a href="@Url.Action("VistaPrevia","Encuestas",new { id = Model.EncuestaId, idSeccion = ViewBag.SeccionSiguiente})" class="btn btn-primary btn-raised">Siguiente</a>
+                        <a href="@Url.Action("VistaPrevia","Encuestas",new { id = Model.IdEncuesta, idSeccion = ViewBag.SeccionSiguiente})" class="btn btn-primary btn-raised">Siguiente</a>
                     }
                     else
                     {

@@ -27,11 +27,11 @@ else
                     <h1 class="ml-1">@ViewData["Title"]</h1>
                 </div>
                 <div class="col-12 col-md-4 d-flex justify-content-center justify-content-lg-end">
-                    <a asp-action="Permisos" asp-route-email="@Model.UserName" class="btn btn-info btn-raised bmd-btn-fab">
-                        <i class="material-icons text-light">lock_open</i>
-                    </a>
                     @if (!string.IsNullOrEmpty(Model?.UserName))
                     {
+                        <a asp-action="Permisos" asp-route-email="@Model.UserName" class="btn btn-info btn-raised bmd-btn-fab">
+                            <i class="material-icons text-light">lock_open</i>
+                        </a>
                         <button type="button" class="btn btn-warning btn-raised bmd-btn-fab ml-2" data-toggle="modal" data-target="#modal-CambiarContrasena">
                             <i class="material-icons">vpn_key</i>
                         </button>

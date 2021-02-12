@@ -12,12 +12,6 @@ namespace EncuestasUABC
             CreateMap<ApplicationUser, ApplicationUserViewModel>();
             CreateMap<ApplicationUserViewModel, ApplicationUser>();
 
-            CreateMap<Alumno, AlumnoViewModel>();
-            CreateMap<AlumnoViewModel, Alumno>();
-
-            CreateMap<Administrativo, AdministrativoViewModel>();
-            CreateMap<AdministrativoViewModel, Administrativo>();
-
             CreateMap<Permiso, PermisoViewModel>();
             CreateMap<PermisoViewModel, Permiso>();
 

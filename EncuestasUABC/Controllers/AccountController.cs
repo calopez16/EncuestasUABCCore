@@ -85,10 +85,10 @@ namespace EncuestasUABC.Controllers
                                 todosPermisos = _mapper.Map<List<PermisoViewModel>>(await _usuarioRepository.PermisosByUser(user.Id));
 
                             var permisosAcciones = todosPermisos.Where(x => !x.Menu).ToList();
-                            var permisosMenu = todosPermisos.Where(x => x.Menu && !x.PermisoIdPadre.HasValue).OrderBy(x => x.Orden).ToList();
+                            var permisosMenu = todosPermisos.Where(x => x.Menu && !x.IdPermisoPadre.HasValue).OrderBy(x => x.Orden).ToList();
                             foreach (var menu in permisosMenu)
                             {
-                                menu.PermisosHijos = todosPermisos.Where(x => x.PermisoIdPadre == menu.Id).OrderBy(x => x.Descripcion).ToList();
+                                menu.PermisosHijos = todosPermisos.Where(x => x.IdPermisoPadre == menu.Id).OrderBy(x => x.Descripcion).ToList();
                             }
                             HttpContext.Session.SetString("UsuarioInfo", JsonConvert.SerializeObject(new UsuarioSessionInfoViewModel
                             {

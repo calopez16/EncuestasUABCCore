@@ -38,7 +38,7 @@ namespace EncuestasUABC.AccesoDatos.Repository
                 .Include(x => x.EncuestaSecciones)
                 .Include(x => x.IdCarreraNavigation)
                 .ThenInclude(x => x.IdUnidadAcademicaNavigation)
-                .ThenInclude(x => x.CampusIdNavigation)
+                .ThenInclude(x => x.IdCampusNavigation)
                 .Select(x => new Encuesta
                 {
                     Id = x.Id,
@@ -55,9 +55,9 @@ namespace EncuestasUABC.AccesoDatos.Repository
                         IdUnidadAcademicaNavigation = new UnidadAcademica
                         {
                             Nombre = x.IdCarreraNavigation.IdUnidadAcademicaNavigation.Nombre,
-                            CampusIdNavigation = new Campus
+                            IdCampusNavigation = new Campus
                             {
-                                Nombre = x.IdCarreraNavigation.IdUnidadAcademicaNavigation.CampusIdNavigation.Nombre,
+                                Nombre = x.IdCarreraNavigation.IdUnidadAcademicaNavigation.IdCampusNavigation.Nombre,
                             }
                         }
                     }
@@ -71,12 +71,12 @@ namespace EncuestasUABC.AccesoDatos.Repository
             #region GetSeccionById
 
             return await _context.EncuestaSecciones
-                .Include(x => x.EncuestaPreguntas).ThenInclude(x => x.TipoPreguntaIdNavigation)
-                .Include(x => x.EncuestaIdNavigation)
+                .Include(x => x.EncuestaPreguntas).ThenInclude(x => x.IdTipoPreguntaNavigation)
+                .Include(x => x.IdEncuestaNavigation)
                 .Select(x => new EncuestaSeccion
                 {
                     Id = x.Id,
-                    EncuestaId = x.EncuestaId,
+                    IdEncuesta = x.IdEncuesta,
                     Nombre = x.Nombre,
                     Descripcion = x.Descripcion,
                     Orden = x.Orden,
@@ -85,19 +85,19 @@ namespace EncuestasUABC.AccesoDatos.Repository
                         Id = y.Id,
                         Orden = y.Orden,
                         Descripcion = y.Descripcion,
-                        TipoPreguntaId = y.TipoPreguntaId,
-                        TipoPreguntaIdNavigation = new TipoPregunta
+                        IdTipoPregunta = y.IdTipoPregunta,
+                        IdTipoPreguntaNavigation = new TipoPregunta
                         {
-                            Descripcion = y.TipoPreguntaIdNavigation.Descripcion
+                            Descripcion = y.IdTipoPreguntaNavigation.Descripcion
                         },
                         Opciones = y.Opciones.Where(x => !x.Eliminado).OrderBy(x => x.Orden).ToList(),
                         Obligatoria = y.Obligatoria
                     }).ToList(),
-                    EncuestaIdNavigation = new Encuesta
+                    IdEncuestaNavigation = new Encuesta
                     {
-                        Nombre = x.EncuestaIdNavigation.Nombre
+                        Nombre = x.IdEncuestaNavigation.Nombre
                     }
-                }).FirstOrDefaultAsync(x => x.Id == id && x.EncuestaId == encuestaId);
+                }).FirstOrDefaultAsync(x => x.Id == id && x.IdEncuesta == encuestaId);
 
             #endregion
         }
@@ -108,12 +108,12 @@ namespace EncuestasUABC.AccesoDatos.Repository
 
             return await _context.EncuestaSecciones
                 .Include(x => x.EncuestaPreguntas)
-                .ThenInclude(x => x.TipoPreguntaIdNavigation)
-                .Include(x => x.EncuestaIdNavigation)
+                .ThenInclude(x => x.IdTipoPreguntaNavigation)
+                .Include(x => x.IdEncuestaNavigation)
                 .Select(x => new EncuestaSeccion
                 {
                     Id = x.Id,
-                    EncuestaId = x.EncuestaId,
+                    IdEncuesta = x.IdEncuesta,
                     Nombre = x.Nombre,
                     Descripcion = x.Descripcion,
                     Orden = x.Orden,
@@ -122,21 +122,21 @@ namespace EncuestasUABC.AccesoDatos.Repository
                         Id = y.Id,
                         Orden = y.Orden,
                         Descripcion = y.Descripcion,
-                        TipoPreguntaId = y.TipoPreguntaId,
-                        TipoPreguntaIdNavigation = new TipoPregunta
+                        IdTipoPregunta = y.IdTipoPregunta,
+                        IdTipoPreguntaNavigation = new TipoPregunta
                         {
-                            Descripcion = y.TipoPreguntaIdNavigation.Descripcion
+                            Descripcion = y.IdTipoPreguntaNavigation.Descripcion
                         },
                         Opciones = y.Opciones.Where(x => !x.Eliminado).OrderBy(x => x.Orden).ToList(),
                         Obligatoria = y.Obligatoria
                     }).ToList(),
-                    EncuestaIdNavigation = new Encuesta
+                    IdEncuestaNavigation = new Encuesta
                     {
-                        Nombre = x.EncuestaIdNavigation.Nombre
+                        Nombre = x.IdEncuestaNavigation.Nombre
                     }
                 })
                 .OrderBy(x => x.Orden)
-                .FirstOrDefaultAsync(x => x.EncuestaId == encuestaId);
+                .FirstOrDefaultAsync(x => x.IdEncuesta == encuestaId);
 
             #endregion
         }
@@ -145,11 +145,11 @@ namespace EncuestasUABC.AccesoDatos.Repository
         {
             #region GetSecciones
             return await _context.EncuestaSecciones
-              .Where(x => x.EncuestaId == encuestaId && !(bool)x.Eliminado)
+              .Where(x => x.IdEncuesta == encuestaId && !(bool)x.Eliminado)
               .Select(x => new EncuestaSeccion
               {
                   Id = x.Id,
-                  EncuestaId = x.EncuestaId,
+                  IdEncuesta = x.IdEncuesta,
                   Orden = x.Orden
               })
               .OrderBy(x => x.Orden)
@@ -168,23 +168,23 @@ namespace EncuestasUABC.AccesoDatos.Repository
         {
             #region GetPreguntaByIdDetalle
             return await _context.EncuestaPreguntas
-                .Include(x => x.TipoPreguntaIdNavigation)
-                .Include(x => x.EncuestaPreguntaIdPadreNavigation)
+                .Include(x => x.IdTipoPreguntaNavigation)
+                .Include(x => x.IdEncuestaPreguntaPadreNavigation)
                 .Include(x => x.Opciones)
                 .Where(x => !x.Eliminado)
                 .OrderBy(x => x.Orden)
                 .Select(x => new EncuestaPregunta
                 {
                     Id = x.Id,
-                    EncuestaId = x.EncuestaId,
-                    EncuestaSeccionId = x.EncuestaSeccionId,
+                    IdEncuesta = x.IdEncuesta,
+                    IdEncuestaSeccion = x.IdEncuestaSeccion,
                     Descripcion = x.Descripcion,
                     Obligatoria = x.Obligatoria,
                     Eliminado = x.Eliminado,
-                    TipoPreguntaId = x.TipoPreguntaId,
-                    TipoPreguntaIdNavigation = new TipoPregunta
+                    IdTipoPregunta = x.IdTipoPregunta,
+                    IdTipoPreguntaNavigation = new TipoPregunta
                     {
-                        Descripcion = x.TipoPreguntaIdNavigation.Descripcion
+                        Descripcion = x.IdTipoPreguntaNavigation.Descripcion
                     },
                     Opciones = x.Opciones
                     .OrderBy(o => o.Orden)
@@ -194,7 +194,7 @@ namespace EncuestasUABC.AccesoDatos.Repository
                         Id = w.Id,
                         Descripcion = w.Descripcion
                     }).ToList()
-                }).FirstOrDefaultAsync(x => x.Id == id && x.EncuestaId == encuestaId && x.EncuestaSeccionId == seccionId);
+                }).FirstOrDefaultAsync(x => x.Id == id && x.IdEncuesta == encuestaId && x.IdEncuestaSeccion == seccionId);
             #endregion
         }
 
