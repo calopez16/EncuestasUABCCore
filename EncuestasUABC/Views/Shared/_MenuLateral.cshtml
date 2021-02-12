@@ -4,53 +4,48 @@
 }
 
 <!-- Sidebar -->
-<div class="bg-primary" id="sidebar-wrapper">
-    <div class="list-group list-group-flush">
+<div class="bg-secondary" id="sidebar-wrapper">
+    <div class="w-100 pt-4 bg-primary" style="height:130px">
+        <a asp-action="Index" asp-controller="Home">
+            <h4 class="text-light mt-2 text-center">
+                <img src="~/img/IconoEncuestasUABC.svg" style="width:40px" />
+                Encuestas UABC
+            </h4>
+        </a>
+    </div>
+    <div class="list-group list-group-flush bg-secondary">
         <div class="row">
-            <div class="col-12">
-                <h4 class="text-light mt-2 text-center">
-                    <img src="~/img/IconoEncuestasUABC.svg" style="width:40px" />
-                    Encuestas UABC
-                </h4>
+            <div class="col-12 text-center">
+                <i class="material-icons md-90 text-light bg-primary" style="margin-top:-50px;border-radius:50%!important">account_circle</i>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="text-center bg-secondary">
-                    <ul class="nav nav-pills">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                                <i class="material-icons md-48 text-light float-left mr-3" style="margin-top:-15px">account_circle</i>
-                                @Model.NombreCompleto
+            <div class="col-12 text-center">
+                <h5 class="text-light"> @Model.NombreCompleto</h5>
+                <ul class="nav nav-pills d-flex justify-content-center" style="margin-top:-20px">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-light text-center" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                            @Model.Rol
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right"  style="margin-top:-20px;width:200px">
+                            <a asp-action="Perfil" asp-controller="Account" class="dropdown-item page-loader">
+                                <i class="material-icons float-left mr-2">person</i>
+                                Perfil
                             </a>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a asp-action="Perfil" asp-controller="Account" class="dropdown-item page-loader">
-                                    <i class="material-icons float-left mr-2">person</i>
-                                    Perfil
-                                </a>
-                                <a asp-action="Ayuda" asp-controller="Home" class="dropdown-item page-loader">
-                                    <i class="material-icons float-left mr-2">support</i>
-                                    Ayuda
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="##" onclick="$('#form_Logout').submit();">
-                                    <i class="material-icons float-left mr-2">exit_to_app</i>
-                                    Cerrar Sesión
-                                </a>
-                            </div>
-                        </li>
-                    </ul>
-                    <span class="text-primary">@Model.Rol</span>
-                </div>
+                            <a asp-action="Ayuda" asp-controller="Home" class="dropdown-item page-loader">
+                                <i class="material-icons float-left mr-2">support</i>
+                                Ayuda
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="##" onclick="$('#form_Logout').submit();">
+                                <i class="material-icons float-left mr-2">exit_to_app</i>
+                                Cerrar Sesión
+                            </a>
+                        </div>
+                    </li>
+                </ul>
             </div>
+           
             <div class="col-12">
                 <ul class="opciones">
-                    <li>
-                        <a asp-action="Perfil" asp-controller="Account" class="opciones-item btn btn-primary text-left p-3 pl-4 m-0 page-loader">
-                            <i class="material-icons float-left clearfix">person</i>
-                            <span class="pl-3">Perfil</span>
-                        </a>
-                    </li>
                     @foreach (var permiso in Model.PermisosMenu)
                     {
                         <li>
@@ -86,17 +81,6 @@
                 </ul>
                 <form asp-action="Logout" asp-controller="Account" id="form_Logout">
                 </form>
-            </div>
-            <div class="col-12">
-                <hr />
-                <ul class="opciones">
-                    <li>
-                        <a class="opciones-item btn btn-primary text-left p-3 pl-4 m-0" href="##" onclick="$('#form_Logout').submit();">
-                            <i class="material-icons float-left clearfix">exit_to_app</i>
-                            <span class="pl-3">Cerrar Sesión</span>
-                        </a>
-                    </li>
-                </ul>
             </div>
         </div>
     </div>

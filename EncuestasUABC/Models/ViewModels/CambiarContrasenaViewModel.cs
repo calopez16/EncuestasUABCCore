@@ -4,15 +4,19 @@ namespace EncuestasUABC.ViewModels
 {
     public class CambiarContrasenaViewModel
     {
-        public string Email { get; set; }
+        public string UserName { get; set; }
         [Display(Name = "Contraseña Actual")]
-        public string OldPassword { get; set; }
+        [DataType(DataType.Password)]
+        public string ContrasenaActual { get; set; }
         [Display(Name = "Nueva Contraseña")]
         [Required(ErrorMessage = "El campo {0} es requerido")]
-        public string Password { get; set; }
+        [DataType(DataType.Password)]
+        public string NuevaContrasena { get; set; }
+
         [Display(Name = "Confirmar Contraseña")]
-        [Required(ErrorMessage ="El campo {0} es requerido")]
-        [Compare(nameof(Password))]
+        [Required(ErrorMessage = "El campo {0} es requerido")]
+        [Compare(nameof(NuevaContrasena), ErrorMessage = "Las contraseñas no coinciden")]
+        [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
     }
 }

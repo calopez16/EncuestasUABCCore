@@ -34,7 +34,7 @@ namespace EncuestasUABC.AccesoDatos.Repositories
             var usuarios = (from user in _context.ApplicationUser
                             join userRoles in _context.UserRoles on user.Id equals userRoles.UserId
                             join role in _context.Roles on userRoles.RoleId equals role.Id
-                            where user.Estatus == activo && !user.Email.Equals(Defaults.AdminEmail)
+                            where (bool)user.Estatus == activo && !user.Email.Equals(Defaults.AdminEmail)
                             select new ApplicationUser
                             {
                                 Id = user.Id,
@@ -44,16 +44,16 @@ namespace EncuestasUABC.AccesoDatos.Repositories
                                 ApellidoMaterno = user.ApellidoMaterno,
                                 UserName = user.UserName,
                                 Rol = role.Name,
-                                Estatus=user.Estatus
+                                Estatus = user.Estatus
                             }).AsQueryable();
 
             if (!string.IsNullOrEmpty(correo))
-                usuarios = usuarios.Where(x => x.Email.Equals(correo));
+                usuarios = usuarios.Where(x => x.Email.Contains(correo));
 
             if (!string.IsNullOrEmpty(nombre))
-                usuarios = usuarios.Where(x => x.Nombre.Equals(nombre)
-                || x.ApellidoPaterno.Equals(nombre)
-                || x.ApellidoMaterno.Equals(nombre));
+                usuarios = usuarios.Where(x => x.Nombre.Contains(nombre)
+                || x.ApellidoPaterno.Contains(nombre)
+                || x.ApellidoMaterno.Contains(nombre));
 
             if (!string.IsNullOrEmpty(rol))
                 usuarios = usuarios.Where(x => x.Rol.Equals(rol));
@@ -147,6 +147,16 @@ namespace EncuestasUABC.AccesoDatos.Repositories
                 .ThenInclude(x => x.PermisosHijos)
                 .Where(x => x.Menu && !x.PermisoIdPadre.HasValue).ToListAsync();
             #endregion
+        }
+
+        public async Task<IdentityResult> ValidarContrasena(string contrasena)
+        {
+            #region ValidarContrasena
+            var passwordValidator = new PasswordValidator<ApplicationUser>();
+            var isContrasenaValida = await passwordValidator.ValidateAsync(_userManager, null, contrasena);
+            return isContrasenaValida;
+            #endregion
+
         }
     }
 }

@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Http;
 using EncuestasUABC.AccesoDatos.Repository.Interfaces;
 using EncuestasUABC.AccesoDatos.Repository;
 using AutoMapper;
+using EncuestasUABC.Constantes;
 
 namespace EncuestasUABC
 {
@@ -27,7 +28,6 @@ namespace EncuestasUABC
         }
 
         public IConfiguration Configuration { get; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -56,12 +56,12 @@ namespace EncuestasUABC
             services.Configure<IdentityOptions>(options =>
             {
                 // Password settings.
-                options.Password.RequireDigit = true;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireNonAlphanumeric = true;
-                options.Password.RequireUppercase = true;
-                options.Password.RequiredLength = 6;
-                options.Password.RequiredUniqueChars = 1;
+                options.Password.RequireDigit = Contrasena.RequiereNumero;
+                options.Password.RequireLowercase = Contrasena.RequiereMinusculas;
+                options.Password.RequireNonAlphanumeric = Contrasena.RequiereCaracteresEspeciales;
+                options.Password.RequireUppercase = Contrasena.RequiereMayusculas;
+                options.Password.RequiredLength = Contrasena.MinimoCaracteresPermitidos;
+                options.Password.RequiredUniqueChars = Contrasena.MinimoCaracteresUnicos;
 
                 // Lockout settings.
                 //options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);

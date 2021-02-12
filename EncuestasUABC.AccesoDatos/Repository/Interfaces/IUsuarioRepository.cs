@@ -18,5 +18,6 @@ namespace EncuestasUABC.AccesoDatos.Repository.Interfaces
         Task<IdentityResult> RemoveRolOfUser(ApplicationUser user, string rol);
         Task<IdentityResult> CambiarContrasena(ApplicationUser user, string nuevaContrasena);
         Task<IdentityResult> CambiarContrasena(ApplicationUser user, string contrasenaActual, string nuevaContrasena);
+        Task<IdentityResult> ValidarContrasena(string contrasena);
     }
 }

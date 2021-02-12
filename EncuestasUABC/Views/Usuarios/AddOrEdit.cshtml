@@ -1,0 +1,99 @@
+﻿@using EncuestasUABC.Models;
+@using EncuestasUABC.Constantes;
+@using EncuestasUABC.ViewModels;
+@model ApplicationUserViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (string.IsNullOrEmpty(Model?.UserName))
+{
+    ViewData["Title"] = "Crear Usuario";
+}
+else
+{
+    ViewData["Title"] = "Editar Usuario";
+}
+<div class="card">
+    <form asp-action="AddOrEdit" class="mb-0">
+        <input type="hidden" asp-for="UserName" />
+        <div class="card-header">
+            <div class="row d-flex justify-content-between">
+                <div class="col-12 col-md-8 d-flex justify-content-start">
+                    <span class="btn-group-sm mt-1">
+                        <a asp-action="Index" class="btn bmd-btn-fab text-primary page-loader" data-toggle="tooltip" data-placement="bottom" title="Regresar">
+                            <i class="material-icons md-36">navigate_before</i>
+                        </a>
+                    </span>
+                    <h1 class="ml-1">@ViewData["Title"]</h1>
+                </div>
+                <div class="col-12 col-md-4 d-flex justify-content-center justify-content-lg-end">
+                    <a asp-action="Permisos" asp-route-email="@Model.UserName" class="btn btn-info btn-raised bmd-btn-fab">
+                        <i class="material-icons text-light">lock_open</i>
+                    </a>
+                    @if (!string.IsNullOrEmpty(Model?.UserName))
+                    {
+                        <button type="button" class="btn btn-warning btn-raised bmd-btn-fab ml-2" data-toggle="modal" data-target="#modal-CambiarContrasena">
+                            <i class="material-icons">vpn_key</i>
+                        </button>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="form-group">
+                        <label asp-for="Nombre" class="bmd-label-floating"></label>
+                        <input asp-for="Nombre" class="form-control">
+                        <span asp-validation-for="Nombre"></span>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="form-group">
+                        <label asp-for="ApellidoPaterno" class="bmd-label-floating"></label>
+                        <input asp-for="ApellidoPaterno" class="form-control">
+                        <span asp-validation-for="ApellidoPaterno"></span>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="form-group">
+                        <label asp-for="ApellidoMaterno" class="bmd-label-floating"></label>
+                        <input asp-for="ApellidoMaterno" class="form-control">
+                        <span asp-validation-for="ApellidoMaterno"></span>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="form-group">
+                        <label asp-for="Email" class="bmd-label-floating"></label>
+                        <input asp-for="Email" class="form-control">
+                        <span asp-validation-for="Email"></span>
+                    </div>
+                </div>
+                @if (HttpContext.HttpContext.User.IsInRole(RolesSistema.Administrador))
+                {
+                    <div class="col-md-6 col-lg-3">
+                        <div class="form-group">
+                            <label asp-for="Rol" class="bmd-label-floating"></label>
+                            <select asp-for="Rol" class="form-control" asp-items="ViewBag.Roles" id="select_Rol">
+                                <option value="">Seleccionar</option>
+                            </select>
+                            <span asp-validation-for="Rol"></span>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="card-footer d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary bmd-btn-fab btn-raised ml-2" id="btn_Guardar" data-toggle="tooltip" data-placement="bottom" title="Guardar">
+                <i class="material-icons md-36">save</i>
+            </button>
+        </div>
+    </form>
+</div>
+
+
+
+@if (!string.IsNullOrEmpty(Model?.UserName))
+{
+    <partial name="~/Views/Usuarios/PartialViews/_ModalResetearContrasena.cshtml" model="new ResetearContrasenaViewModel { UserName = Model.UserName }" />
+}

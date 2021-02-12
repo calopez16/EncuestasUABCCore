@@ -4,8 +4,6 @@ $(document).ready(function () {
     cargarFiltros();
 });
 
-
-
 function cargarPaginado() {
     var correo = $("#txt-filtro-correo").val();
     var nombre = $("#txt-filtro-nombre").val();
@@ -33,9 +31,7 @@ function cargarPaginado() {
                                         <td><span>${columns[i].data}</span></tr></td>`;
                             }
                         }
-
                     }
-
                     var data = `${datos}
                                     <tr><td colspan="2"><div class="d-flex justify-content-end w-100">${botones}</div></td></tr>`;
                     return data ?
@@ -43,7 +39,6 @@ function cargarPaginado() {
                         false;
                 }
             },
-
         },
         columnDefs: [
             {
@@ -129,9 +124,9 @@ function cargarPaginado() {
                 className: "text-center",
                 render: function (data, type, row) {
                     var item = "";
-                    if (row.activo) {
+                    if (row.estatus) {
                         item = `<span class="btn-group-sm">
-                                  <a class="btn btn-info bmd-btn-fab page-loader" href="${window.urlproyecto}/Usuarios/Edit?email=${data}" data-toggle="tooltip" data-placement="bottom" title="Editar usuario">
+                                  <a class="btn btn-info bmd-btn-fab page-loader" href="${window.urlproyecto}/Usuarios/AddOrEdit?email=${data}" data-toggle="tooltip" data-placement="bottom" title="Editar usuario">
                                     <i class="material-icons">edit</i>
                                   </a>
                                 </span>`;
@@ -146,7 +141,7 @@ function cargarPaginado() {
                 className: "text-center",
                 render: function (data, type, row) {
                     var item = "";
-                    if (row.activo) {
+                    if (row.estatus) {
                         item = `<span class="btn-group-sm">
                                   <button class="btn btn-danger bmd-btn-fab btn_Eliminar ml-2 ml-mb-0" data-id="${data}" data-toggle="tooltip" data-placement="bottom" title="Eliminar Usuario">
                                     <i class="material-icons">delete</i>

@@ -37,9 +37,7 @@ namespace EncuestasUABC.AccesoDatos.Inicializador
             if (!_context.Roles.Any(x => x.Name.Equals(RolesSistema.Administrador)))
             {
                 _roleManager.CreateAsync(new IdentityRole(RolesSistema.Administrador)).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(RolesSistema.Administrativo)).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(RolesSistema.Alumno)).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(RolesSistema.Egresado)).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole(RolesSistema.Usuario)).GetAwaiter().GetResult();
             }
             if (!_context.ApplicationUser.Any(x => x.UserName.Equals(Defaults.AdminEmail)))
             {

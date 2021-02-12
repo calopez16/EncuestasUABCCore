@@ -1,4 +1,5 @@
 ﻿using EncuestasUABC.Models.ViewModels.Catalogos;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,6 +8,7 @@ namespace EncuestasUABC.Models
 {
     public class ApplicationUserViewModel
     {
+
         [Required(ErrorMessage = "El {0} es requerido")]
         [MaxLength(80)]
         public string Nombre { get; set; }
@@ -21,15 +23,17 @@ namespace EncuestasUABC.Models
         public string ApellidoMaterno { get; set; }
         public string UserName { get; set; }
 
+        [Remote(action: "ValidarCorreoUABC", controller: "Validador", AdditionalFields = nameof(UserName))]
         [Display(Name = "Correo")]
+        [EmailAddress(ErrorMessage = "El campo {0} no es un correo válido")]
         [Required(ErrorMessage = "El {0} es requerido")]
         public string Email { get; set; }
-        public bool Activo { get; set; } = true;
+        public bool Estatus { get; set; } = true;
 
         public AdministrativoViewModel Administrativo { get; set; }
-        public AlumnoViewModel Alumno { get; set; }
-        public EgresadoViewModel Egresado { get; set; }
+        [Required(ErrorMessage = "El {0} es requerido")]
         public string Rol { get; set; }
+
 
     }
 
@@ -81,7 +85,6 @@ namespace EncuestasUABC.Models
         public ApplicationUserViewModel UsuarioIdNavigation { get; set; }
 
     }
-
 
     public class PermisoViewModel
     {

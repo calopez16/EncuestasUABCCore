@@ -232,7 +232,7 @@ namespace EncuestasUABC.Controllers
             {
                 var usuarioInfo = _httpContextAccessor.GetUsuarioInfoViewModel();
                 var user = await _repository.FirstOrDefault<ApplicationUser>(x => x.Id.Equals(usuarioInfo.Id));
-                var result = await _usuarioRepository.CambiarContrasena(user, model.OldPassword, model.Password);
+                var result = await _usuarioRepository.CambiarContrasena(user, model.ContrasenaActual, model.NuevaContrasena);
                 if (!result.Succeeded)
                 {
                     if (result.Errors.Any(x => x.Code.Equals("PasswordMismatch")))
