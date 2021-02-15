@@ -267,12 +267,12 @@ namespace EncuestasUABC.Controllers
                                 x.Id,
                                 x.Fecha,
                                 x.Nombre,
-                                CarreraIdNavigation = new
+                                IdCarreraNavigation = new
                                 {
                                     x.IdCarreraNavigation.Nombre
                                 },
                                 x.IdEstatusEncuesta,
-                                EstatusEncuestaIdNavigation = new
+                                IdEstatusEncuestaNavigation = new
                                 {
                                     x.IdEstatusEncuestaNavigation.Descripcion
                                 }

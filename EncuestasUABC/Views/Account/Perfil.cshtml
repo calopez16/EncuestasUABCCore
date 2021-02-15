@@ -12,7 +12,7 @@
         <div class="ibox">
             <div class="ibox-body">
                 <div class="row">
-                    <div class="col-lg-3 col-md-4 p-5">
+                    <div class="col-12 col-lg-4 p-5">
                         <div class="ibox">
                             <div class="ibox-body text-center">
                                 <div class="m-t-20">
@@ -30,81 +30,45 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-9 col-md-8">
+                    <div class="col-12 col-lg-8">
                         <div class="ibox">
                             <div class="ibox-body">
-                                <ul class="nav nav-tabs tabs-line">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" href="#informacion" data-toggle="tab">
-                                            <i class="fa fa-user"></i> Informacion
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#cambiarContrasena" data-toggle="tab">
-                                            <i class="fa fa-lock"></i> Cambiar contraseña
-                                        </a>
-                                    </li>
-                                </ul>
-                                <div class="tab-content">
-                                    <div class="tab-pane fade show active" id="informacion">
-                                        <form asp-action="Perfil">
-                                            <input hidden asp-for="Email" />
-                                            <input hidden asp-for="Rol" />
-                                            <div class="row">
-                                                <div class="col-md-6 col-lg-3">
-                                                    <div class="form-group">
-                                                        <label asp-for="Nombre" class="bmd-label-floating"></label>
-                                                        <input asp-for="Nombre" class="form-control" autocomplete="off">
-                                                        <span asp-validation-for="Nombre"></span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6 col-lg-3">
-                                                    <div class="form-group">
-                                                        <label asp-for="ApellidoPaterno" class="bmd-label-floating"></label>
-                                                        <input asp-for="ApellidoPaterno" class="form-control">
-                                                        <span asp-validation-for="ApellidoPaterno"></span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6 col-lg-3">
-                                                    <div class="form-group">
-                                                        <label asp-for="ApellidoMaterno" class="bmd-label-floating"></label>
-                                                        <input asp-for="ApellidoMaterno" class="form-control" autocomplete="off">
-                                                        <span asp-validation-for="ApellidoMaterno"></span>
-                                                    </div>
-                                                </div>
+                                <h4>Información</h4>
+                                <hr />
+                                <form asp-action="Perfil">
+                                    <input hidden asp-for="Email" />
+                                    <input hidden asp-for="Rol" />
+                                    <div class="row">
+                                        <div class="col-md-6 col-lg-3">
+                                            <div class="form-group">
+                                                <label asp-for="Nombre" class="bmd-label-floating"></label>
+                                                <input asp-for="Nombre" class="form-control" autocomplete="off">
+                                                <span asp-validation-for="Nombre"></span>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-12 d-flex justify-content-center">
-                                                    <button type="submit" class="btn btn-raised btn-primary d-flex align-content-between">
-                                                        <i class="material-icons mr-2" style="margin-top:-3px">save</i> Guardar
-                                                    </button>
-                                                </div>
+                                        </div>
+                                        <div class="col-md-6 col-lg-3">
+                                            <div class="form-group">
+                                                <label asp-for="ApellidoPaterno" class="bmd-label-floating"></label>
+                                                <input asp-for="ApellidoPaterno" class="form-control">
+                                                <span asp-validation-for="ApellidoPaterno"></span>
                                             </div>
-                                        </form>
+                                        </div>
+                                        <div class="col-md-6 col-lg-3">
+                                            <div class="form-group">
+                                                <label asp-for="ApellidoMaterno" class="bmd-label-floating"></label>
+                                                <input asp-for="ApellidoMaterno" class="form-control" autocomplete="off">
+                                                <span asp-validation-for="ApellidoMaterno"></span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="tab-pane fade show" id="cambiarContrasena">
-                                        <form asp-action="CambiarContrasena" onsubmit="return ContrasenaValida()" id="form_CambiarContrasena">
-                                            <div class="row">
-                                                <div class="row col-md-6">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label for="txt_OldPassword" class="bmd-label-floating">Contraseña Actual</label>
-                                                            <input name="OldPassword" class="form-control" type="password" id="txt_OldPassword">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            @*<partial name="~/Views/Usuarios/PartialViews/_FormCambiarContrasena.cshtml" model="new CambiarContrasenaViewModel()" />*@
-                                            <div class="row">
-                                                <div class="col-12 d-flex justify-content-center">
-                                                    <button type="submit" class="btn btn-raised btn-primary d-flex align-content-between">
-                                                        <i class="material-icons mr-2" style="margin-top:-3px">save</i> Cambiar Contraseña
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </form>
+                                    <div class="row">
+                                        <div class="col-12 d-flex justify-content-center">
+                                            <button type="submit" class="btn btn-raised btn-primary d-flex align-content-between">
+                                                <i class="material-icons mr-2" style="margin-top:-3px">save</i> Guardar
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
                     </div>

@@ -97,7 +97,7 @@ function cargarPaginado() {
         //Se especifica la información de las columnas
         columns: [
             {
-                data: 'estatusEncuestaId',
+                data: 'idEstatusEncuesta',
                 sortable: true,
                 visible: true,
                 className: "text-center",
@@ -137,7 +137,7 @@ function cargarPaginado() {
                 visible: true
             },
             {
-                data: 'carreraIdNavigation.nombre',
+                data: 'idCarreraNavigation.nombre',
                 searchable: false,
                 sortable: true,
                 autoWidth: true,
@@ -162,7 +162,7 @@ function cargarPaginado() {
                 visible: true,
                 className: "text-center",
                 render: function (data, x, row) {
-                    if (row.estatusEncuestaId != enum_EstatusEncuesta.Eliminada) {
+                    if (row.idEstatusEncuestaNavigation != enum_EstatusEncuesta.Eliminada) {
                         return `<span class="btn-group-sm">
                                   <button class="btn btn-danger bmd-btn-fab btn_Eliminar" data-id="${data}" data-nombre="${row.nombre}" data-toggle="tooltip" data-placement="bottom" title="Eliminar encuesta">
                                     <i class="material-icons">delete</i>

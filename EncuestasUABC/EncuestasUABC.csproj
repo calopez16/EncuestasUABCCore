@@ -6,6 +6,13 @@
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="wwwroot\lib\easyEditor\**" />
+    <Content Remove="wwwroot\lib\easyEditor\**" />
+    <EmbeddedResource Remove="wwwroot\lib\easyEditor\**" />
+    <None Remove="wwwroot\lib\easyEditor\**" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.0.0" />

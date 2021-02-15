@@ -15,35 +15,44 @@
 </style>
 <div class="card">
     <div class="card-header">
-        <a asp-action="Editar" asp-route-id="@Model.IdEncuesta" class="btn btn-primary bmd-btn-fab float-left mr-4" data-toggle="tooltip" data-placement="bottom" title="Regresar a edición de encuesta">
-            <i class="material-icons md-36">navigate_before</i>
-        </a>
-        <button class="btn btn-primary bmd-btn-fab btn_PreguntaAgregar float-right mr-2" data-toggle="tooltip" data-placement="bottom" title="Agregar pregunta">
-            <i class="material-icons md-36">add_task</i>
-        </button>
-        <div class="row" style="display:none;margin-top:-10px" id="div_EditarSeccionNombre">
-            <div class="col-8">
-                <input type="text" id="txt_SeccionNombre" class="form-control form-lg" style="font-size:2.5rem" value="@Model.Nombre" autocomplete="off" />
+        <div class="row d-flex justify-content-between">
+            <div class="col-12 col-md-8 d-flex justify-content-start">
+                <span class="btn-group-sm mt-1">
+                    <a asp-action="Editar" asp-route-id="@Model.IdEncuesta" class="btn bmd-btn-fab text-primary page-loader" data-toggle="tooltip" data-placement="bottom" title="Regresar">
+                        <i class="material-icons md-36">navigate_before</i>
+                    </a>
+                </span>
+                <div class="row w-100" style="display:none;margin-top:-10px;" id="div_EditarSeccionNombre">
+                    <div class="col-12 col-lg-8">
+                        <input type="text" id="txt_SeccionNombre" class="form-control form-lg" style="font-size:2.5rem" value="@Model.Nombre" autocomplete="off" />
+                    </div>
+                    <div class="col-12 col-lg-2 form-inline d-flex d-sm-block justify-content-center pt-3">
+                        <span class="btn-group-sm m-1">
+                            <button type="button" class="btn btn-success bmd-btn-fab" data-toggle="tooltip" data-placement="bottom" title="Guardar nombre de sección" id="btn_GuardarSeccionNombre">
+                                <i class="material-icons">check</i>
+                            </button>
+                        </span>
+                        <span class="btn-group-sm m-1">
+                            <button type="button" class="btn btn-danger bmd-btn-fab" data-toggle="tooltip" data-placement="bottom" title="Cancelar edición de nombre" id="btn_CancelarEditarSeccionNombre">
+                                <i class="material-icons">clear</i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <h1 class="mt-1" style="cursor:pointer;width:70%" id="h1_SeccionNombre">
+                    @ViewData["Title"]:<span class="ml-3">@Model.Nombre</span>
+                    <i class="material-icons text-primary" style="display:none" title="Editar nombre de sección">edit</i>
+                </h1>
             </div>
-            <div class="col-2 form-inline text-center">
-                <span class="btn-group-sm m-1">
-                    <button type="button" class="btn btn-success bmd-btn-fab" data-toggle="tooltip" data-placement="bottom" title="Guardar nombre de sección" id="btn_GuardarSeccionNombre">
-                        <i class="material-icons">check</i>
-                    </button>
-                </span>
-                <span class="btn-group-sm m-1">
-                    <button type="button" class="btn btn-danger bmd-btn-fab" data-toggle="tooltip" data-placement="bottom" title="Cancelar edición de nombre" id="btn_CancelarEditarSeccionNombre">
-                        <i class="material-icons">clear</i>
-                    </button>
-                </span>
+            <div class="col-12 col-md-4 d-flex justify-content-center justify-content-lg-end">
+                <button class="btn btn-primary bmd-btn-fab btn_PreguntaAgregar float-right mr-2" data-toggle="tooltip" data-placement="bottom" title="Agregar pregunta">
+                    <i class="material-icons md-36">add_task</i>
+                </button>
+            </div>
+            <div class="col-12 ml-5">
+                <h5>Encuesta: @Model.IdEncuestaNavigation.Nombre</h5>
             </div>
         </div>
-        <h1 class="mt-1" style="cursor:pointer;width:70%" id="h1_SeccionNombre">
-            @ViewData["Title"]:<span class="ml-3">@Model.Nombre</span>
-            <i class="material-icons text-primary" style="display:none" title="Editar nombre de sección">edit</i>
-        </h1>
-        <span class="h5">Encuesta: @Model.IdEncuestaNavigation.Nombre</span>
-
     </div>
     <div class="card-body">
 
